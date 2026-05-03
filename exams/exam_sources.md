@@ -6,15 +6,15 @@
 
 > PDF: <https://www.synergylabs.org/courses/15-440/assignments/Midterm1-Fall2021-solutions.pdf>
 
-1(b) A text messaging application would best be implemented using UDP. (✅/❌ ) 
+1(b) A text messaging application would best be implemented using UDP. (✅/❌)
 
 > False. Text messaging necessitates reliable, in-order service, so TCP should be used.
 
-1(d) A Remote Procedure Call (RPC) enables a computer program to execute a subroutine in its own memory address space. (✅/❌ ) 
+1(d) A Remote Procedure Call (RPC) enables a computer program to execute a subroutine in its own memory address space. (✅/❌)
 
 > False. RPCs enable subroutine execution in a remote address space.
 
-1(f) DHCP is used to translate hostnames into IP addresses. (✅/❌ )
+1(f) DHCP is used to translate hostnames into IP addresses. (✅/❌)
 
 > False. Domain Name Service (DNS) is used for name-address translation, while DHCP (Dynamic Host Configuration Protocol) is used for dynamically assigning IP addresses to networked end-hosts.
 
@@ -40,7 +40,7 @@
 
    (c) As you may have noticed, event h is missing a Lamport clock value. What are the possible values for the Lamport clock of event h? What are their corresponding total-ordered Lamport clock values? Assume that the maximum number of processes is 10, and that process P2 has ID 2.
 
-   > 44 is the only possible Lamport clock value for event h. Therefore, its totally-ordered value is $M ∗ Li(e) + i = 10 ∗ 44 + 2 = 442$.
+   > 44 is the only possible Lamport clock value for event h. Therefore, its totally ordered value is $M \cdot L_i(e) + i = 10 \cdot 44 + 2 = 442$.
 
 5. Eunice has decided that Gradescope is too slow, and wants to implement her own autograding system, Dotolab, where students submit their code via RPCs. Since she wants students to be sure that they have submitted, she wants to implement RPCs using at-least-once semantics. Note, however, that students still have a limited number of submissions for their projects!
 
@@ -87,7 +87,7 @@
 
 > True. TCP’s retries and ordering cause latency spikes in case of packet loss.
 
-1.7 Transmission delay is proportional to the packet size, while propagation delay is portional to the length of the link.
+1.7 Transmission delay is proportional to the packet size, while propagation delay is proportional to the length of the link.
 
 > Transmission delay is the time spent sending the packet by the router, while the propagation delay is the time it spends travelling on the link.
 
@@ -183,13 +183,13 @@
 
 > PDF: <https://www.synergylabs.org/courses/15-440/assignments/Fall2019-Midterm-I-WithSolutions.pdf>
 
-1(b) Over a wide area network it is better to use TCP to implement Voice-over-IP telephony rather than UDP given the potential for packet losses. (✅/❌ )
+1(b) Over a wide area network it is better to use TCP to implement Voice-over-IP telephony rather than UDP given the potential for packet losses. (✅/❌)
 
-> False. UDP is still going to be better for the VoIP app since VoIP is real time and the delays caused with TCP retransmision would make things worse. What’s more, VoIP is loss-tolerant.
+> False. UDP is still going to be better for the VoIP app since VoIP is real time and the delays caused by TCP retransmission would make things worse. What’s more, VoIP is loss-tolerant.
 
 2(a) Can you implement an RPC system using UDP connections, instead of TCP? Answer yes/no and explain why or why not in at most two sentences.
 
-> Yes. It doesnt matter what transport layer protocol you choose for the RPC system. You can choose to implement over an unreliable network connection and rely on RPC system to detect and tolerate the failures.
+> Yes. It does not matter what transport-layer protocol you choose for the RPC system. You can choose to implement over an unreliable network connection and rely on the RPC system to detect and tolerate failures.
 
 2(b) A developer decides to use RPCs to remotely invoke the function `Sum_LinkedList(ListItem *head)`. What problem might they encounter?
 
@@ -225,14 +225,14 @@
 
 3. You are hired by the augmented reality startup AR2 that needs to perform a complex image processing algorithm. Because mobile phones have little computing power, AR2 ’s algorithm gets unacceptably slow as image sizes increase. Your manager, Jaine, proposes to use RPC to perform the work on a remote, more powerful server. You measure the following numbers, assuming a base image scaling factor of N.
 
-   - The running time of AR2 ’s algorithm is $M (N ) = 3N$ ms on a mobile phone. On the server, its $S(N ) = N/3$ ms. 
-   - Marshalling and unmarshalling take $(N/6 + 20)$ ms in total. 
+   - The running time of AR2’s algorithm is $M(N) = 3N$ ms on a mobile phone. On the server, its $S(N) = N/3$ ms.
+   - Marshalling and unmarshalling take $(N/6 + 20)$ ms in total.
    - The average RTT between a user and the server is 80 ms. 
    - Bandwidth is infinite between the user and the server.
 
    3(a) For what value of N is Jaine right, i.e., AR2 should be using an RPC instead of a local call?
 
-   > When $3N ≥ 80ms + (N/6 + 20)ms + N/3 = 100ms + N/2$. So, $N ≥ 40$. 
+   > When $3N \ge 80\text{ ms} + (N/6 + 20)\text{ ms} + N/3\text{ ms} = 100\text{ ms} + (N/2)\text{ ms}$. So, $N \ge 40$.
 
    3(b) With geo-replication, AR2 is able to reduce the average RTT. How will N change? (Give a qualitative answer)
 
@@ -247,15 +247,15 @@
 
    > The bottleneck is the marshalling time. No matter how much everything else is improved, the marshalling time will keep the RPC time high.
 
-6. BergerNet is a new social network started by the TAs and Professors of 15440 providing almost the same functionality as social networks do today. As a new engineering lead, it is your job to make some crucial design decisions that are either going to make or break the BergerNet. BergerNet uses RPCs. Identify the easiest-to-implement RPC semantic (at-leastonce, at-most-once, exactly-once) for each of the following features. Give a *one sentence* reason for your choice. (1pt for semantic, 1pt for reason only if semantic correct).
+6. BergerNet is a new social network started by the TAs and Professors of 15440 providing almost the same functionality as social networks do today. As a new engineering lead, it is your job to make some crucial design decisions that are either going to make or break BergerNet. BergerNet uses RPCs. Identify the easiest-to-implement RPC semantic (at-least-once, at-most-once, exactly-once) for each of the following features. Give a *one sentence* reason for your choice. (1 point for the semantic, 1 point for the reason only if the semantic is correct.)
 
    6(a) Transferring money to your friend on BergerNet
 
-   > At-most once. Easiest to implement and can always retry sending on failure.
+   > At-most-once. Easiest to implement, and the user can retry on failure.
 
    6(c) Deleting a friend on BergerNet
 
-   > At-least once. Delete is idempotent. At-most once does not work because it is not the easiest to implement.
+   > At-least-once. Delete is idempotent. At-most-once does not work because it is not the easiest to implement.
 
 ### Fall 2016
 
@@ -268,13 +268,13 @@
 |         3-4 | Question 2(b), 2(c.A), 2(c.B), 2(e)   | Virtualization isolation; MapReduce stragglers/master failure; DNS resilience |
 |         6-7 | Question 4(a), 4(b), 4(c), 4(d), 4(e) | DNS/CDN hierarchy; Chord lookup and finger-table reasoning                  |
 
-1(a) For a particular Map-Reduce Phase with ‘M’ and ’R’ nodes respectively, each reducer node handles 1/R of the intermediate key-values by default. (✅/❌ )
+1(a) For a particular MapReduce phase with $M$ and $R$ nodes respectively, each reducer node handles $1/R$ of the intermediate key-values by default. (✅/❌)
 
-> true. Each Reducer node handles 1/R of the possible keyspace and fetches them from each of the M Mappers.
+> True. Each reducer node handles $1/R$ of the possible key space and fetches the corresponding intermediate key-values from each of the $M$ mappers.
 
-1(b) In case of System Virtualization, the hypervisor (or VMM) can only allocate and assign the actual number of physical processor resources it has available at its disposal to individual Virtual Machines (VMs). (✅/❌ )
+1(b) In case of system virtualization, the hypervisor (or VMM) can only allocate and assign the actual number of physical processor resources it has available at its disposal to individual virtual machines (VMs). (✅/❌)
 
-> false. Virtualization allows you to overcommit resources and provide more virtual resources than actual physical resources, for example by time multiplexing the same set of CPU/processors across multiple VMs.
+> False. Virtualization allows you to overcommit resources and provide more virtual resources than actual physical resources, for example by time-multiplexing the same set of CPUs across multiple VMs.
 
 2(a) Consistent hashing is used in a variety of distributed systems over more traditional hashing algorithms.
 
@@ -298,7 +298,7 @@
 
    2(c.B) Under the MapReduce programming model, how does one deal with a single master node failure? (Assume there is a single master node).
 
-   > Solution: Master failure (discussed in class and also in the paper assigned for readin). 1. Master writes periodic checkpoints such that a new copy can be started from the last checkpointed state when master fails. 2. If only a single master, that particular MapReduce task is aborted and has to be restarted with a new master.
+   > Solution: Master failure was discussed in class and in the assigned reading. (1) The master writes periodic checkpoints so a new copy can be started from the last checkpointed state when the master fails. (2) If there is only a single master, that particular MapReduce task is aborted and has to be restarted with a new master.
 
 2(e) The DNS root and GTLD servers often come under attack. Give 2 reasons that we don’t notice when they are under attack.
 
@@ -354,7 +354,7 @@
 
    > east-ns.srini-lectures.com
 
-   Srini decides to move the content to a Chord DHT. He splits the lectures in 10 second chunks, which results in 65536 ($2^{16}$) files. He uses SHA3-256 (256bit long hash) to generate the identifiers used in his DHT. Finally, he recruits 1024 (210) users to participate in the Chord DHT as storage nodes.
+   Srini decides to move the content to a Chord DHT. He splits the lectures into 10-second chunks, which results in 65,536 ($2^{16}$) files. He uses SHA3-256, a 256-bit hash, to generate the identifiers used in his DHT. Finally, he recruits 1,024 ($2^{10}$) users to participate in the Chord DHT as storage nodes.
 
    4(d)  How many hops does it typically take to lookup a single chunk?
 
@@ -368,15 +368,15 @@
 
 > PDF: <https://www.cs.cmu.edu/~dga/15-440/F12/midterm2012-solve.pdf>
 
-1(d) UDP is better than TCP for streaming voice-over-IP data. (✅/❌ )
+1(d) UDP is better than TCP for streaming voice-over-IP data. (✅/❌)
 
 > True. Losing some audio bits isn’t as bad as dealing with the delays from TCP’s retransmission.
 
-1(e)  UDP is better than TCP for RPCs that return medium-sized (100KB) results. (✅/❌ )
+1(e) UDP is better than TCP for RPCs that return medium-sized (100 KB) results. (✅/❌)
 
 > False. 100KB is too big to fit in a single packet (64KB). The RPC system would just end up re-implementing much of what TCP does to split this data into packets and ensure that it is received reliably and reassembled. This would therefore be a poor idea.
 
-1(f) RPCs provide different semantics from local calls because RPCs introduce a different class of errors. (✅/❌ )
+1(f) RPCs provide different semantics from local calls because RPCs introduce a different class of errors. (✅/❌)
 
 > True. RPCs can suffer from network or server failures, so callers need to deal with those additional failure modes.
 
@@ -392,54 +392,58 @@ func `ReadHandler(conn *net.UDPConn)` {
 } 
 ```
 
-A. Spin loop **B. Race condition** C. Deadlock 
+A. Spin loop
+
+**B. Race condition**
+
+C. Deadlock
 
 Correct Explain briefly (1-2 sentences) where the bug is. 
 
 > bytes corresponds to some memory that is reused by ReadFromUDP. Thus, the slice to ProcessPacket could be overwritten while it is being processed.
 
-4(h) LSP could be extended to be robust, with high probability, in the presence of corrupted UDP packets by appending a checksum to each message and dropping any that are received with an incorrect checksum. (✅/❌ )
+4(h) LSP could be extended to be robust, with high probability, in the presence of corrupted UDP packets by appending a checksum to each message and dropping any that are received with an incorrect checksum. (✅/❌)
 
 > True. The resending of messages will ensure that (eventually) a valid packet will be sent.
 
-4(i) If a UDP packet gets delayed by several seconds, then the message it contains could be mistaken for one that occurs much later in the message sequence. (✅/❌ )
+4(i) If a UDP packet gets delayed by several seconds, then the message it contains could be mistaken for one that occurs much later in the message sequence. (✅/❌)
 
-> True. Due the the wrapping around of sequence numbers.
+> True. This can happen because sequence numbers wrap around.
 
 6. (14 points) Three computers at CMU (A, B, and C) communicate using a protocol that implements the idea of Lamport clocks (they include their clock time stamp in messages). For reference, if you need a reminder, recall that the three rules of Lamport’s algorithm are:
 
-   1. At process i, increment Li before each event
-   2. To send message m at process i, apply rule 1 and then include the current local time in the message, i.e., $send(m, Li)$.
-   3. To receive a message $(m, t)$ at process j, set $L_j = max(L_j, t)$ and then apply rule 1 before time-stamping the receive event.
+   1. At process $i$, increment $L_i$ before each event.
+   2. To send message $m$ at process $i$, apply Rule 1 and then include the current local time in the message, i.e., $\mathrm{send}(m, L_i)$.
+   3. To receive a message $(m, t)$ at process $j$, set $L_j = \max(L_j, t)$ and then apply Rule 1 before time-stamping the receive event.
 
    At the beginning of time, all three computers begin with their logical clock set to zero (0). Later, the following sequence of events occurs:
 
-   - A sends message M1 to B: “hi”.
-   - After sending M1, A sends message M2 to C: “hi”
-   - After receiving M1, B sends message M3 to C: “A told me hi”
-   - After receiving M3 first and then M2, C sends message M4 to A: “B is boring”
+   - A sends message $M_1$ to B: “hi”.
+   - After sending $M_1$, A sends message $M_2$ to C: “hi”.
+   - After receiving $M_1$, B sends message $M_3$ to C: “A told me hi”.
+   - After receiving $M_3$ first and then $M_2$, C sends message $M_4$ to A: “B is boring”.
 
    6(a) Indicate the time included with the messages as they are sent at each step.
 
    ```
-   Send (M1, _ )
-   Send (M2, _ )
-   Send (M3, _ )
-   Send (M4, _ )
+   Send(M1, _)
+   Send(M2, _)
+   Send(M3, _)
+   Send(M4, _)
    ```
    
    > ```
-   > Send (M1, 1)
-   > Send (M2, 2)
-   > Send (M3, 3)
-   > Send (M4, 6)
+   > Send(M1, 1)
+   > Send(M2, 2)
+   > Send(M3, 3)
+   > Send(M4, 6)
    > ```
    
    6(b) Maintaining all clock states from the previous question, three ADDITIONAL messages are sent:
    
-   - After receiving M4, A sends message M5 to B: “C is kind of random!”
-   - After receiving M5, B sends message M6 to A: “C is boring”
-   - A receives message M6
+   - After receiving $M_4$, A sends message $M_5$ to B: “C is kind of random!”
+   - After receiving $M_5$, B sends message $M_6$ to A: “C is boring”.
+   - A receives message $M_6$.
    
    After all of these messages have been sent and received, what time does each computer think it is?
    
@@ -448,15 +452,18 @@ Correct Explain briefly (1-2 sentences) where the bug is.
    | B    | 10   |
    | C    | 6    |
    
-   > (Remember, receiving and sending are different events!)
+   > Remember, receiving and sending are different events.
+   >
+   > ```text
    > initially: A=0, B=0, C=0
    > send(M1): A=1
-   >send(M2): A=2
+   > send(M2): A=2
    > send(M3): A=2, B=3
    > send(M4): A=2, B=3, C=6
    > send(M5): A=8, B=3, C=6
    > send(M6): A=8, B=10, C=6
-   > recv(M6): A=11, B=10, C=6.
+   > recv(M6): A=11, B=10, C=6
+   > ```
 
    6(c) Is this a relatively or totally ordered system?
 
@@ -465,80 +472,83 @@ Correct Explain briefly (1-2 sentences) where the bug is.
    6(d) Write out the vector time representation with the following messages as they are sent at each step.
    
    ```
-   Send (M1, [ ] )
-   Send (M2, [ ] )
-   Send (M3, [ ] )
-   Send (M4, [ ] )
+   Send(M1, [ ])
+   Send(M2, [ ])
+   Send(M3, [ ])
+   Send(M4, [ ])
    ```
    
-   > Send (M1, [1 ,0 ,0] )
-   > Send (M2, [2 ,0 ,0] )
-   > Send (M3, [1 ,2 ,0] )
-   > Send (M4, [2 ,2 ,3] )
+   > ```text
+   > Send(M1, [1, 0, 0])
+   > Send(M2, [2, 0, 0])
+   > Send(M3, [1, 2, 0])
+   > Send(M4, [2, 2, 3])
+   > ```
 
 ### Mid 2011
 
 > PDF: <https://www.cs.cmu.edu/~dga/15-440/F12/midterm2011_solve.pdf>
 
-1(b) The checksum portion of an IP packet allows the receiver to both detect and correct a single-bit error in the packet. (✅/❌ )
+1(b) The checksum portion of an IP packet allows the receiver to both detect and correct a single-bit error in the packet. (✅/❌)
 
 > False. Checksums can be used to detect errors, but not to correct them.
 
-1(c) TCP’s reliable in-order byte stream abstraction can add unpredictable latency to messages under high packet loss. (✅/❌ )
+1(c) TCP’s reliable in-order byte stream abstraction can add unpredictable latency to messages under high packet loss. (✅/❌)
 
 > True. Retransmission and in-order delivery can delay later bytes behind lost earlier bytes.
 
-1(d) When creating a UDP connection to a server, the client and server will engage in a handshake protocol. (✅/❌ )
+1(d) When creating a UDP connection to a server, the client and server will engage in a handshake protocol. (✅/❌)
 
 > False. There is no setup phase with UDP
 
-1(h) When making a synchronous RPC call, the caller will not return until after the requested operation has been completed, assuming no error is encountered. (✅/❌ )
+1(h) When making a synchronous RPC call, the caller will not return until after the requested operation has been completed, assuming no error is encountered. (✅/❌)
 
 > True. A synchronous RPC blocks the caller until the remote call completes or an error is reported.
 
-1(i) If the Lamport clock of event e1 is less than the Lamport clock of event e2, then there must be a chain of causal events by which e1 precedes e2. (✅/❌ )
+1(i) If the Lamport clock of event $e_1$ is less than the Lamport clock of event $e_2$, then there must be a chain of causal events by which $e_1$ precedes $e_2$. (✅/❌)
 
 > False. Lamport clocks preserve the happens-before implication only in the forward direction; smaller timestamps do not prove causal ordering.
 
-1(j) Global Positioning System (GPS) satellites use NTP to keep their clocks synchronized. (✅/❌ )
+1(j) Global Positioning System (GPS) satellites use NTP to keep their clocks synchronized. (✅/❌)
 
 > Solution: GPS satellites have their own atomic clocks. NTP would not provide sufficient accuracy for this application.
 
-6. Three computers at CMU, A, B, and C communicate using a protocol that implements the idea of lamport clocks (they include their clock time stamp in messages). For reference, if you need a reminder, recall that the three rules of Lamport’s algorithm are:
+6. Three computers at CMU, A, B, and C communicate using a protocol that implements the idea of Lamport clocks (they include their clock timestamp in messages). For reference, if you need a reminder, recall that the three rules of Lamport’s algorithm are:
 
-   1. At process i, increment Li before each event
-   2. To send message m at process i, apply rule 1 and then include the current local time in the message, i.e., $send(m, Li)$.
-   3. To receive a message $(m, t)$ at process j, set $L_j = max(L_j, t)$ and then apply rule 1 before time-stamping the receive event.
+   1. At process $i$, increment $L_i$ before each event.
+   2. To send message $m$ at process $i$, apply Rule 1 and then include the current local time in the message, i.e., $\mathrm{send}(m, L_i)$.
+   3. To receive a message $(m, t)$ at process $j$, set $L_j = \max(L_j, t)$ and then apply Rule 1 before time-stamping the receive event.
 
    At the beginning of time, all three computers begin with their logical clock set to zero (0). Later, the following sequence of events occurs:
 
-   - A sends message M1 to B: “hi”.
-   - After receiving M1, B sends message M2 to C: “A told me hi”
-   - After receiving M2, C sends message M3 to A: “B is boring”
+   - A sends message $M_1$ to B: “hi”.
+   - After receiving $M_1$, B sends message $M_2$ to C: “A told me hi”.
+   - After receiving $M_2$, C sends message $M_3$ to A: “B is boring”.
 
    6(a) Indicate the time included with the messages as they are sent at each step.
 
    ```
-   Send (M1, _ )
-   Send (M2, _ )
-   Send (M3, _ )
-   Send (M4, _ )
+   Send(M1, _)
+   Send(M2, _)
+   Send(M3, _)
+   Send(M4, _)
    ```
 
-   > Send (M1, 1)
-   > Send (M2, 3)
-   > Send (M3, 5)
+   > ```text
+   > Send(M1, 1)
+   > Send(M2, 3)
+   > Send(M3, 5)
+   > ```
 
    6(b) Maintaining all clock states from the previous question, three ADDITIONAL messages are sent:
 
-   - After receiving M3, A sends message M4 to B: “C is kind of random!”
-   - After receiving M4, B sends message M5 to A: “C is boring”
-   - A receives message M5
+   - After receiving $M_3$, A sends message $M_4$ to B: “C is kind of random!”
+   - After receiving $M_4$, B sends message $M_5$ to A: “C is boring”.
+   - A receives message $M_5$.
 
    After all of these messages have been sent and received, what time does each computer think it is?
 
-   >  A=10, B=9, C=5.
-   > (Remember, receiving and sending are different events!)
+   > A=10, B=9, C=5. Remember, receiving and sending are different events.
 
    6(c) Is this a relatively or totally ordered system?
 
@@ -546,9 +556,9 @@ Correct Explain briefly (1-2 sentences) where the bug is.
 
    6(d) Reset all clocks to zero. This time:
 
-   - A sends message M1 to B.
+   - A sends message $M_1$ to B.
    - The user of machine A is talking on the phone with the user of machine B. She tells him “I just sent you a message online. Please send a message to C right now.”
-   - B sends message M2 to C.
+   - B sends message $M_2$ to C.
 
    Once all of the messages have been sent and received, what times might C’s clock be set to under which circumstance?
 
@@ -593,39 +603,47 @@ Correct Explain briefly (1-2 sentences) where the bug is.
 
    > UDP, TCP, TCP, UDP, TCP, UDP
 
-   11. Suppose each computer in a distributed system keeps an approximate real-time clock $Ri$ in addition to a Lamport-like clock $Li$. 
+11. Suppose each computer in a distributed system keeps an approximate real-time clock $R_i$ in addition to a Lamport-like clock $L_i$.
 
-       A computer’s real-time clock $Ri$ is an always-increasing integer (i.e., for any two reads $r_1$, $r_2$ of $R_i$ such that $r1 →_i r2$, we have r2 > r1), but the real-time clocks at different computers may drift relative to each other (i.e., $R_j − R_i$ is non-constant for j ≠ i). 
+    A computer's real-time clock $R_i$ is an always-increasing integer: for any two reads $r_1, r_2$ of $R_i$ such that $r_1 \to_i r_2$, we have $r_2 > r_1$. The real-time clocks at different computers may drift relative to each other, so $R_j - R_i$ is non-constant for $j \ne i$.
 
-   Consider the following modification, Shamport, to Lamport’s partial-ordering algorithm: 
+    Consider the following modification, **Shamport**, to Lamport's partial-ordering algorithm:
 
-   **Rule 1:** before each event at computer i, set $L_i = min(Li + 1, Ri)$. 
+    **Rule 1:** Before each event at computer $i$, set $L_i = \min(L_i + 1, R_i)$.
 
-   **Rule 2:** when sending a message m, apply Rule 1 and include the time Li as part of the message. 
+    **Rule 2:** When sending a message $m$, apply Rule 1 and include the time $L_i$ as part of the message, i.e., send $(m, L_i)$ instead of just $m$.
 
-   **Rule 3:** when receiving a message $(m, t)$ at computer j, set $L_j = max(Lj, t)$ and then apply Rule 1 before timestamping the message-arrival event. 
+    **Rule 3:** When receiving a message $(m, t)$ at computer $j$, set $L_j = \max(L_j, t)$ and then apply Rule 1 before timestamping the message-arrival event.
 
-   Let the Shamport global time of an event e at computer i be $S(e) = L_i(e)$.
+    Let the Shamport global time of an event $e$ at computer $i$ be $S(e) = L_i(e)$.
 
-   11(a) In the algorithm above, underline the difference between Shamport and Lamport’s algorithm. (Underline as little as possible).
+    11(a) In the algorithm above, underline the difference between Shamport and Lamport's algorithm. (Underline as little as possible.)
 
-   > Shamport’s algorithm uses $L_i = min(L_i + 1, R_i )$ in Rule 1 instead of $L_i = L_i + 1$. Otherwise the two algorithms are the same.
+    > Shamport's algorithm uses $L_i = \min(L_i + 1, R_i)$ in Rule 1 instead of $L_i = L_i + 1$. Otherwise the two algorithms are the same.
 
-   11(b) Let $e, e'$ be two events at computer i such that $e →_i e’$. Prove that $S(e' ) > S(e)$.
+    11(b) Let $e, e'$ be two events at computer $i$ such that $e \to_i e'$. Prove that $S(e') > S(e)$.
 
-   > The key observation is that any new event advances the logical clock. There are a couple common pitfalls to avoid: 
-   >
-   > (1) e and e’ are not necessarily consecutive events; other intervening events can affect the Shamport clock. 
-   >
-   > (2) Events at computer i include the local side of send and receive events, so you need to include possible applications of Rule 2 and Rule 3 in your proof. And (3), reading the problem correctly to understand that the logical clocks Li here are not Lamport clocks, and thus you cannot blindly apply the rules for Lamport clocks from class. One proof is: Consider the sequence of all events e . . . e0 at computer i. If S(e0 ) ≤ S(e) then there must exist at least one pair of consecutive events f, f 0 (WLOG f →i f 0 ) such that S(f 0 ) ≤ S(f ); otherwise each new event would advance the logical clock Li , which would yield Li (e0 ) > Li (e0 ) and thus S(e0 ) > S(e). To show S(e0 ) > S(e), therefore, it suffices to show that Li (f 0 ) > Li (f ) for any two consecutive events f →i f 0 . Let (t, r) be the logical and real-time clock times for event f and (t0 , r0 ) be the times for f 0 . We must show that t0 > t for any events f and f 0 . We break this into three cases based on whether f 0 is a normal local event, a send event, or a receive event. (In each of these cases we allow f to be any type of event.) Notice that in every case we have r0 > r because $Ri$ is always-increasing and f →i f 0 . Case 1: f 0 is a normal local event. This causes a single application of Rule 1, yielding t0 = min(t + 1, r0 ). Briefly consider the rule that set the logical clock for f . Because all three rules last-affect the logical clock with an application of Rule 1, we have that t = min(,̇r) and thus that t ≤ r, yielding t < r0 . Because t + 1 > t and r0 > t we therefore have that t0 > t regardless of which term of the min-operation is lesser, yielding that S(f 0 ) > S(f ) as desired if f 0 is a local-only event. Case 2: f 0 is a send event. This causes an application of Rule 2, which affects the logical clock only with an application of Rule 1. Thus, Case 2 reduces directly to Case 1.
+    > The key observation is that any new event advances the logical clock. There are three common pitfalls: $e$ and $e'$ need not be consecutive; send and receive events still include local events at computer $i$; and the $L_i$ clocks here are not ordinary Lamport clocks.
+    >
+    > Consider the sequence of all events $e, \ldots, e'$ at computer $i$. If $S(e') \le S(e)$, then some consecutive pair of events $f, f'$ with $f \to_i f'$ must have $S(f') \le S(f)$; otherwise every consecutive step would strictly increase the Shamport time, implying $S(e') > S(e)$. Thus it is enough to show $L_i(f') > L_i(f)$ for every consecutive pair $f \to_i f'$.
+    >
+    > Let $(t, r)$ be the logical-clock and real-time-clock values for event $f$, and let $(t', r')$ be the corresponding values for event $f'$. Because $R_i$ is always increasing and $f \to_i f'$, we have $r' > r$. Also, after timestamping $f$, Rule 1 has capped the logical clock by the real-time clock, so $t \le r$. Therefore $r' > t$.
+    >
+    > If $f'$ is a normal local event, Rule 1 gives $t' = \min(t + 1, r')$. Both $t + 1$ and $r'$ are greater than $t$, so $t' > t$.
+    >
+    > If $f'$ is a send event, Rule 2 affects the clock only by applying Rule 1 before the send timestamp is recorded. This is the same argument as the normal local-event case, so again $t' > t$.
+    >
+    > If $f'$ is a receive event for message $(m, t_m)$, Rule 3 followed by Rule 1 gives $t' = \min(\max(t, t_m) + 1, r')$. Since $\max(t, t_m) + 1 > t$ and $r' > t$, we again have $t' > t$.
+    >
+    > Therefore every consecutive local step increases $L_i$, so $S(e') > S(e)$.
 
-   11(c) Draw a time-series diagram in which S(send(m)) > S(receive(m)) for some message m. Explain in 1-2 sentences why this unwanted behavior occurs.
+    11(c) Draw a time-series diagram in which $S(\mathrm{send}(m)) > S(\mathrm{receive}(m))$ for some message $m$. Explain in 1-2 sentences why this unwanted behavior occurs.
 
-   > This can happen when the receiver’s real-time clock is behind the sender’s. On receive, the node first raises Lj using the message timestamp, but Rule 1 then caps the logical clock at its slower real-time clock, so the receive event can be timestamped earlier than the send.
+    > This can happen when the receiver's real-time clock is behind the sender's. On receive, the node first raises $L_j$ using the message timestamp, but Rule 1 then caps the logical clock at the slower real-time clock, so the receive event can be timestamped earlier than the send.
 
-   11(d) Suppose every one-way message latency is at least x clock ticks by any local clock, and external synchronization guarantees |Ri − Rj| ≤ y. Is there a value of y small enough to guarantee S(send(m)) < S(receive(m)) for any message?
+    11(d) Suppose every one-way message latency is at least $x$ clock ticks by any local clock, and external synchronization guarantees $|R_i - R_j| \le y$. Is there a value of $y$ small enough to guarantee $S(\mathrm{send}(m)) < S(\mathrm{receive}(m))$ for any message?
 
-   > Yes. It is enough to have y < x: the minimum propagation delay then exceeds the maximum real-clock skew, so the receiver’s real-time clock is still ahead of the sender’s timestamp when Rule 1 is applied.
+    > Yes. It is enough to have $y < x$: the minimum propagation delay then exceeds the maximum real-clock skew, so the receiver's real-time clock is still ahead of the sender's timestamp when Rule 1 is applied.
 
 ### Final 2009
 
@@ -637,29 +655,63 @@ Correct Explain briefly (1-2 sentences) where the bug is.
 |           3 | Question 6(a), 6(h)              | GFS data path; Lamport happens-before implication                              |
 |        8-11 | Question 14                      | MapReduce-style distributed data processing                                    |
 
-1. Which techniques are used in DNS to improve scalability? A. Replication B. Recursive queries C. Caching / Soft-State D. Partitioning of Namespace
+1. Which techniques are used in DNS to improve scalability?
+
+   A. Replication
+
+   B. Recursive queries
+
+   C. Caching / Soft-State
+
+   D. Partitioning of namespace
 
    > A, C, D
 
-2. Which of the following are true about the Chord distributed hash table? A. Has O(log(N)) lookup latency B. Directly supports fuzzy or wildcard lookups for content C. Uses content-based naming D. Provides anonymity
+2. Which of the following are true about the Chord distributed hash table?
+
+   A. Has $O(\log N)$ lookup latency.
+
+   B. Directly supports fuzzy or wildcard lookups for content.
+
+   C. Uses content-based naming.
+
+   D. Provides anonymity.
 
    > A, C
 
-3. Which of the following are commonly provided in RPC libraries? A. Application-level failure handling B. Data marshalling/unmarshalling C. Asynchronous function calls D. Exactly-once semantics E. At-most-once semantics
+3. Which of the following are commonly provided in RPC libraries?
+
+   A. Application-level failure handling
+
+   B. Data marshalling/unmarshalling
+
+   C. Asynchronous function calls
+
+   D. Exactly-once semantics
+
+   E. At-most-once semantics
 
    > B, E
 
-4. Which of the following are advantages of using content-based naming for p2p file transfers? A. The receiver can download a chunk using parallel TCP streams. B. The receiver can route around failed links. C. The receiver can download a chunk of data from any source, not just the original seed. D. The receiver can verify that it received the correct data.
+4. Which of the following are advantages of using content-based naming for P2P file transfers?
+
+   A. The receiver can download a chunk using parallel TCP streams.
+
+   B. The receiver can route around failed links.
+
+   C. The receiver can download a chunk of data from any source, not just the original seed.
+
+   D. The receiver can verify that it received the correct data.
 
    > C, D
 
 6. Which of the following statements are true? Please circle True or False:
 
-   6(a) In Google File System (GFS), when a client needs to access data, it contacts the master and gets the data from the master. (✅/❌ )
+   6(a) In Google File System (GFS), when a client needs to access data, it contacts the master and gets the data from the master. (✅/❌)
 
    > False
 
-   6(h) Recall the global “happens-before” relationship (→) that captured the logical notions of time using both the local happens-before relationship at each server and the fact that a message must be sent before it can be received. True or false: For a Lamport logical clock L, if e1 → e2 then L(e1 ) < L(e2 ). (✅/❌ )
+   6(h) Recall the global “happens-before” relationship ($\to$) that captured the logical notions of time using both the local happens-before relationship at each server and the fact that a message must be sent before it can be received. True or false: For a Lamport logical clock $L$, if $e_1 \to e_2$ then $L(e_1) < L(e_2)$. (✅/❌)
 
    > True
 
@@ -755,57 +807,105 @@ Correct Explain briefly (1-2 sentences) where the bug is.
 |         5-6 | Question 4, 5, 6                 | Chord/P2P lookup and design trade-offs                                                        |
 |           9 | Question 11, 12                  | Lamport timestamp ordering                                                                    |
 
-1. (22 points) True/False: Circle the one that best applies. Grading is 2 points for every correct answer. That means that at the end of the exam, if you don’t know the right answer, come back here and guess randomly!
+1. **True/False and select the right answers.** Circle the one that best applies. The original source includes additional logging, Tor, and distributed mutual-exclusion subitems; only the CSC4303-relevant networking subitems are retained here.
 
-   Threads and Processes
+   1(a) The TCP initial handshake must be completed between the sender and every router on the path to the destination before communication can take place. (✅/❌)
 
-   - True, False It is less expensive to create a process than a thread.
-   - True, False Switching between threads is faster than switching between processes.
-   - True, False In order to switch between user threads, you need to enter the kernel.
-   - True, False Threads share a heap and a stack.
+   > False. The TCP three-way handshake is end-to-end between the two hosts; routers forward packets and do not participate in a TCP connection.
 
-   Networking
+   1(b) The Internet service model allows a small (a percent or two) amount of packet loss. In other words, end-hosts must be able to deal with a small amount of loss. (✅/❌)
 
-   - True, False The TCP initial handshake must be completed between the sender and every router on the path to the destination before communication can take place.
-   - True, False The Internet service model allows a small (a percent or two) amount of packet loss. (In other words, end-hosts must be able to deal with a small amount of loss)
-   - True, False Domain Name Service (DNS) servers remember which clients have cached DNS replies so that the servers can send invalidation messages when name bindings change.
+   > True. IP provides best-effort delivery, so reliability and recovery from loss are handled by transport protocols or applications.
 
-   Distributed Mutual Exclusion
+   1(c) Domain Name Service (DNS) servers remember which clients have cached DNS replies so that the servers can send invalidation messages when name bindings change. (✅/❌)
 
-   - True, False Ring-based distributed mutual exclusion is a great solution for a latency-sensitive application running on 10,000 nodes.
+   > False. DNS cache freshness is controlled by TTLs; authoritative servers do not track all caching clients and push invalidations to them.
 
-   Logging
+2. Which of the following design assumptions apply to HDFS/GFS? (Circle all that apply.)
 
-   - True, False Write-ahead logging is a useful technique for providing persistence for random updates without needing to write to a random location on disk.
-   - True, False For correctness, all write-ahead log records must specify how to both undo and redo the operation they describe.
+   A. Only amazingly powerful servers can handle the size and complexity of the workload.
 
-   Tor
+   B. Any use of a centralized server would cause too much of a bottleneck.
 
-   - True, False The onion routing scheme used by Tor is resilient to an attacker that can simultaneously compromise every node in the Tor network.
+   C. Component failures are expected.
 
-2. Which of the following design assumptions apply to HDFS/GFS? (Circle all that apply) A. Only amazingly powerful servers can handle the size and complexity of the workload. B. Any use of a centralized server would cause too much of a bottleneck. C. Component failures are expected. D. Files are huge by traditional standards. E. File contents are often updated and overwritten. (✅/❌ )
+   D. Files are huge by traditional standards.
 
-   > C, D
+   E. File contents are often updated and overwritten.
 
-4. Suppose the above Chord setup: • At what node do you expect to find key 10? • At what node do you expect to find key 9? • On average, how many hops are there when searching for a key? • What route will a search for key 11 take, starting at node 3?
+   > C, D.
 
-   > Key 10 maps to node 0, and key 9 maps to node 9. Chord lookups take O(log N) hops on average. Starting at node 3 for key 11, the lookup goes 3 → 9 → 0.
+4. Suppose the following Chord setup:
+
+   - Identifier circle: $0,1,\ldots,11$.
+   - Active nodes: $n_0$, $n_3$, $n_6$, and $n_9$.
+   - Successor table:
+
+   | Node | $i=0$ | $i=1$ | $i=2$ |
+   | ---- | ----- | ----- | ----- |
+   | $n_0$ | $\mathrm{succ}(1)=n_3$ | $\mathrm{succ}(2)=n_3$ | $\mathrm{succ}(4)=n_6$ |
+   | $n_3$ | $\mathrm{succ}(4)=n_6$ | $\mathrm{succ}(5)=n_6$ | $\mathrm{succ}(7)=n_9$ |
+   | $n_6$ | $\mathrm{succ}(7)=n_9$ | $\mathrm{succ}(8)=n_9$ | $\mathrm{succ}(10)=n_0$ |
+   | $n_9$ | $\mathrm{succ}(10)=n_0$ | $\mathrm{succ}(11)=n_0$ | $\mathrm{succ}(13)=n_0$ |
+
+   Answer the following:
+
+   - At what node do you expect to find key 10?
+   - At what node do you expect to find key 9?
+   - On average, how many hops are there when searching for a key?
+   - What route will a search for key 11 take, starting at node 3?
+
+   > Key 10 maps to $n_0$, and key 9 maps to $n_9$. Chord lookups take $O(\log N)$ hops on average. Starting at $n_3$ for key 11, the lookup goes $n_3 \to n_9 \to n_0$.
 
 5. Suppose you want to build a large distributed system to store cookie recipes. Each cookie is stored using the recipe’s name (“Grandma’s Arsenic Cookie Surprise”). Unlike many P2P systems, in this one, the recipe data is small, so you wanted to store the actual data in the P2P system instead of leaving it on the original nodes. A friend says “Hey, I hear that Chord is very efficient – it doesn’t take many lookups to find the node containing the data.” Explain to your friend why directly throwing this data into a DHT such as chord, with key = recipe name, value = recipe data, is a really bad design decision. Brief - two sentences or so.
 
    > Chord only supports exact-key lookup well, while recipe users are likely to search by partial names, ingredients, or categories. Hashing recipe names also destroys locality, so related recipes cannot be found together without building a separate index.
 
-6. Tell us what style of P2P system you would use, and what assumptions you think are reasonable for your cookie-storing-system: • Number of nodes • Number of recipes • Number of queries/second • What do queries look like? Style of system AND a brief rationale for this decision:
+6. Tell us what style of P2P system you would use, and what assumptions you think are reasonable for your cookie-storing-system:
+
+   - Number of nodes
+   - Number of recipes
+   - Number of queries/second
+   - What do queries look like?
+
+   Give the style of system and a brief rationale for this decision.
 
    > A centralized or replicated index is a better fit than a pure DHT if the recipe corpus is moderate and queries are keyword/category searches rather than exact-key lookups. The recipe data is small enough to replicate or cache, while the index can support richer search over names, ingredients, and tags.
 
-11. What is the value of x? If it cannot be determined, write “unknown”.
+11. Consider a system with four machines that uses Lamport timestamps for logical ordering. Let $L_i(m_j,\mathrm{send})$ be the Lamport logical time for machine $i$ sending message $j$, and let $L_i(m_j,\mathrm{recv})$ be the Lamport logical time for machine $i$ receiving message $j$. Each local clock is initialized to $0$. Answer the questions below based on these timestamps:
 
-    > x = 7. Message m5 is sent by machine 4 with Lamport time 6, and machine 1’s local clock before receiving it is 2, so the receive timestamp is max(2, 6) + 1 = 7.
+    ```text
+    L_1(m_1, send) = 1
+    L_1(m_2, send) = 2
+    L_2(m_1, recv) = 2
+    L_3(m_2, recv) = 3
+    L_2(m_3, send) = 3
+    L_3(m_4, send) = 4
+    L_3(m_3, recv) = 5
+    L_4(m_4, recv) = 5
+    L_4(m_5, send) = 6
+    L_1(m_5, recv) = x
+    L_4(m_6, send) = 7
+    L_1(m_7, send) = 8
+    L_3(m_7, recv) = 9
+    L_3(m_6, recv) = 10
+    ```
 
-12. For the following, circle which event happened first. If it cannot be determined, circle “unknown.” • L1 (m1, send) L4 (m5, send) U nknown • L2 (m3, send) L3 (m4, send) U nknown • L3 (m4, send) L3 (m3, recv) U nknown • L2 (m3, send) L4 (m6, send) U nknown • L4 (m6, send) L1 (m7, send) U nknown
+    What is the value of $x$? If it cannot be determined, write "unknown".
 
-    > L1(m1, send); Unknown; L3(m4, send); Unknown; Unknown.
+    > $x = 7$. Message $m_5$ is sent by machine 4 with Lamport time 6, and machine 1's local clock before receiving it is 2, so the receive timestamp is $\max(2, 6) + 1 = 7$.
+
+12. For the following, circle which event happened first. If it cannot be determined, circle "unknown."
+
+    | Option 1 | Option 2 | Unknown |
+    | -------- | -------- | ------- |
+    | $L_1(m_1,\mathrm{send})$ | $L_4(m_5,\mathrm{send})$ | unknown |
+    | $L_2(m_3,\mathrm{send})$ | $L_3(m_4,\mathrm{send})$ | unknown |
+    | $L_3(m_4,\mathrm{send})$ | $L_3(m_3,\mathrm{recv})$ | unknown |
+    | $L_2(m_3,\mathrm{send})$ | $L_4(m_6,\mathrm{send})$ | unknown |
+    | $L_4(m_6,\mathrm{send})$ | $L_1(m_7,\mathrm{send})$ | unknown |
+
+    > $L_1(m_1,\mathrm{send})$; unknown; $L_3(m_4,\mathrm{send})$; unknown; unknown.
 
 ### Final 2011
 
@@ -820,33 +920,36 @@ Correct Explain briefly (1-2 sentences) where the bug is.
 
 1. (8 points) Circle True or False as appropriate. If you don’t know the answer, come back at the end and GUESS; a blank answer is the same as a wrong answer, so guessing can only help.
 
-   1(a) DNS is delegated hierarchically by having the root nodes tell resolvers which servers to query for `.com`, and so on, until the client’s query can be answered. (✅/❌ )
+   1(a) DNS is delegated hierarchically by having the root nodes tell resolvers which servers to query for `.com`, and so on, until the client’s query can be answered. (✅/❌)
 
    > True.
 
-   1(b) DNS resolvers use Paxos and invalidation messages to maintain the consistency of cached records. (✅/❌ )
+   1(b) DNS resolvers use Paxos and invalidation messages to maintain the consistency of cached records. (✅/❌)
 
    > False.
 
-   1(c) Some Content Delivery Networks (CDNs) use DNS responses to direct clients to the closest CDN cache. (✅/❌ )
+   1(c) Some Content Delivery Networks (CDNs) use DNS responses to direct clients to the closest CDN cache. (✅/❌)
 
    > True.
 
-   1(d) The Map step of MapReduce provides a way to store and retrieve items according to their keys. (✅/❌ )
+   1(d) The Map step of MapReduce provides a way to store and retrieve items according to their keys. (✅/❌)
 
    > False.
 
 6. Peer to Peer
 
-   6(a) In a centralized p2p network (such as the old Napster), how many indices must be searched if a client wants to locate a particular file?
+   6(a) In a centralized P2P network (such as the old Napster), how many indices must be searched if a client wants to locate a particular file?
 
    > 1
 
-   6(b) Name one major disadvantage of the centralized p2p system (from a distributed principles point of view)
+   6(b) Name one major disadvantage of the centralized P2P system (from a distributed principles point of view)
 
    > - Single point of failure - Server processes everything - Server must keep track of a potentially very large number of clients - more?
 
-   6(c) Query flooding is an alternative design that solves some of the problems of centralized p2p and eliminates the central server. However, it changes the mechanics of peer interactions significantly. Explain (1 sentence each) how a newly-joining node publishes the files they wish to make available, in... A centralized p2p network:
+   6(c) Query flooding is an alternative design that solves some of the problems of centralized P2P and eliminates the central server. However, it changes the mechanics of peer interactions significantly. Explain, in one sentence each, how a newly joining node publishes the files they wish to make available:
+
+   - In a centralized P2P network
+   - In a query-flooding P2P network
 
    > They send their list of files and metadata to the server.
    >
@@ -854,9 +957,9 @@ Correct Explain briefly (1-2 sentences) where the bug is.
    >
    > They don’t do anything - queries come to them.
 
-   6(d) One popular improvement upon query flooding is to move to a “supernode” flooding architecture. Using N as the number of nodes in the network and, S as the number of supernodes (S << N ), explain the benefit of moving to this supernode architecture.
+   6(d) One popular improvement upon query flooding is to move to a “supernode” flooding architecture. Using $N$ as the number of nodes in the network and $S$ as the number of supernodes, where $S \ll N$, explain the benefit of moving to this supernode architecture.
 
-   > Queries require now O(S) messages instead of O(N ). In addition, if the nodes used as supernodes are more stable or have higher capacity, can further improve the performance or stability of the network.
+   > Queries now require $O(S)$ messages instead of $O(N)$. In addition, if the nodes used as supernodes are more stable or have higher capacity, they can further improve the performance or stability of the network.
 
    6(e) What is a common mechanism used to limit the propagation of queries in a flooding network?
 
@@ -876,15 +979,15 @@ Correct Explain briefly (1-2 sentences) where the bug is.
 
    > Performance problems as nodes forward a key resolution request to larger chains of neighbors.
 
-   7(c) The Chord scheme overcomes this problem by having each node maintain a “finger table”. Given starting node j and destination node k, where k > j, how much is the distance between the two nodes reduced with each hop?
+   7(c) The Chord scheme overcomes this problem by having each node maintain a “finger table”. Given starting node $j$ and destination node $k$, where $k > j$, how much is the distance between the two nodes reduced with each hop?
 
    > It decreases exponentially, or it is cut in half
 
-   7(d) In a Chord structured DHT with N nodes, how many hops would a lookup operation require?
+   7(d) In a Chord structured DHT with $N$ nodes, how many hops would a lookup operation require?
 
-   > log(N )
+   > $O(\log N)$.
 
-   7(e) Assume a Chord network in which node q is the successor of node p. During operation, node p discovers that its successor link is no longer consistent because q has updated its predecessor link. What does this change imply must have happened in the network?
+   7(e) Assume a Chord network in which node $q$ is the successor of node $p$. During operation, node $p$ discovers that its successor link is no longer consistent because $q$ has updated its predecessor link. What does this change imply must have happened in the network?
 
    > A new node joined the network ’between’ p and q.
 
@@ -1044,31 +1147,31 @@ Practice Problems: Link-State Routing. C receives contradictory LSPs: one from A
 
 1(a) If the router’s buffer is completely full of TCP acknowledgment packets, how many packets are queued in the buffer? Assume the TCP segment has no payload, and the packet headers do not contain any IPv4 or TCP options. (3 points)
 
-> Ignoring the link-layer header and any minimum size restriction on the link-layer frame, a TCP ACK packet is 40 bytes long, consisting of a 20-byte IP header and a 20-byte TCP header. A 100,000-byte buffer can hold 100000/40 or 2500 ACK packets.
+> Ignoring the link-layer header and any minimum size restriction on the link-layer frame, a TCP ACK packet is 40 bytes long, consisting of a 20-byte IP header and a 20-byte TCP header. A 100,000-byte buffer can hold $100000/40 = 2500$ ACK packets.
 
 1(b) Suppose the buffer is completely full. How long does it take the router to transmit all of the bytes in the buffer? (3 points)
 
-> Sending 100,000 bytes at 125,000 bytes/sec requires 100000/125000 or 0.8 seconds, or 800 msec.
+> Sending 100,000 bytes at 125,000 bytes/sec requires $100000/125000 = 0.8$ seconds, or 800 msec.
 
 1(c) Suppose the router supports two first-in first-out queues, one for interactive applications (like Voice over IP) and the other for all remaining traffic, with static priority for the queue handling interactive traffic. If a VoIP packet arrives when the queue for interactive applications is empty, what is the maximum time before the router starts transmitting the VoIP packet? (Assume that the router does not preempt any ongoing packet transmission.) (4 points)
 
-> At worst, the VoIP packets arrives just as the router starts transmitting a full-sized (i.e., 1000-byte) non-VoIP packet, forcing the VoIP packet to wait for 1000/125000 or 0.008 seconds, or 8 msec.
+> At worst, the VoIP packet arrives just as the router starts transmitting a full-sized (i.e., 1000-byte) non-VoIP packet, forcing the VoIP packet to wait for $1000/125000 = 0.008$ seconds, or 8 msec.
 
 2(a) What is the earliest time that A can start sending data to B? (3 points)
 
-> _____ Immediately after sending the SYN packet to B __X__ Immediately after receiving the SYN-ACK packet from B _____ Immediately after receiving data from B Once the SYN-ACK arrives, A knows that B has A’s initial sequence number and is ready to accept data packets from A.
+> Immediately after receiving the SYN-ACK packet from B. Once the SYN-ACK arrives, A knows that B has A's initial sequence number and is ready to accept data packets from A.
 
 2(b) What is the earliest time that B can start sending data to A? (3 points)
 
-> _____ Immediately after receiving the SYN packet from A _____ Immediately after sending the SYN-ACK packet to A __X__ Immediately after receiving the ACK packet from A _____ Immediately after receiving data from A Once the ACK arrives, B knows that A has B’s initial sequence number and is ready to accept data packets from B.
+> Immediately after receiving the ACK packet from A. Once the ACK arrives, B knows that A has B's initial sequence number and is ready to accept data packets from B.
 
 2(c) Suppose the ACK packet from A gets lost. What ultimately triggers A to retransmit the lost ACK packet? Assume no other packets get lost and no data packets are sent. (4 points)
 
-> _____ A retransmission timeout at A __X__ A retransmission timeout at B, triggering a retransmission of the SYN-ACK packet ACK packets are not retransmitted, so A does not experience a retransmission timeout. If B does not receive an ACK for the SYN-ACK, then B will retransmit the (presumed lost) SYN-ACK after the retransmission timeout expires.
+> A retransmission timeout at B triggers retransmission of the SYN-ACK packet. ACK packets are not retransmitted by themselves, so A does not experience a retransmission timeout for the lost ACK. If B does not receive an ACK for the SYN-ACK, then B will retransmit the presumed-lost SYN-ACK after the retransmission timeout expires.
 
 3(a) How many IP addresses does the campus “own” in its 12.1.0.0/17 block? You can represent your answer as a power of two. (2 points)
 
-> The 17-bit mask leaves 32-17, or 15 bits to identify the addresses within the block. As such, the block contains 215 or 32,768 addresses.
+> The 17-bit mask leaves $32 - 17 = 15$ bits to identify the addresses within the block. As such, the block contains $2^{15} = 32{,}768$ addresses.
 
 3(b) What are the smallest and largest IP addresses that the campus owns in the block?
 
@@ -1076,11 +1179,11 @@ Practice Problems: Link-State Routing. C receives contradictory LSPs: one from A
 
 3(c) Suppose the ISP router receives a packet with destination IP address 12.1.1.1? What path does this packet follow? (2 points)
 
-> The packet flows over the path 1 -> 2 -> 3 -> 4.
+> The packet flows over the path $1 \to 2 \to 3 \to 4$.
 
 3(d) Suppose the ISP router receives a packet with destination IP address 12.1.20.1? What path does this packet follow? (2 points)
 
-> The packet flows over the path 1 -> 2 -> 3 -> 2 -> 3 ...
+> The packet flows over the path $1 \to 2 \to 3 \to 2 \to 3 \to \cdots$.
 
 3(e) What ultimately happens to a packet with destination IP address 12.1.20.1? Where does it go? (2 points)
 
@@ -1096,7 +1199,7 @@ Practice Problems: Link-State Routing. C receives contradictory LSPs: one from A
 
 5(a) Suppose process A calls send() to send 10,000 bytes of data, and the operating system begins sending the data as a sequence of packets destined to B. If process A calls close() on the socket before the operating system finishes transmitting the data, will the remaining data be sent to B? Why or why not? (3 points)
 
-> Yes, the Operating System continues transmitted the remaining data to B, to ensure the ordered, reliable delivery of the byte stream.
+> Yes. The operating system continues transmitting the remaining data to B to ensure ordered, reliable delivery of the byte stream.
 
 5(b) Suppose process A calls close() after the operating system has transmitted all of the outstanding data. What kind of packet does the operating system send in response to A’s call to close()? (2 points)
 
@@ -1104,7 +1207,7 @@ Practice Problems: Link-State Routing. C receives contradictory LSPs: one from A
 
 5(c) Explain why B may need to perform multiple calls to recv() to receive all 10,000 bytes of data from A. (3 points)
 
-> The data may not reach B in its entirety at the same time, since it is split into multiple packets. These packets may experience different delays due to congestion, retransmission and receivewindow constraints.
+> The data may not reach B in its entirety at the same time, since it is split into multiple packets. These packets may experience different delays due to congestion, retransmission, and receive-window constraints.
 
 5(d) Suppose B’s operating system has learned that A has closed its end of the connection. Once process B has read all of the data from A, what does B’s next call to recv() return? (2 points)
 
@@ -1139,7 +1242,7 @@ Practice Problems: Link-State Routing. C receives contradictory LSPs: one from A
 
 1(c) To prevent free-riding, a BitTorrent peer rates other peers in terms of the download rate they offer, and then decides how much to offer in return. Suppose six users offer data at rates of 10, 4, 8, 3, 7, and 5 Mbps, respectively, and the peer has 15 Mbps of upload bandwidth. What upload rate does it offer to each of the six peers? (3 points)
 
-> The peer uploads with 1/N of its bandwidth to the top N peers, where N is 4 by default. So, the upload rates are 15/4, 0, 15/4, 0, 15/4, 15/4.
+> The peer uploads with $1/N$ of its bandwidth to the top $N$ peers, where $N=4$ by default. So, the upload rates are $15/4$, 0, $15/4$, 0, $15/4$, $15/4$ Mbps.
 
 1(d) Under the same scenario as question 1(c), suppose peer #1 (currently offering a download rate of 10 Mbps) decides to be more strategic. What is the minimum rate that peer #1 could offer and still achieve the same upload rate it received in question 1(c)? (2 points)
 
@@ -1311,7 +1414,7 @@ Practice Problems: Link-State Routing. C receives contradictory LSPs: one from A
 |         7-8 | Question 4(a), 4(b), 4(c), 4(d)                                  | Routing/addressing/tunneling headers, NAT, IP/MAC/MPLS                                                                                           |
 
 
-Source note: the URL is an exam PDF, not an official answer key; retained items in this section have no official solution text in the source.
+Source note: the URL is an exam PDF, not an official answer key. Where the answer is directly inferable from standard networking material, a concise derived answer is included; figure-dependent items without enough context are marked prompt-only.
 
 QUESTION 1: Network system engineering (13 points)
 
@@ -1319,41 +1422,31 @@ You have recently been hired by FinBook, the online social network for fish. Fin
 
 1(A) HTTP redirection
 
-> 1 advantage:
->
-> 1 disadvantage:
+> Advantage: the front end can make a per-request server-selection decision and redirect the client to a better datacenter. Disadvantage: it adds at least one HTTP round trip and exposes the redirection choice to the client.
 
 1(B) DNS server-selection
 
-> 1 advantage:
->
-> 2 disadvantages:
+> Advantage: it is transparent to clients and works with ordinary URLs. Disadvantages: DNS caching and TTLs make changes slow to take effect, and the DNS resolver's location may be a poor proxy for the client's location.
 
 1(C) IP anycast
 
-> 2 advantage:
->
-> 2 disadvantages:
+> Advantages: clients can use one stable IP address, and routing can naturally direct traffic to a nearby replica. Disadvantages: routing changes can move a flow to a different datacenter, and operators have coarse control over load compared with application-level redirection.
 
 1(D) NAT + load-balancer
 
-> 1 advantage:
->
-> 1 disadvantage:
+> Advantage: it hides the backend servers behind one public address and can distribute requests among them. Disadvantage: the load balancer can become a bottleneck or single point of failure unless it is replicated.
 
 1(E) ARP spoofing (unsolicited announcement of your MAC with other’s IP address)
 
-> 1 advantage:
->
-> 1 disadvantage:
+> Advantage: it can redirect traffic on a LAN without changing client configuration. Disadvantage: it is fragile, local to one broadcast domain, and looks like an attack rather than a clean failover mechanism.
 
 QUESTION 2: More network system engineering (13 points)
 
 2(a) You graduated from Princeton (yay!) and joined a social media startup that wants to rival Facebook (at least you hope). The startup doesn’t have any funding, so you took your implementation of simple router and are running it on a Linux box, using it as a router for your servers (instead of paying $$ to Cisco). As your company scaled, you started seeing some clients that use IPv6. Your servers understand IPv6, but your router doesn’t. Describe two ways in which you can extend your router to handle IPv6 traffic:
 
-> Option 1: (answer <= 2 lines)
+> Option 1: implement dual-stack IPv4/IPv6 forwarding in the router, including IPv6 parsing, longest-prefix lookup, hop-limit decrement, and neighbor discovery.
 >
-> Option 2: (answer <= 2 lines)
+> Option 2: tunnel IPv6 packets over IPv4 to an IPv6-capable gateway, so the existing IPv4 router forwards encapsulated traffic.
 
 2(b) You are at Princeton for reunions and get a work phone call saying that the servers are running extremely slow and they believe the servers are under a DOS attack. You think this is your competitors (maybe Facebook is afraid of you after all!) and use your iPhone to ssh into your Linux machine. You remember that while implementing a flow table, 0 meant block and 1 meant allow. TCP’s protocol # is 6 and UDP’s is 17. What entries will you add in the flow table to do the following:
 
@@ -1361,8 +1454,13 @@ QUESTION 2: More network system engineering (13 points)
 > - Ban all traffic from 66.220.0.0/16
 > - Allow UDP traffic to server 69.65.28.126:3333
 >
-> Your entries should have the following format:
-> `<source IP, destination IP, protocol number, src Port, dst Port, 0 or 1>`
+> One suitable priority-ordered rule set is:
+>
+> ```text
+> <66.220.0.0/16, *, *, *, *, 0>
+> <128.112.0.0/16, *, 6, *, *, 1>
+> <*, 69.65.28.126, 17, *, 3333, 1>
+> ```
 
 2(c) Your company has grown and now has a couple of thousand users. You said farewell to the your simple router implementation and finally paid some $$ to Cisco. You have multiple servers and routers in your (small) datacenter now. One day you show up at work and find that some clients cannot connect to your servers. In a panic, you start dumping traffic on the ingress gateway router of the problematic servers and see the following packets (partial headers):
 
@@ -1377,7 +1475,9 @@ QUESTION 2: More network system engineering (13 points)
 | 4 | 84 | 0 | 237 | 01 | 18.69.204.150 | 69.65.28.126 |
 | 4 | 40 | 0 | 208 | 06 | 121.69.24.120 | 69.65.28.126 |
 
-What is going wrong? Or, explain why this information is useless. (answer <= 2 lines)
+What is going wrong? Or, explain why this information is useless. (Answer in at most two lines.)
+
+> This information is mostly insufficient: the partial IP headers do not show TCP/UDP ports, TCP flags, checksums, return traffic, or forwarding-table state, so they do not identify why connections fail.
 
 QUESTION 3: Distance-Vector Routing (9 points)
 
@@ -1394,25 +1494,61 @@ The initial routing table at node A is:
 | D | 15 | D |
 | E | ∞ | --- |
 
+The topology has links $A-B=21$, $A-D=15$, $B-C=18$, $B-D=12$, $C-D=5$, $C-E=11$, and $D-E=17$.
+
 3(a) Show the initial routing table of node E:
 
-> Destination / Cost / Next Hop: A, B, C, D
+> | Destination | Cost | Next Hop |
+> | ----------- | ---: | -------- |
+> | A | ∞ | --- |
+> | B | ∞ | --- |
+> | C | 11 | C |
+> | D | 17 | D |
 
 3(b) Show the routing table of node E after one iteration of the algorithm:
 
-> Destination / Cost / Next Hop: A, B, C, D
+> | Destination | Cost | Next Hop |
+> | ----------- | ---: | -------- |
+> | A | 32 | D |
+> | B | 29 | C or D |
+> | C | 11 | C |
+> | D | 16 | C |
 
 3(c) Show the routing table of node E after two iterations of the algorithm:
 
-> Destination / Cost / Next Hop: A, B, C, D
+> | Destination | Cost | Next Hop |
+> | ----------- | ---: | -------- |
+> | A | 31 | C |
+> | B | 28 | C |
+> | C | 11 | C |
+> | D | 16 | C |
 
 3(d.i) In some failure situations, the administrator notices that it takes an exceptionally long time for the routing protocol to stabilize in this network. What problem with the distance vector protocol is the cause?
 
+> Count-to-infinity.
+
 3(d.ii) The administrator is told that BGP does not suffer from this problem. What prevents BGP from having this problem?
+
+> BGP is a path-vector protocol: each route carries the AS path, so a router can detect and reject routes that already contain itself.
 
 QUESTION 4: Routing, addressing, and tunneling (9 points)
 
 The above figure shows a network topology connecting two LANs. The LAN on the left uses a NAT to connect to the Internet and includes a client host H1. The LAN on the right includes a webserver H2. Packets between the two LANs are routed along the path shown by a heavy dark lines, which includes both an IP tunnel and an MPLS tunnel. All packets which traverse the path use both tunnels. The various network interfaces have IP and MAC addresses as shown.
+
+Source figure labels retained in text form:
+
+```text
+H1: 10.0.0.2 / MAC 1
+NAT inside: 10.0.0.1 / MAC 2
+NAT outside: 1.2.3.4 / MAC 3
+Left-side router-facing link: 1.2.3.5 / MAC 4
+IP/MPLS path labels: 1.2.3.6 / MAC 5, 1.2.3.7 / MAC 6, 1.2.3.8 / MAC 7,
+                  1.2.4.1 / MAC 8, 1.2.4.2 / MAC 9, 1.2.4.3 / MAC 10,
+                  1.2.4.4 / MAC 11, 2.0.0.1 / MAC 12, 2.0.0.2 / MAC 13
+Right-side LAN/router labels: 3.0.0.1 / MAC 14, 3.0.0.2 / MAC 15,
+                              3.0.0.3 / MAC 16, 3.0.0.4 / MAC 17
+H2: 3.0.1.2 / MAC 18
+```
 
 H1 has established an HTTP session with web server H2 and data packets are flowing between the two machines. As an example, we have filled in the headers for packet 1 (traveling from the server H2 to the client H1). If there shouldn't be any source or destination field for the header type, write an "X" in that table entry.
 
@@ -1425,19 +1561,19 @@ You have to fill in the header type and the source and destination address for t
 
 4(a) Header for packet 2:
 
-> Header Type / Source / Destination
+> Prompt-only retained from the source PDF; no official answer key was available in the source for this figure-dependent table.
 
 4(b) Header for packet 3:
 
-> Header Type / Source / Destination
+> Prompt-only retained from the source PDF; no official answer key was available in the source for this figure-dependent table.
 
 4(c) Header for packet 4:
 
-> Header Type / Source / Destination
+> Prompt-only retained from the source PDF; no official answer key was available in the source for this figure-dependent table.
 
 4(d) Header for packet 5:
 
-> Header Type / Source / Destination
+> Prompt-only retained from the source PDF; no official answer key was available in the source for this figure-dependent table.
 
 ### 2009 Mid
 
@@ -2086,7 +2222,7 @@ Problem 1, item 14: Which function is not thread-safe?
 
 > (c). The retained source is a multiple-choice answer key; the key lists item 14 as answer (c).
 
-Problem 1, item 18: When requested to send 20 bytes over a network socket, execution will block until all 20 bytes have been sent. (✅/❌ )
+Problem 1, item 18: When requested to send 20 bytes over a network socket, execution will block until all 20 bytes have been sent. (✅/❌)
 
 > False.
 
