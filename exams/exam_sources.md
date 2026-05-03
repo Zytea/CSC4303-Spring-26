@@ -181,17 +181,33 @@
 
 ### Mid Fall 2019 
 
-PDF: <https://www.synergylabs.org/courses/15-440/assignments/Fall2019-Mid-I-WithSolutions.pdf>
+PDF: <https://www.synergylabs.org/courses/15-440/assignments/Fall2019-Midterm-I-WithSolutions.pdf>
 
-| PDF page(s) | Problem / subpart ID(s) retained | CSC4303 overlap |
-|---:|---|---|
-| 2 | Question 1(b) | VoIP transport choice |
-| 3 | Question 2(a), 2(b) | RPC over UDP; RPC marshalling of pointer/linked data structures |
-| 4 | Question 2(f)(a), 2(f)(b) | Cristian-style time synchronization with asymmetric delays |
+1(b) Over a wide area network it is better to use TCP to implement Voice-over-IP telephony rather than UDP given the potential for packet losses. (✅/❌ )
+
+> False. UDP is still going to be better for the VoIP app since VoIP is real time and the delays caused with TCP retransmision would make things worse. What’s more, VoIP is loss-tolerant.
+
+2(a) Can you implement an RPC system using UDP connections, instead of TCP? Answer yes/no and explain why or why not in at most two sentences.
+
+> Yes. It doesnt matter what transport layer protocol you choose for the RPC system. You can choose to implement over an unreliable network connection and rely on RPC system to detect and tolerate the failures.
+
+2(b) A developer decides to use RPCs to remotely invoke the function `Sum_LinkedList(ListItem *head)`. What problem might they encounter?
+
+> RPC systems don’t handle pointer structures well. The marshalling system would need to figure out how to follow the linked list structure and include all the needed memory locations.
+
+(f) Nodes A and B wish to time synchronize. The link from A to B takes 40ms, and the link from B to A takes 20ms but these numbers are not known to the computers. They synchronize using Cristian’s algorithm in one round. Node A’s time is 500 and Node B’s time is 632. Node A starts the protocol.
+
+1. At the completion of the protocol what time does Node A believe it is?
+
+> It takes 40ms for the packet to reach B, so B timestamps it as 632+40 = 672. The response reaches node A with an RTT of 60ms, so node A sets its time to 672+60/2=702.
+
+2. What, if any, error is in this value and why?
+
+> At the end of the protocol Node B will think it is 692. The error is 10ms. It arose because of the asymmetry in the links.
 
 ### Fall 2018 
 
-PDF: <https://www.synergylabs.org/courses/15-440/assignments/Fall2018-Mid-I-WithSolutions.pdf>
+PDF: <https://www.synergylabs.org/courses/15-440/assignments/Fall2018-Midterm-I-WithSolutions.pdf>
 
 | PDF page(s) | Problem / subpart ID(s) retained | CSC4303 overlap |
 |---:|---|---|
@@ -201,7 +217,7 @@ PDF: <https://www.synergylabs.org/courses/15-440/assignments/Fall2018-Mid-I-With
 
 ### Fall 2016 
 
-PDF: <https://www.synergylabs.org/courses/15-440/assignments/Fall2016-Mid-II-WithSolutions.pdf>
+PDF: <https://www.synergylabs.org/courses/15-440/assignments/Fall2016-Midterm-II-WithSolutions.pdf>
 
 | PDF page(s) | Problem / subpart ID(s) retained | CSC4303 overlap |
 |---:|---|---|
@@ -286,7 +302,7 @@ PDF: <https://courses.cs.washington.edu/courses/cse461/23sp/samples/sample-midte
 
 ### Mid Review Practice, Section 4
 
-PDF: <https://courses.cs.washington.edu/courses/cse461/23sp/section/4-Mid-review.pdf>
+PDF: <https://courses.cs.washington.edu/courses/cse461/23sp/section/4-midterm-review.pdf>
 
 | PDF page(s) | Problem / subpart ID(s) retained | CSC4303 overlap |
 |---:|---|---|
@@ -295,7 +311,7 @@ PDF: <https://courses.cs.washington.edu/courses/cse461/23sp/section/4-Mid-review
 
 ### Winter 2017 Mid
 
-PDF: <https://courses.cs.washington.edu/courses/cse461/22wi/practice-materials/Mid-2.3.17.pdf>
+PDF: <https://courses.cs.washington.edu/courses/cse461/22wi/practice-materials/midterm-2.3.17.pdf>
 
 | PDF page(s) | Problem / subpart ID(s) retained | CSC4303 overlap |
 |---:|---|---|
@@ -427,7 +443,7 @@ Answer DOC: <https://www.cs.princeton.edu/courses/archive/spring23/cos461/exams/
 ### Spring 2006 Mid 
 
 Answer DOC: <https://www.cs.princeton.edu/courses/archive/spring23/cos461/exams/spring06-cos461-exam1-answers.doc>  
-Original course answer DOC: <https://www.cs.princeton.edu/courses/archive/spr06/cos461/exams/Mid-answers.doc>
+Original course answer DOC: <https://www.cs.princeton.edu/courses/archive/spr06/cos461/exams/midterm-answers.doc>
 
 | Page(s) | Problem / subpart ID(s) retained | CSC4303 overlap                                              |
 | ------: | -------------------------------- | ------------------------------------------------------------ |
