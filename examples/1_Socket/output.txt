@@ -1,0 +1,26 @@
+PS C:\Users\Zytea\Documents\Codex\2026-05-02\process-cilent-socket-connect-i-o> wsl make run
+./server &
+sleep 1
+[server] socket(AF_INET, SOCK_STREAM, 0)
+[server] listenfd = 3
+[server] bind(listenfd, 0.0.0.0:8080)
+[server] listen(listenfd, 128)
+[server] accept(listenfd, ...) blocks here until a client connects
+./client
+[client] socket(AF_INET, SOCK_STREAM, 0)
+[client] clientfd = 3
+[client] inet_pton(AF_INET, "127.0.0.1", &serveraddr.sin_addr)
+[client] connect(clientfd, 127.0.0.1:8080) starts TCP handshake
+[client] connect returned; TCP channel is established
+[client] write(clientfd, ...)
+[client] read(clientfd, ...)
+[server] accept returned connfd = 4
+[server] peer = 127.0.0.1:39513
+[server] read(connfd, ...)
+[server] received 18 bytes: hello from client
+[server] write(connfd, ...)
+[server] close(connfd)
+[server] close(listenfd)
+[client] received 36 bytes: echo from server: hello from client
+[client] close(clientfd)
+wait
