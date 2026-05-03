@@ -199,21 +199,15 @@
 
 1. At the completion of the protocol what time does Node A believe it is?
 
-> It takes 40ms for the packet to reach B, so B timestamps it as 632+40 = 672. The response reaches node A with an RTT of 60ms, so node A sets its time to 672+60/2=702.
+   > It takes 40ms for the packet to reach B, so B timestamps it as 632+40 = 672. The response reaches node A with an RTT of 60ms, so node A sets its time to 672+60/2=702.
 
 2. What, if any, error is in this value and why?
 
-> At the end of the protocol Node B will think it is 692. The error is 10ms. It arose because of the asymmetry in the links.
+   > At the end of the protocol Node B will think it is 692. The error is 10ms. It arose because of the asymmetry in the links.
 
 ### Fall 2018
 
 > PDF: <https://www.synergylabs.org/courses/15-440/assignments/Fall2018-Midterm-I-WithSolutions.pdf>
-
-| PDF page(s) | Problem / subpart ID(s) retained | CSC4303 overlap                                                   |
-| ----------: | -------------------------------- | ----------------------------------------------------------------- |
-|           4 | Question 2(a), 2(b), 2(c)        | VoIP/UDP; vector clocks in Dynamo-style systems; NTP vs Cristian  |
-|           6 | Question 3(a), 3(b), 3(c)        | RPC performance, latency sensitivity, and marshalling bottlenecks |
-|          11 | Question 6(a), 6(c)              | RPC semantics for non-idempotent and idempotent operations        |
 
 2(a) You are responsible for building the successor to the popular Skype Voice-over-IP protocol that works across the internet (high RTTs). Your boss went to CMU but did not take 441 or 440, and thinks you should use TCP due to its reliable delivery feature. Can you explain to him why this is not a good idea?
 
@@ -255,13 +249,13 @@
 
 6. BergerNet is a new social network started by the TAs and Professors of 15440 providing almost the same functionality as social networks do today. As a new engineering lead, it is your job to make some crucial design decisions that are either going to make or break the BergerNet. BergerNet uses RPCs. Identify the easiest-to-implement RPC semantic (at-leastonce, at-most-once, exactly-once) for each of the following features. Give a *one sentence* reason for your choice. (1pt for semantic, 1pt for reason only if semantic correct).
 
-6(a) Transferring money to your friend on BergerNet
+   6(a) Transferring money to your friend on BergerNet
 
-> At-most once. Easiest to implement and can always retry sending on failure.
+   > At-most once. Easiest to implement and can always retry sending on failure.
 
-6(c) Deleting a friend on BergerNet
+   6(c) Deleting a friend on BergerNet
 
-> At-least once. Delete is idempotent. At-most once does not work because it is not the easiest to implement.
+   > At-least once. Delete is idempotent. At-most once does not work because it is not the easiest to implement.
 
 ### Fall 2016
 
@@ -274,27 +268,21 @@
 |           4 | Question 2(c.A), 2(c.B), 2(e)         | MapReduce stragglers/master failure; DNS caching and replication resilience |
 |         6-7 | Question 4(a), 4(b), 4(c), 4(d), 4(e) | DNS/CDN hierarchy; Chord lookup and finger-table reasoning                  |
 
-1(A) For a particular Map-Reduce Phase with ‘M’ and ’R’ nodes respectively, each reducer node handles 1/R of the intermediate key-values by default. (✅/❌ )
+1(a) For a particular Map-Reduce Phase with ‘M’ and ’R’ nodes respectively, each reducer node handles 1/R of the intermediate key-values by default. (✅/❌ )
 
-> TRUE. Each Reducer node handles 1/R of the possible keyspace and fetches them from each of the M Mappers.
+> true. Each Reducer node handles 1/R of the possible keyspace and fetches them from each of the M Mappers.
 
-1(B) In case of System Virtualization, the hypervisor (or VMM) can only allocate and assign the actual number of physical processor resources it has available at its disposal to individual Virtual Machines (VMs). (✅/❌ )
+1(b) In case of System Virtualization, the hypervisor (or VMM) can only allocate and assign the actual number of physical processor resources it has available at its disposal to individual Virtual Machines (VMs). (✅/❌ )
 
-> FALSE. Virtualization allows you to overcommit resources and provide more virtual resources than actual physical resources, for example by time multiplexing the same set of CPU/processors across multiple VMs.
+> false. Virtualization allows you to overcommit resources and provide more virtual resources than actual physical resources, for example by time multiplexing the same set of CPU/processors across multiple VMs.
 
-1(C) DES (symmetric key) is faster than RSA (public-private key) (✅/❌ )
+2(a) Consistent hashing is used in a variety of distributed systems over more traditional hashing algorithms. 
 
-> TRUE. Symmetric key ciphers are generally going to be faster than Public-private key ciphers due to the mathematical complexity of the latter.
-
-1(D) When setting up a TOR circuit the sender is guaranteed that the path taken (intermediate routers) to the receiver will be the same as without using TOR. (✅/❌ )
-
-> FALSE. There are no guarantees, and the sender decides which path to take when using TOR, which comprises of TOR nodes and not the regular internet routers.
-
-2(a) Consistent hashing is used in a variety of distributed systems over more traditional hashing algorithms. A. Describe one way that consistent hashing performs better when failures occur (e.g. in DHTs or in CDNs).
+1. Describe one way that consistent hashing performs better when failures occur (e.g. in DHTs or in CDNs).
 
 > Less content needs to be moved between nodes.
 
-2(B) Describe one way that consistent hashes perform better when nodes have differing views on the availability of servers.
+2. Describe one way that consistent hashes perform better when nodes have differing views on the availability of servers.
 
 > Consistent hashing reduces the spread of requests across nodes when views are different
 
@@ -305,6 +293,68 @@
 2(e) The DNS root and GTLD servers often come under attack. Give 2 reasons that we don’t notice when they are under attack.
 
 > The records from the root and GTLD have long TTLs and are cached widely. The root and GTLD zones are replicated very widely and it is difficult to attack all locations at the same time.
+
+
+4. As the CMU’s Distributed Systems class graduates ventured into the world, they spread their description of class lectures. As a result, the popularity of video recordings of the lectures skyrocketed (unfortunately, mostly for the jokes rather than the technical content) and now Srini needs your help in managing the storage and delivery of the files. Srini starts by building an Akamai-like CDN to deliver the files for his web site www.srinilectures.com. As a first step, Srini:
+
+   1. registers the domain srini-lectures.com with two name servers ns1.srini-lectures.com and ns2.srini-lectures.com.
+   2. sets up two regional, low-level DNS servers - east-ns.srini-lectures.com and westns.srini-lectures.com - for clients on the east and west coast.
+   3. sets up two servers to deliver cached content with IP addresses 1.1.1.1 and 2.2.2.2. Srini expects users to get the 1.1.1.1 address for www.srini-lectures.com if they are on the east coast and 2.2.2.2 if they are on the west coast.
+
+   4(a) There are 6 name servers involved in the system: 
+
+   - a.root-servers.net 
+
+   - a.gtld-servers.net 
+
+   - ns1.srini-lectures.com 
+   - ns2.srini-lectures.com 
+   - east-ns.srini-lectures.com 
+   - west-ns.srini-lectures.com
+
+   For each of the following DNS records: 
+
+   1) list *ALL* servers where the DNS record stored (do not list cached locations), 
+   2) what will its TTL be (assume that the TTL can only be 1 minute or 1 day) and 
+   3) why you chose that TTL (1-2 sentences)
+
+   A. NS record that points to ns1.srini-lectures.com
+
+   > on a.gtld-servers.net with TTL 1 day
+
+   B. NS record that points to east-ns.srini-lectures.com
+
+   > on ns1.srini-lectures.com and ns2.srini-lectures.com with TTL 1 day
+
+    C. A record for www.srini-lectures.com
+
+   > on east-ns.srini-lectures.com and west-ns.srini-lectures.com with TTL 1 min
+
+   4(b) On the first query (i.e. no cached information at the local name server) for www.srini-lectures.com from New York - which of the 6 name servers listed are contacted?
+
+   > a.root-servers.net 
+   >
+   > a.gtld-servers.net 
+   >
+   > ns1.srini-lectures.com or ns2.srini-lectures.com 
+   >
+   > east-ns.srini-lectures.com
+
+   4(c) On a second query, 5 minutes after the previous query, for www.srinilectures.com from New York - which of the 6 name servers listed are contacted?
+
+   > east-ns.srini-lectures.com
+
+   Srini decides to move the content to a Chord DHT. He splits the lectures in 10 second chunks, which results in 65536 ($2^{16}$) files. He uses SHA3-256 (256bit long hash) to generate the identifiers used in his DHT. Finally, he recruits 1024 (210) users to participate in the Chord DHT as storage nodes.
+
+   4(d)  How many hops does it typically take to lookup a single chunk?
+
+   > log2(1024) = 10 hops
+   
+   4(e) How many different hosts are typically in the Chord finger table at any node?
+   
+    > log2(1024) = 10 hosts
+    >
+    > ⚠️table item=256
 
 ### Mid 2012
 
@@ -319,27 +369,41 @@
 
 1(d) UDP is better than TCP for streaming voice-over-IP data. (✅/❌ )
 
-> Losing some audio bits isn’t as bad as dealing with the delays from TCP’s retransmission.
+> True. Losing some audio bits isn’t as bad as dealing with the delays from TCP’s retransmission.
 
-1(e) UDP is better (✅/❌ )
+1(e)  UDP is better than TCP for RPCs that return medium-sized (100KB) results. (✅/❌ )
 
-> 100KB is too big to fit in a single packet. The RPC system would just end up re-implementing much of what TCP does to split this data into packets and ensure that it is received reliably and reassembled. This would therefore be a poor idea.
+> False. 100KB is too big to fit in a single packet (64KB). The RPC system would just end up re-implementing much of what TCP does to split this data into packets and ensure that it is received reliably and reassembled. This would therefore be a poor idea.
 
 1(f) RPCs provide different semantics from local calls because RPCs introduce a different class of errors. (✅/❌ )
 
 > True. RPCs can suffer from network or server failures, so callers need to deal with those additional failure modes.
 
-3(a) func `ReadHandler(conn *net.UDPConn)` { bytes:= make([]byte, 2000) for { n, _, _:= conn.ReadFromUDP(bytes) go ProcessPacket(bytes[0:n]) } } Spin loop Race condition Deadlock Correct Explain briefly (1-2 sentences) where the bug is. No explanation is necessary if you mark Correct.
+3(a)  Debugging Concurrency and Synchronization Bugs
+
+```go
+func `ReadHandler(conn *net.UDPConn)` { 
+    bytes:= make([]byte, 2000) 
+    for { 
+        n, _, _:= conn.ReadFromUDP(bytes)
+     	go ProcessPacket(bytes[0:n]) 
+    }   
+} 
+```
+
+A. Spin loop **B. Race condition** C. Deadlock 
+
+Correct Explain briefly (1-2 sentences) where the bug is. 
 
 > bytes corresponds to some memory that is reused by ReadFromUDP. Thus, the slice to ProcessPacket could be overwritten while it is being processed.
 
 4(h) LSP could be extended to be robust, with high probability, in the presence of corrupted UDP packets by appending a checksum to each message and dropping any that are received with an incorrect checksum. (✅/❌ )
 
-> The resending of messages will ensure that (eventually) a valid packet will be sent.
+> True. The resending of messages will ensure that (eventually) a valid packet will be sent.
 
 4(i) If a UDP packet gets delayed by several seconds, then the message it contains could be mistaken for one that occurs much later in the message sequence. (✅/❌ )
 
-> Due the the wrapping around of sequence numbers.
+> True. Due the the wrapping around of sequence numbers.
 
 ### Mid 2011
 
@@ -382,11 +446,11 @@
 
 1. RPC tries to make remote procedure calls look the same as local procedure calls. But the illusion isn’t perfect. Circle all of the options that correctly describe differences between a local function call and an RPC: A. RPC calls require an extra parameter to identify the server. B. RPC calls may have higher or variable latency. C. RPC calls are limited to call-by-value. D. RPC calls have different (more) failure modes. E. Local function calls require a malloc of a heap object to represent the return pointer.
 
-> A,B,D
+   > A,B,D
 
 8. For which of the following applications would UDP be preferable over TCP, ignoring annoying concerns such as firewalls that might block some protocols? A. Streaming a live video over the internet TCP / UDP B. Instant messaging/email TCP / UDP C. Logging in to your bank website TCP / UDP D. Voice over IP TCP / UDP E. Large file transfers TCP / UDP F. Looking up a very small value from a directory service TCP / UDP
 
-> UDP, TCP, TCP, UDP, TCP, UDP
+   > UDP, TCP, TCP, UDP, TCP, UDP
 
 Suppose each computer in a distributed system keeps an approximate real-time clock Ri in addition to a Lamport-like clock Li. A computer’s real-time clock Ri is an always-increasing integer (i.e., for any two reads r1, r2 of Ri such that r1 →i r2, we have r2 > r1), but the real-time clocks at different computers may drift relative to each other (i.e., Rj − Ri is non-constant for j ≠ i). Consider the following modification, Shamport, to Lamport’s partial-ordering algorithm: Rule 1: before each event at computer i, set Li = min(Li + 1, Ri). Rule 2: when sending a message m, apply Rule 1 and include the time Li as part of the message. Rule 3: when receiving a message (m, t) at computer j, set Lj = max(Lj, t) and then apply Rule 1 before timestamping the message-arrival event. Let the Shamport global time of an event e at computer i be S(e) = Li(e).
 
@@ -418,29 +482,29 @@ Suppose each computer in a distributed system keeps an approximate real-time clo
 
 1. Which techniques are used in DNS to improve scalability? A. Replication B. Recursive queries C. Caching / Soft-State D. Partitioning of Namespace
 
-> A, C, D
+   > A, C, D
 
 2. Which of the following are true about the Chord distributed hash table? A. Has O(log(N)) lookup latency B. Directly supports fuzzy or wildcard lookups for content C. Uses content-based naming D. Provides anonymity
 
-> A, C
+   > A, C
 
 3. Which of the following are commonly provided in RPC libraries? A. Application-level failure handling B. Data marshalling/unmarshalling C. Asynchronous function calls D. Exactly-once semantics E. At-most-once semantics
 
-> B, E
+   > B, E
 
 4. Which of the following are advantages of using content-based naming for p2p file transfers? A. The receiver can download a chunk using parallel TCP streams. B. The receiver can route around failed links. C. The receiver can download a chunk of data from any source, not just the original seed. D. The receiver can verify that it received the correct data.
 
-> C, D
+   > C, D
 
 6. Which of the following statements are true? Please circle True or False:
 
-6(a) In Google File System (GFS), when a client needs to access data, it contacts the master and gets the data from the master. (✅/❌ )
+   6(a) In Google File System (GFS), when a client needs to access data, it contacts the master and gets the data from the master. (✅/❌ )
 
-> False
+   > False
 
-6(h) Recall the global “happens-before” relationship (→) that captured the logical notions of time using both the local happens-before relationship at each server and the fact that a message must be sent before it can be received. True or false: For a Lamport logical clock L, if e1 → e2 then L(e1 ) < L(e2 ). (✅/❌ )
+   6(h) Recall the global “happens-before” relationship (→) that captured the logical notions of time using both the local happens-before relationship at each server and the fact that a message must be sent before it can be received. True or false: For a Lamport logical clock L, if e1 → e2 then L(e1 ) < L(e2 ). (✅/❌ )
 
-> True
+   > True
 
 ### Final 2010
 
@@ -454,27 +518,27 @@ Suppose each computer in a distributed system keeps an approximate real-time clo
 
 1. Circle the one that best applies. Grading is 2 points for every correct answer. That means that at the end of the exam, if you don’t know the right answer, come back here and guess randomly! Threads and Processes True, False It is less expensive to create a process than a thread. True, False Switching between threads is faster than switching between processes. True, False In order to switch between user threads, you need to enter the kernel. True, False Threads share a heap and a stack. Networking True, False The TCP initial handshake must be completed between the sender and every router on the path to the destination before communication can take place. True, False The Internet service model allows a small (a percent or two) amount of packet loss. (In other words, end-hosts must be able to deal with a small amount of loss) True, False Domain Name Service (DNS) servers remember which clients have cached DNS replies so that the servers can send invalidation messages when name bindings change. Distributed Mutual Exclusion True, False Ring-based distributed mutual exclusion is a great solution for a latency-sensitive application running on 10,000 nodes. Logging True, False Write-ahead logging is a useful technique for providing persistence for random updates without needing to write to a random location on disk. True, False For correctness, all write-ahead log records must specify how to both undo and redo the operation they describe. Tor True, False The onion routing scheme used by Tor is resilient to an attacker that can simultaneously compromise every node in the Tor network. --- 2. Which of the following design assumptions apply to HDFS/GFS? (Circle all that apply) A. Only amazingly powerful servers can handle the size and complexity of the workload. B. Any use of a centralized server would cause too much of a bottleneck. C. Component failures are expected. D. Files are huge by traditional standards. E. File contents are often updated and overwritten. (✅/❌ )
 
-> C, D
+   > C, D
 
 4. Suppose the above Chord setup: • At what node do you expect to find key 10? • At what node do you expect to find key 9? • On average, how many hops are there when searching for a key? • What route will a search for key 11 take, starting at node 3?
 
-> Key 10 maps to node 0, and key 9 maps to node 9. Chord lookups take O(log N) hops on average. Starting at node 3 for key 11, the lookup goes 3 → 9 → 0.
+   > Key 10 maps to node 0, and key 9 maps to node 9. Chord lookups take O(log N) hops on average. Starting at node 3 for key 11, the lookup goes 3 → 9 → 0.
 
 5. Suppose you want to build a large distributed system to store cookie recipes. Each cookie is stored using the recipe’s name (“Grandma’s Arsenic Cookie Surprise”). Unlike many P2P systems, in this one, the recipe data is small, so you wanted to store the actual data in the P2P system instead of leaving it on the original nodes. A friend says “Hey, I hear that Chord is very efficient – it doesn’t take many lookups to find the node containing the data.” Explain to your friend why directly throwing this data into a DHT such as chord, with key = recipe name, value = recipe data, is a really bad design decision. Brief - two sentences or so.
 
-> Chord only supports exact-key lookup well, while recipe users are likely to search by partial names, ingredients, or categories. Hashing recipe names also destroys locality, so related recipes cannot be found together without building a separate index.
+   > Chord only supports exact-key lookup well, while recipe users are likely to search by partial names, ingredients, or categories. Hashing recipe names also destroys locality, so related recipes cannot be found together without building a separate index.
 
 6. Tell us what style of P2P system you would use, and what assumptions you think are reasonable for your cookie-storing-system: • Number of nodes • Number of recipes • Number of queries/second • What do queries look like? Style of system AND a brief rationale for this decision:
 
-> A centralized or replicated index is a better fit than a pure DHT if the recipe corpus is moderate and queries are keyword/category searches rather than exact-key lookups. The recipe data is small enough to replicate or cache, while the index can support richer search over names, ingredients, and tags.
+   > A centralized or replicated index is a better fit than a pure DHT if the recipe corpus is moderate and queries are keyword/category searches rather than exact-key lookups. The recipe data is small enough to replicate or cache, while the index can support richer search over names, ingredients, and tags.
 
 11. What is the value of x? If it cannot be determined, write “unknown”.
 
-> x = 7. Message m5 is sent by machine 4 with Lamport time 6, and machine 1’s local clock before receiving it is 2, so the receive timestamp is max(2, 6) + 1 = 7.
+    > x = 7. Message m5 is sent by machine 4 with Lamport time 6, and machine 1’s local clock before receiving it is 2, so the receive timestamp is max(2, 6) + 1 = 7.
 
 12. For the following, circle which event happened first. If it cannot be determined, circle “unknown.” • L1 (m1, send) L4 (m5, send) U nknown • L2 (m3, send) L3 (m4, send) U nknown • L3 (m4, send) L3 (m3, recv) U nknown • L2 (m3, send) L4 (m6, send) U nknown • L4 (m6, send) L1 (m7, send) U nknown
 
-> L1(m1, send); Unknown; L3(m4, send); Unknown; Unknown.
+    > L1(m1, send); Unknown; L3(m4, send); Unknown; Unknown.
 
 ### Final 2011
 
@@ -489,59 +553,59 @@ Suppose each computer in a distributed system keeps an approximate real-time clo
 
 6. (a) In a centralized p2p network (such as the old Napster), how many indices must be searched if a client wants to locate a particular file?
 
-> 1
+   > 1
 
-6(b) Name one major disadvantage of the centralized p2p system (from a distributed principles point of view)
+   6(b) Name one major disadvantage of the centralized p2p system (from a distributed principles point of view)
 
-> - Single point of failure - Server processes everything - Server must keep track of a potentially very large number of clients - more?
+   > - Single point of failure - Server processes everything - Server must keep track of a potentially very large number of clients - more?
 
-6(c) Query flooding is an alternative design that solves some of the problems of centralized p2p and eliminates the central server. However, it changes the mechanics of peer interactions significantly. Explain (1 sentence each) how a newly-joining node publishes the files they wish to make available, in... A centralized p2p network:
+   6(c) Query flooding is an alternative design that solves some of the problems of centralized p2p and eliminates the central server. However, it changes the mechanics of peer interactions significantly. Explain (1 sentence each) how a newly-joining node publishes the files they wish to make available, in... A centralized p2p network:
 
-> They send their list of files and metadata to the server.
->
-> A query flooding p2p network:
+   > They send their list of files and metadata to the server.
+   >
+   > A query flooding p2p network:
 
-6(d) One popular improvement upon query flooding is to move to a “supernode” flooding architecture. Using N as the number of nodes in the network and, S as the number of supernodes (S << N ), explain the benefit of moving to this supernode architecture.
+   6(d) One popular improvement upon query flooding is to move to a “supernode” flooding architecture. Using N as the number of nodes in the network and, S as the number of supernodes (S << N ), explain the benefit of moving to this supernode architecture.
 
-> Queries require now O(S) messages instead of O(N ). In addition, if the nodes used as supernodes are more stable or have higher capacity, can further improve the performance or stability of the network.
+   > Queries require now O(S) messages instead of O(N ). In addition, if the nodes used as supernodes are more stable or have higher capacity, can further improve the performance or stability of the network.
 
 7. (a) In a distributed hash table (DHT) using a ring mapping, explain how a key is mapped to a specific node?
 
-> Keys and nodes map to points in a ring space. A node handles all keys mapped between it and its successor.
+   > Keys and nodes map to points in a ring space. A node handles all keys mapped between it and its successor.
 
-7(b) In the most basic form of DHT systems, nodes simply track their predecessor and successor. Very briefly state what problem this leads to as the network grows larger.
+   7(b) In the most basic form of DHT systems, nodes simply track their predecessor and successor. Very briefly state what problem this leads to as the network grows larger.
 
-> Performance problems as nodes forward a key resolution request to larger chains of neighbors.
+   > Performance problems as nodes forward a key resolution request to larger chains of neighbors.
 
-7(c) The Chord scheme overcomes this problem by having each node maintain a “finger table”. Given starting node j and destination node k, where k > j, how much is the distance between the two nodes reduced with each hop?
+   7(c) The Chord scheme overcomes this problem by having each node maintain a “finger table”. Given starting node j and destination node k, where k > j, how much is the distance between the two nodes reduced with each hop?
 
-> It decreases exponentially, or it is cut in half
+   > It decreases exponentially, or it is cut in half
 
-7(d) In a Chord structured DHT with N nodes, how many hops would a lookup operation require?
+   7(d) In a Chord structured DHT with N nodes, how many hops would a lookup operation require?
 
-> log(N )
+   > log(N )
 
-7(e) Assume a Chord network in which node q is the successor of node p. During operation, node p discovers that its successor link is no longer consistent because q has updated its predecessor link. What does this change imply must have happened in the network?
+   7(e) Assume a Chord network in which node q is the successor of node p. During operation, node p discovers that its successor link is no longer consistent because q has updated its predecessor link. What does this change imply must have happened in the network?
 
-> A new node joined the network ’between’ p and q.
+   > A new node joined the network ’between’ p and q.
 
 9. MapReduce has proved an extremely popular framework for distributed computation on large clusters, because it masks many of the painful parts of ganging together thousands of nodes to accomplish a task.
 
-9(a) In general high-performance computing (HPC), programmed using message passing, what is the technique used to provide fault tolerance? (Very short answer)
+   9(a) In general high-performance computing (HPC), programmed using message passing, what is the technique used to provide fault tolerance? (Very short answer)
 
-> Checkpoint/restore
+   > Checkpoint/restore
 
-9(b) Identify two important limitations that MapReduce places upon the Map functions so that the framework can hide failures from the programmer.
+   9(b) Identify two important limitations that MapReduce places upon the Map functions so that the framework can hide failures from the programmer.
 
-> They must be side-effect free, deterministic, and idempotent.
+   > They must be side-effect free, deterministic, and idempotent.
 
-9(c) What advantage does this give MapReduce over MPI for failure handling and recovery? (There are several—list the one(s) you think is most important)
+   9(c) What advantage does this give MapReduce over MPI for failure handling and recovery? (There are several—list the one(s) you think is most important)
 
-> Recovery can be done by only executing the work that was being handled on the failed machine, not the entire cluster. There is no need to take snapshots or to barrier sync the cluster.
+   > Recovery can be done by only executing the work that was being handled on the failed machine, not the entire cluster. There is no need to take snapshots or to barrier sync the cluster.
 
-9(d) How does MapReduce handle “straggler” tasks that take longer than all of the others (e.g., perhaps they’re running on a slower machine or one with buggy hardware)?
+   9(d) How does MapReduce handle “straggler” tasks that take longer than all of the others (e.g., perhaps they’re running on a slower machine or one with buggy hardware)?
 
-> It executes them in duplicate on another machine towards the end of execution. (Not needed for answer: It can do so because of the same properties of the tasks above - namely, that they can be freely re-executed and produce the same result.)
+   > It executes them in duplicate on another machine towards the end of execution. (Not needed for answer: It can do so because of the same properties of the tasks above - namely, that they can be freely re-executed and produce the same result.)
 
 
 ## UW CSE 461 Computer Networks
@@ -838,7 +902,7 @@ Practice Problems: Link-State Routing. C receives contradictory LSPs: one from A
 
 4. Short answers on Ethernet/IP, NAT/firewall rules, TCP ACKs, and socket writes.
 
-> Ethernet-only Internet designs do not scale because flooding/ARP/spanning tree do not scale and MAC addresses are not hierarchical. Assigning IP addresses directly to adapters would lose topological aggregation or require renumbering on movement. With one public NAT address and about 100,000 simultaneous hosts, the NAT can run out of ports. A public web server behind NAT needs port forwarding from public port 80 to the internal server. The firewall should allow SYNs to 1.2.3.4:80, allow SYN-ACKs, allow outbound SYNs from 1.0.0.0/8, deny other inbound SYNs, and allow the rest. ACK 8001 proves three 1000-byte segments were received; duplicate ACKs suggest segment 8001-9000 may be lost; ACK 12001 means none of the original ten are still suspected lost and seven segments were definitely received. A socket read returning 0 means EOF from a remote FIN; a short write of 500 means only part of the requested buffer was accepted, so the program must write the remaining bytes.
+   > Ethernet-only Internet designs do not scale because flooding/ARP/spanning tree do not scale and MAC addresses are not hierarchical. Assigning IP addresses directly to adapters would lose topological aggregation or require renumbering on movement. With one public NAT address and about 100,000 simultaneous hosts, the NAT can run out of ports. A public web server behind NAT needs port forwarding from public port 80 to the internal server. The firewall should allow SYNs to 1.2.3.4:80, allow SYN-ACKs, allow outbound SYNs from 1.0.0.0/8, deny other inbound SYNs, and allow the rest. ACK 8001 proves three 1000-byte segments were received; duplicate ACKs suggest segment 8001-9000 may be lost; ACK 12001 means none of the original ten are still suspected lost and seven segments were definitely received. A socket read returning 0 means EOF from a remote FIN; a short write of 500 means only part of the requested buffer was accepted, so the program must write the remaining bytes.
 
 ### 2010 Mid
 
