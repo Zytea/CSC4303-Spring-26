@@ -32,6 +32,7 @@ class ExamBlock:
 class RenderContext:
     major: str = ""
     emitted_contexts: set[str] = field(default_factory=set)
+    nested_parents: set[str] = field(default_factory=set)
     parent_subpart: str = ""
     nested_counter: int = 0
 
@@ -190,6 +191,17 @@ def infer_major(ids: str, text: str = "") -> str:
     return hit.group(1) if hit else ""
 
 
+def infer_nested_parents(ids: str) -> set[str]:
+    parents: set[str] = set()
+    for piece in re.split(r"[,;]", ids):
+        markers = re.findall(r"\(([A-Za-z0-9.]+)\)", piece)
+        if len(markers) >= 2:
+            parents.add(markers[0])
+        elif len(markers) == 1 and "." in markers[0]:
+            parents.add(markers[0].split(".", 1)[0])
+    return parents
+
+
 BOUNDARY_RE = re.compile(
     r"(?m)^[ \t]*(?:"
     r"\([A-Za-z0-9.]+\)\s+|"
@@ -204,8 +216,12 @@ SOLUTION_RE = re.compile(r"\bSolution:\s*", flags=re.I)
 def find_next_question_boundary(text: str) -> int | None:
     for match in BOUNDARY_RE.finditer(text):
         prefix = text[: match.start()]
-        # Avoid treating an answer's first sentence as a new question.
-        if "\n\n" in prefix or not prefix.strip():
+        # Avoid treating an answer that starts with "(a)" or "A." as a new
+        # question. A later marker after a blank line is usually the next
+        # retained subpart whose solution was missing from the snippet.
+        if prefix.strip() and "\n\n" in prefix:
+            return match.start()
+        if not prefix.strip() and "\n" in prefix:
             return match.start()
     return None
 
@@ -222,7 +238,7 @@ def split_solution_pairs(text: str) -> list[tuple[str, str]]:
         next_solution_start = solutions[index + 1].start() if index + 1 < len(solutions) else len(text)
         between = text[solution.end() : next_solution_start]
 
-        boundary = find_next_question_boundary(between) if index + 1 < len(solutions) else None
+        boundary = find_next_question_boundary(between)
         if boundary is None:
             answer = between.strip()
             cursor = next_solution_start
@@ -230,8 +246,13 @@ def split_solution_pairs(text: str) -> list[tuple[str, str]]:
             answer = between[:boundary].strip()
             cursor = solution.end() + boundary
 
-        if question or answer:
+        if question:
             pairs.append((question, answer))
+
+    trailing = text[cursor:].strip()
+    if trailing:
+        for question in split_orphan_questions(trailing):
+            pairs.append((question, ""))
 
     return pairs
 
@@ -288,6 +309,11 @@ def normalize_answer_text(text: str) -> str:
     text = re.sub(r"^(?:Ans(?:wer)?\.?:)\s*", "", text, flags=re.I)
     text = re.sub(r"^(True|False)\s*[-:]\s*", r"\1. ", text, flags=re.I)
     text = re.sub(r"^(TRUE|FALSE)\s*[-:]\s*", r"\1. ", text)
+    text = "\n".join(
+        line
+        for line in text.splitlines()
+        if not line.strip().startswith("√") and line.strip() != "---"
+    )
     text = re.sub(r"\n{3,}", "\n\n", text)
     return text.strip() or "[Solution missing in source snippet.]"
 
@@ -308,9 +334,25 @@ def is_instruction_context(text: str) -> bool:
     return any(phrase in compact for phrase in instruction_phrases) and "?" not in compact
 
 
-def detect_parent_subpart(context: str) -> str:
+def split_orphan_questions(text: str) -> list[str]:
+    matches = list(SUBPART_RE.finditer(text))
+    if len(matches) <= 1:
+        return [text]
+    prefix = text[: matches[0].start()].strip()
+    pieces: list[str] = []
+    for index, match in enumerate(matches):
+        end = matches[index + 1].start() if index + 1 < len(matches) else len(text)
+        piece = text[match.start() : end].strip()
+        if index == 0 and prefix:
+            piece = f"{prefix}\n\n{piece}"
+        if piece:
+            pieces.append(piece)
+    return pieces or [text]
+
+
+def detect_parent_subpart(context: str, ctx: RenderContext) -> str:
     matches = list(re.finditer(r"(?m)^[ \t]*\(([A-Za-z0-9.]+)\)\s+", context))
-    if matches:
+    if matches and matches[-1].group(1) in ctx.nested_parents:
         return matches[-1].group(1)
     return ""
 
@@ -342,7 +384,7 @@ def render_context(context: str, ctx: RenderContext) -> list[str]:
         return []
     ctx.emitted_contexts.add(key)
 
-    parent = detect_parent_subpart(context)
+    parent = detect_parent_subpart(context, ctx)
     if parent:
         ctx.parent_subpart = parent
         ctx.nested_counter = 0
@@ -350,9 +392,16 @@ def render_context(context: str, ctx: RenderContext) -> list[str]:
     kind, marker, body = strip_leading_marker(context)
     if kind == "paren":
         body, has_tf = normalize_question_text(body)
-        line = f"({marker}) {body}"
+        if marker in ctx.nested_parents:
+            line = f"({marker}) {body}"
+        elif ctx.major:
+            line = f"{ctx.major}({marker}) {body}"
+        else:
+            line = f"({marker}) {body}"
         if has_tf:
             line += " (✅/❌ )"
+        if marker not in ctx.nested_parents and has_tf:
+            return [line, "", "> [Solution missing in source snippet.]"]
         return [line]
     if kind == "number":
         body, has_tf = normalize_question_text(body)
@@ -419,10 +468,10 @@ def quote_answer(answer: str) -> list[str]:
 
 
 def render_raw_block(text: str) -> list[str]:
-    text = normalize_text_block(text)
-    if not text:
-        return []
-    return ["```text", text, "```"]
+    # If a snippet cannot be split into question/solution pairs, do not dump
+    # the raw extraction into exam_sources.md. The index table above still
+    # records the retained page/problem and keeps the document layout clean.
+    return []
 
 
 def render_text_block(text: str, entry: SnippetEntry) -> list[str]:
@@ -434,7 +483,7 @@ def render_text_block(text: str, entry: SnippetEntry) -> list[str]:
     if not pairs:
         return render_raw_block(text)
 
-    ctx = RenderContext(major=infer_major(entry.ids, text))
+    ctx = RenderContext(major=infer_major(entry.ids, text), nested_parents=infer_nested_parents(entry.ids))
     lines: list[str] = []
     for question, answer in pairs:
         question_lines = render_question(question, ctx)
