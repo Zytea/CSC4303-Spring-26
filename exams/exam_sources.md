@@ -229,19 +229,29 @@
 
 > NTP accounts for server processing time using a different equation. NTP also takes multiple measurements to several time servers in parallel and is organized hierarchically, while Cristian’s algorithm assumes a single time server.
 
-3. You are hired by the augmented reality startup AR2 that needs to perform a complex image processing algorithm. Because mobile phones have little computing power, AR2 ’s algorithm gets unacceptably slow as image sizes increase. Your manager, Jaine, proposes to use RPC to perform the work on a remote, more powerful server. You measure the following numbers, assuming a base image scaling factor of N. • The running time of AR2 ’s algorithm is M (N ) = 3N ms on a mobile phone. On the server, its S(N ) = N/3 ms. • Marshalling and unmarshalling take (N/6 + 20) ms in total. • The average RTT between a user and the server is 80 ms. • Bandwidth is infinite between the user and the server.
+3. You are hired by the augmented reality startup AR2 that needs to perform a complex image processing algorithm. Because mobile phones have little computing power, AR2 ’s algorithm gets unacceptably slow as image sizes increase. Your manager, Jaine, proposes to use RPC to perform the work on a remote, more powerful server. You measure the following numbers, assuming a base image scaling factor of N.
 
-3(a) For what value of N is Jaine right, i.e., AR2 should be using an RPC instead of a local call?
+   - The running time of AR2 ’s algorithm is $M (N ) = 3N$ ms on a mobile phone. On the server, its $S(N ) = N/3$ ms. 
+   - Marshalling and unmarshalling take $(N/6 + 20)$ ms in total. 
+   - The average RTT between a user and the server is 80 ms. 
+   - Bandwidth is infinite between the user and the server.
 
-> Want 3N ≥ 80ms + (N/6 + 20)ms + N/3 = 100ms + N/2. So, N ≥ 40. We also accepted answers that considered 2(N/6 + 20)ms or 4(N/6 + 20)ms
+   3(a) For what value of N is Jaine right, i.e., AR2 should be using an RPC instead of a local call?
 
-3(b) With geo-replication, AR2 is able to reduce the average RTT. How will N change? (Give a qualitative answer)
+   > When $3N ≥ 80ms + (N/6 + 20)ms + N/3 = 100ms + N/2$. So, $N ≥ 40$. 
 
-> It decreases, because the server’s computation becomes as fast as the phone’s for a lower value of N .
+   3(b) With geo-replication, AR2 is able to reduce the average RTT. How will N change? (Give a qualitative answer)
 
-3(c) As AR2 acquires 1) more and more powerful servers and 2) places them closer to users, you notice that the total RPC time does not improve very much. Explain why, by pointing out the bottleneck, in two sentences or less.
+   > It decreases, because the server’s computation becomes as fast as the phone’s for a lower value of N .
 
-> The bottleneck is the marshalling time. No matter how much everything else is improved, the marshalling time will keep the RPC time high.
+   3(c) As AR2 acquires 
+
+   1. more and more powerful servers and 
+   2. places them closer to users, 
+
+   you notice that the total RPC time does not improve very much. Explain why, by pointing out the bottleneck, in two sentences or less.
+
+   > The bottleneck is the marshalling time. No matter how much everything else is improved, the marshalling time will keep the RPC time high.
 
 6. BergerNet is a new social network started by the TAs and Professors of 15440 providing almost the same functionality as social networks do today. As a new engineering lead, it is your job to make some crucial design decisions that are either going to make or break the BergerNet. BergerNet uses RPCs. Identify the easiest-to-implement RPC semantic (at-leastonce, at-most-once, exactly-once) for each of the following features. Give a *one sentence* reason for your choice. (1pt for semantic, 1pt for reason only if semantic correct).
 
