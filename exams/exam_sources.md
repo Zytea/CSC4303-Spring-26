@@ -261,10 +261,6 @@
 
 > PDF: <https://www.synergylabs.org/courses/15-440/assignments/Fall2016-Midterm-II-WithSolutions.pdf>
 
-1(a) For a particular MapReduce phase with $M$ and $R$ nodes respectively, each reducer node handles $1/R$ of the intermediate key-values by default. (✅/❌)
-
-> True. Each reducer node handles $1/R$ of the possible key space and fetches the corresponding intermediate key-values from each of the $M$ mappers.
-
 1(b) In case of system virtualization, the hypervisor (or VMM) can only allocate and assign the actual number of physical processor resources it has available at its disposal to individual virtual machines (VMs). (✅/❌)
 
 > False. Virtualization allows you to overcommit resources and provide more virtual resources than actual physical resources, for example by time-multiplexing the same set of CPUs across multiple VMs.
@@ -282,16 +278,6 @@
 2(b) You are working on a MAC laptop and using it to develop and test a new Linux OS/kernel. You are worried about bugs since they will cause the Linux kernel to crash. Explain how the ’Isolation’ property of hosted Virtualization solution like VMWare Workstation running on your MAC can help in this case.
 
 > Fault Isolation: We can run the new Linux kernel in a VM. If this VM kernel contains a bug, and crashes it will not crash the main host (OSX) thereby providing fault isolation and allow development and testing to continue.
-
-2(c) We studied the MapReduce programming paradigm for large scale data analysis on clusters, and compared and contrasted that to the more traditional Bulk Synchronous Programming (BSP) methods.
-
-   2(c.A) Explain what the problem with ‘stragglers’ is when using MapReduce and how is it addressed?
-
-   > Solution: Stragglers mean that some Map/Reduce computations may take much longer than others, delaying the entire phase. Solution is to rerun the tasks on nodes that have finished first and then take the result for that task from whoever finishes first.
-
-   2(c.B) Under the MapReduce programming model, how does one deal with a single master node failure? (Assume there is a single master node).
-
-   > Solution: Master failure was discussed in class and in the assigned reading. (1) The master writes periodic checkpoints so a new copy can be started from the last checkpointed state when the master fails. (2) If there is only a single master, that particular MapReduce task is aborted and has to be restarted with a new master.
 
 2(e) The DNS root and GTLD servers often come under attack. Give 2 reasons that we don’t notice when they are under attack.
 
@@ -856,10 +842,9 @@ Correct Explain briefly (1-2 sentences) where the bug is.
 
 | PDF page(s) | Problem / subpart ID(s) retained            | CSC4303 overlap                                                     |
 | ----------: | ------------------------------------------- | ------------------------------------------------------------------- |
-|         2-3 | Question 1(a), 1(b), 1(c), 1(d)            | DNS hierarchy; DNS caching; CDN via DNS; MapReduce map semantics    |
+|         2-3 | Question 1(a), 1(b), 1(c)                  | DNS hierarchy; DNS caching; CDN via DNS                             |
 |       10-11 | Question 6(a), 6(b), 6(c), 6(d), 6(e), 6(f) | Napster, query flooding, supernodes, flooding limits                |
 |       12-13 | Question 7(a), 7(b), 7(c), 7(d), 7(e), 7(f) | DHT/Chord ring mapping, finger table, successor, fallback/proximity |
-|       15-16 | Question 9(a), 9(b), 9(c), 9(d)             | MapReduce/GFS failure handling and stragglers                       |
 
 1. (8 points) Circle True or False as appropriate. If you don’t know the answer, come back at the end and GUESS; a blank answer is the same as a wrong answer, so guessing can only help.
 
@@ -937,25 +922,6 @@ Correct Explain briefly (1-2 sentences) where the bug is.
    > (1) This allows routing based on proximity, which would reduce slow routes that criss-cross the globe.
    > (2) It provides a fallback in case one of the nodes in the finger table is unreachable.
 
-9. MapReduce has proved an extremely popular framework for distributed computation on large clusters, because it masks many of the painful parts of ganging together thousands of nodes to accomplish a task.
-
-   9(a) In general high-performance computing (HPC), programmed using message passing, what is the technique used to provide fault tolerance? (Very short answer)
-
-   > Checkpoint/restore
-
-   9(b) Identify two important limitations that MapReduce places upon the Map functions so that the framework can hide failures from the programmer.
-
-   > They must be side-effect free, deterministic, and idempotent.
-
-   9(c) What advantage does this give MapReduce over MPI for failure handling and recovery? (There are several—list the one(s) you think is most important)
-
-   > Recovery can be done by only executing the work that was being handled on the failed machine, not the entire cluster. There is no need to take snapshots or to barrier sync the cluster.
-
-   9(d) How does MapReduce handle “straggler” tasks that take longer than all of the others (e.g., perhaps they’re running on a slower machine or one with buggy hardware)?
-
-   > It executes them in duplicate on another machine towards the end of execution. (Not needed for answer: It can do so because of the same properties of the tasks above - namely, that they can be freely re-executed and produce the same result.)
-
-
 ## UW CSE 461 Computer Networks
 
 ### Sample Mid 2
@@ -987,7 +953,9 @@ Correct Explain briefly (1-2 sentences) where the bug is.
 
 3(b) Describe two advantages and two disadvantages of NAT.
 
-> Advantages: NAT counters IPv4 address shortage and can filter some unwanted inbound packets. Disadvantages: outside hosts cannot directly connect to inside hosts without a table entry or explicit forwarding rule, and NAT breaks or complicates peer-to-peer applications and protocols that embed IP addresses in payloads.
+> Advantages: NAT counters IPv4 address shortage and can filter some unwanted inbound packets. 
+>
+> Disadvantages: outside hosts cannot directly connect to inside hosts without a table entry or explicit forwarding rule, and NAT breaks or complicates peer-to-peer applications and protocols that embed IP addresses in payloads.
 
 3(c) What was the primary motivation for developing IPv6?
 
@@ -1015,7 +983,11 @@ Correct Explain briefly (1-2 sentences) where the bug is.
 
 5(a) Describe how distance-vector and link-state routing algorithms differ.
 
-> Distance-vector routing exchanges shortest-path information with neighbors. Link-state routing exchanges topology information. Distance-vector converges more slowly but is computationally simpler.
+> Distance-vector routing exchanges shortest-path information with neighbors. 
+>
+> Link-state routing exchanges topology information. 
+>
+> Distance-vector converges more slowly but is computationally simpler.
 
 5(b) Which of the two algorithms converges faster?
 
@@ -1042,17 +1014,27 @@ Correct Explain briefly (1-2 sentences) where the bug is.
 |       12-16 | Practice Problems: Bandwidth Allocation; Practice Problems: AIMD | Max-min fairness and AIMD calculations                    |
 |       53-54 | Practice Problems: Link-State Routing                            | Link-state routing convergence and inconsistent LSP views |
 
-Practice Problems: Bandwidth Allocation. Four flows A, B, C, and D share a 10 Mbps link. Demands are A=1 Mbps, B=2 Mbps, C=10 Mbps, and D=infinite. What is the max-min fair allocation?
+12-13 Bandwidth Allocation. Four flows A, B, C, and D share a 10 Mbps link. 
+
+Demands are A=1 Mbps, B=2 Mbps, C=10 Mbps, and D=infinite. 
+
+What is the max-min fair allocation?
 
 > Flow A: 1 Mbps. Flow B: 2 Mbps. Flow C: 3.5 Mbps. Flow D: 3.5 Mbps.
 
-Practice Problems: AIMD. A 10 Mbps link is shared by flow A, capped at 3 Mbps, and flow B, with infinite demand. Each RTT increases rate by 1 Mbps if uncongested and halves the rate if congested. Starting from A=2 Mbps and B=20 Mbps, what are the rates after 1, 2, and 3 RTTs?
+15-16: AIMD. A 10 Mbps link is shared by flow A, capped at 3 Mbps, and flow B, with infinite demand. Each RTT increases rate by 1 Mbps if uncongested and halves the rate if congested. Starting from A=2 Mbps and B=20 Mbps, what are the rates after 1, 2, and 3 RTTs?
 
 > After 1 RTT: A = 1 Mbps, B = 10 Mbps. After 2 RTTs: A = 0.5 Mbps, B = 5 Mbps. After 3 RTTs: A = 1.5 Mbps, B = 6 Mbps.
 
-Practice Problems: Link-State Routing. C receives contradictory LSPs: one from A says the A-B link is down, but one from B says the A-B link is up. How could this happen, and what should C do?
+53-54: Link-State Routing. C receives contradictory LSPs: one from A says the A-B link is down, but one from B says the A-B link is up. 
 
-> This can happen if one LSP was sent before the A-B link changed and the other was sent after it changed. C should keep flooding and recomputing from the newest LSPs; eventually the old LSP will be superseded and both sides will agree again.
+<img src="assets/image-20260504102610677.png" alt="image-20260504102610677" style="zoom:25%;" />
+
+How could this happen, and what should C do?
+
+> This can happen if one LSP was sent before the A-B link changed and the other was sent after it changed. 
+>
+> C should keep flooding and recomputing from the newest LSPs; eventually the old LSP will be superseded and both sides will agree again.
 
 ### Winter 2017 Mid
 
