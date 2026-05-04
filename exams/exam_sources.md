@@ -1421,12 +1421,6 @@ B. A retransmission timeout at B, triggering a retransmission of the SYN-ACK pac
 
 > PDF: <https://www.cs.princeton.edu/courses/archive/spring23/cos461/exams/spring11-cos461-exam1-answers.pdf>
 
-| PDF page(s) | Problem / subpart ID(s) retained | CSC4303 overlap                                                 |
-| ----------: | -------------------------------- | --------------------------------------------------------------- |
-|         2-3 | Question 1(a), 1(b), 1(c)        | NAT/tunneling and packet-header fields                          |
-|         4-5 | Question 2(a), 2(b), 2(c), 2(d)  | TCP ACK arithmetic, FIN/close, window/congestion behavior       |
-|        8-10 | Question 4                       | IP headers, prefix filters, and routing/filtering rule behavior |
-
 1. Routing, addressing, and tunneling
 
 <img src="assets/image-20260504115546375.png" alt="image-20260504115546375" style="zoom:50%;" />
@@ -1442,17 +1436,36 @@ H1 has established an HTTP session with web server H2 and data packets are flowi
 
 You only have to fill in the header type and the source and destination address for the network and datalink layer headers for packets 2, 3, and 4 (these packets are all traveling from the client H1 to the server H2, as marked on the figure with heavy black arrows and numbers). Note: You might not need to use all the rows supplied.
 
-1(a) Header for packet 2 traveling from H1 to H2.
+1(a) Header for packet 2.
 
-> Ethernet: MAC 1 to MAC 2. IP: 10.0.0.2 to 3.0.1.2.
+| Header Type | Source   | Destination |
+| ----------- | -------- | ----------- |
+| Ethernet    | MAC 1    | MAC 2       |
+| IP          | 10.0.0.2 | 3.0.1.2     |
 
-1(b) Header for packet 3 traveling from H1 to H2.
+1(b) Header for packet 3.
 
-> Ethernet: MAC 3 to MAC 4. IP: 1.2.3.4 to 3.0.1.2.
+| Header Type | Source  | Destination |
+| ----------- | ------- | ----------- |
+| Ethernet    | MAC 3   | MAC 4       |
+| IP          | 1.2.3.4 | 3.0.1.2     |
 
-1(c) Header for packet 4 traveling from H1 to H2 through the tunnels.
+1(c) Header for packet 4.
 
-> Ethernet: MAC 9 to MAC 10. Outer IP tunnel: 1.2.3.8 to 1.2.4.3. Inner IP tunnel: 1.2.3.6 to 2.0.0.1. Original IP packet: 1.2.3.4 to 3.0.1.2.
+| Header Type | Source  | Destination |
+| ----------- | ------- | ----------- |
+| Ethernet    | MAC 9   | MAC 10      |
+| IP          | 1.2.3.8 | 1.2.4.3     |
+| IP          | 1.2.3.6 | 2.0.0.1     |
+| IP          | 1.2.3.4 | 3.0.1.2     |
+
+2 TCP and Congestion Control 
+
+Consider the following graph of TCP throughput (NOT DRAWN TO SCALE), where the y-axis describes the TCP window size of the sender. We will later ask you to describe what happens on the right side of the graph as the sender continues to transmit. 
+
+<img src="assets/image-20260504121147007.png" alt="image-20260504121147007" style="zoom:50%;" />
+
+2.1 The window size of the TCP sender decreases at several points in the graph, including those marked by B and D. 
 
 2(a) What event at B causes the TCP sender to decrease its window, and does it prove the network discarded a packet?
 
@@ -1469,6 +1482,28 @@ You only have to fill in the header type and the source and destination address 
 2(d) Why might point D be higher than point B when other clients share the same routers?
 
 > Cross traffic from other senders can change over time, so the amount of congestion and the sender's window at later loss points can differ.
+
+ (e) For a lightly-loaded network, is the event at D MORE likely or LESS likely to occur when the sender has multiple TCP segments outstanding? (Write “MORE” or “LESS”)
+
+> LESS
+
+2.2 Consider the curved slope labeled by point A. Why does the TCP window behave in such a manner, rather than have a linear slope? (Put another way, why would it be bad if region A had a linear slope?)
+
+> This “slow-start” period quickly discovers the maximum acceptable throughput that the path supports – otherwise, AI (additive increase) could take too long (each a full RTT).
+
+2.3 Assume that the network has an MSS of 1000 bytes and the roundtrip-time between sender and receiver of 100 milliseconds. Assume at time 0 the sender attempts to open the connection. Also assume that the sender can “write” a full window’s worth of data instantaneously, so the only latency you need to worry about is the actual propagation delay of the network. 
+
+2.3 (a) How much time has progressed by point B?
+
+…
+
+(b) How much time has progressed between points C and D?
+
+(c) How much time has progressed between points E and F?
+
+2.4 If the sender shares its network with other clients whose traffic traverses the same IP routers, give one explanation for why point D is higher than point B?
+
+> Changing cross-traffic by other concurrent senders across same routers.
 
 4.1(a) Suppose Ethernet was the only LAN technology and the Internet were one large switched Ethernet. Give two networking reasons this is a bad idea.
 
