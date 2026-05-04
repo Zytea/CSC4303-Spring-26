@@ -30,21 +30,21 @@
 
    <img src="assets/image-20260503173948068.png" alt="image-20260503173948068" style="zoom: 20%;" />
 
-   (a) Based on their Lamport clock values, what is the relationship between events labelled b and c? Which event happened earlier?
+(a) Based on their Lamport clock values, what is the relationship between events labelled b and c? Which event happened earlier?
 
    > No relationship, events b and c are parallel (L(b) < L(c) does not imply that b precedes c).
 
-   (b) Ignore the Lamport clock values for this subpart. Han proposes a much simpler algorithm to determine event ordering: each time two processes communicate, the sender attaches a log of all events it has seen so far, along with their corresponding local timestamps. For example, when P3 sends event c to P2, it also sends event a’s timestamp. When P2 receives the message (event e), it can reconstruct a global view of event history across both P2 and P3. Based on these logs, can P2 determine the ordering between events a and b? If so, what is the correct ordering from P2’s perspective up to event e? If not, why not?
+(b) Ignore the Lamport clock values for this subpart. Han proposes a much simpler algorithm to determine event ordering: each time two processes communicate, the sender attaches a log of all events it has seen so far, along with their corresponding local timestamps. For example, when P3 sends event c to P2, it also sends event a’s timestamp. When P2 receives the message (event e), it can reconstruct a global view of event history across both P2 and P3. Based on these logs, can P2 determine the ordering between events a and b? If so, what is the correct ordering from P2’s perspective up to event e? If not, why not?
 
    > No, because it is futile to compare timestamps across different processes. Since the machine clocks are not precisely synchronized, it is not meaningful to compare the resulting timestamps either. In this example, event a is recorded in terms of P3’s clock while b is recorded in terms of P2’s. Alternative explanations based on Lamport time will also be accepted.
 
-   (c) As you may have noticed, event h is missing a Lamport clock value. What are the possible values for the Lamport clock of event h? What are their corresponding total-ordered Lamport clock values? Assume that the maximum number of processes is 10, and that process P2 has ID 2.
+(c) As you may have noticed, event h is missing a Lamport clock value. What are the possible values for the Lamport clock of event h? What are their corresponding total-ordered Lamport clock values? Assume that the maximum number of processes is 10, and that process P2 has ID 2.
 
    > 44 is the only possible Lamport clock value for event h. Therefore, its totally ordered value is $M \cdot L_i(e) + i = 10 \cdot 44 + 2 = 442$.
 
 5. Eunice has decided that Gradescope is too slow, and wants to implement her own autograding system, Dotolab, where students submit their code via RPCs. Since she wants students to be sure that they have submitted, she wants to implement RPCs using at-least-once semantics. Note, however, that students still have a limited number of submissions for their projects!
 
-   (a) Eunice wrote the following code to implement the ‘Submit’ RPC (for submitting code to Dotolab). Why does it violate at-least-once semantics, and how can she fix it? (Please keep your answer brief, and do not write code).
+(a) Eunice wrote the following code to implement the ‘Submit’ RPC (for submitting code to Dotolab). Why does it violate at-least-once semantics, and how can she fix it? (Please keep your answer brief, and do not write code).
 
    ```go
    func (client *Client) Submit(data []byte) {
@@ -71,11 +71,11 @@
    > }
    > ```
 
-   (b) Eunice has fixed the code such that student submissions now follow at-least-once semantics. However, students are now complaining that they are running out of submissions because of query duplication. What additional information can Eunice include in her messages to make sure that Dotolab discards duplicate submissions?
+(b) Eunice has fixed the code such that student submissions now follow at-least-once semantics. However, students are now complaining that they are running out of submissions because of query duplication. What additional information can Eunice include in her messages to make sure that Dotolab discards duplicate submissions?
 
    > Solution: Eunice should include a submission ID (sequence number) with each message. If Dotolab receives a message with a submission ID matching a previous value, it should simply discard the duplicate message.
 
-   (c) Eunice decides to augment her RPC implementation by providing exactly-once semantics. She pays extra for a better network, `CMU_SUPER_SECURE`, which guarantees that messages are always delivered in-order and will never be dropped in transit. Is this sufficient to guarantee exactly-once semantics? Why or why not?
+(c) Eunice decides to augment her RPC implementation by providing exactly-once semantics. She pays extra for a better network, `CMU_SUPER_SECURE`, which guarantees that messages are always delivered in-order and will never be dropped in transit. Is this sufficient to guarantee exactly-once semantics? Why or why not?
 
    > No. The server could still crash between the time the client sends the message and the time the server would have received it (i.e. while the message is in transit), so she cannot guarantee that the message will be delivered.
 
@@ -99,51 +99,51 @@
 
 3. Time Synchronization
 
-   3.1 First, John wants to calculate the estimated minimum one way delay of sending a time sync request to the server. Assuming store-and-forward routing as well as the following scenarios listed below, please help John with the calculation (consider only one request message for one way):
-   - The link from John's PC to the router has a bandwidth of 5Mbps, and a latency of 10ms.
-   - The link from the router to the server has a bandwidth of 2Mbps, and a latency of 100ms.
-   - The time sync request has a size of 20Kb.
+3.1 First, John wants to calculate the estimated minimum one way delay of sending a time sync request to the server. Assuming store-and-forward routing as well as the following scenarios listed below, please help John with the calculation (consider only one request message for one way):
+- The link from John's PC to the router has a bandwidth of 5Mbps, and a latency of 10ms.
+- The link from the router to the server has a bandwidth of 2Mbps, and a latency of 100ms.
+- The time sync request has a size of 20Kb.
    > 20Kb/5Mbps + 10ms + 20Kb/2Mbps + 100ms = 4ms + 10ms + 10ms + 100ms = 124ms
 
-   3.2 John now decides to use Cristian's Time Sync algorithm to synchronize the clock on his PC with the server. He sends a sync request at `08:06:00.000`. Then, at `08:06:00.400` his PC receives a response from the server, saying that the time is `08:08:10:000`. What time should John set his PC to?
+3.2 John now decides to use Cristian's Time Sync algorithm to synchronize the clock on his PC with the server. He sends a sync request at `08:06:00.000`. Then, at `08:06:00.400` his PC receives a response from the server, saying that the time is `08:08:10:000`. What time should John set his PC to?
 
    > 08:08:10.200
 
-   3.3 Based on your answers to the above two sub-questions, what is the accuracy of the time estimate made in 3.2?
+3.3 Based on your answers to the above two sub-questions, what is the accuracy of the time estimate made in 3.2?
 
    > ±(200 - 124) = ±76ms
 
-   3.4 However, after using Cristian's Time Sync algorithm several days, John realizes that this algorithm may not be very accurate if it the RTT is large. Therefore, John decides to use NTP instead.
+3.4 However, after using Cristian's Time Sync algorithm several days, John realizes that this algorithm may not be very accurate if it the RTT is large. Therefore, John decides to use NTP instead.
 
-   Consider the following diagram:
+Consider the following diagram:
 
    <img src="assets/image-20260503181943994.png" alt="image-20260503181943994" style="zoom:33%;" />
 
-   The four timestamps show when John sends the request, when the request is received at the server, when the server sends the response, and when John receives the response.
+The four timestamps show when John sends the request, when the request is received at the server, when the server sends the response, and when John receives the response.
 
-   What is the RTT in this diagram (does NOT include server process time)?
+What is the RTT in this diagram (does NOT include server process time)?
 
    > 200ms
 
-   Calculate the estimated time offset of NTP
+Calculate the estimated time offset of NTP
 
    > -1min 4s
 
-   Besides algorithms dealing with real-world time, John also wants to try logical clocks, which only care about relative order of different events. John thinks that regular Lamport clocks have some drawbacks, so he'd like to choose between total-order Lamport clocks and vector clocks. Help him by clarifying some details about each algorithm. How do total-order Lamport clocks achieve a "total-order"? Explain in 1-2 sentences.
+Besides algorithms dealing with real-world time, John also wants to try logical clocks, which only care about relative order of different events. John thinks that regular Lamport clocks have some drawbacks, so he'd like to choose between total-order Lamport clocks and vector clocks. Help him by clarifying some details about each algorithm. How do total-order Lamport clocks achieve a "total-order"? Explain in 1-2 sentences.
 
    > Potential ties (possible due to concurrency) are broken using process ID, so that they become totally ordered.
 
-   What shortcoming of Lamport logical clocks do vector clocks overcome?
+What shortcoming of Lamport logical clocks do vector clocks overcome?
 
    > If one Lamport timestamp is less than another, it did not necessarily happen before the other (it may be concurrent). Vector clocks do not have this ambiguity
 
 7. RPC
 
-   7.1 In the test environment for p0partA, we expected your implementation to have an exactly-once semantics because there are no packet drops and kvstore actions always succeed. However, in a real environment, packet drops, action failures, etc. are common. Assuming our clients wait for results indefinitely and don’t retry in case of failures, what are the actual semantics of the implementation? Explain your answer.
+7.1 In the test environment for p0partA, we expected your implementation to have an exactly-once semantics because there are no packet drops and kvstore actions always succeed. However, in a real environment, packet drops, action failures, etc. are common. Assuming our clients wait for results indefinitely and don’t retry in case of failures, what are the actual semantics of the implementation? Explain your answer.
 
-   At-most-once. Because the client and the server don't have a failure detection and retry mechanism, each request is executed at most once.
+At-most-once. Because the client and the server don't have a failure detection and retry mechanism, each request is executed at most once.
 
-   7.2 In p0partA it is possible to associate duplicate values to the same key. Bob doesn’t like duplicate values and decided to rewrite the implementation for kvstore with the following pseudocode.
+7.2 In p0partA it is possible to associate duplicate values to the same key. Bob doesn’t like duplicate values and decided to rewrite the implementation for kvstore with the following pseudocode.
 
    ```go
    /* a map from string to int array */
@@ -164,18 +164,18 @@
    	return
    ```
 
-   Bob wants to publish this new kvstore to clients using a RPC framework without writing a server by himself. Which RPC semantics should he choose? Why?
+Bob wants to publish this new kvstore to clients using a RPC framework without writing a server by himself. Which RPC semantics should he choose? Why?
 
    > At-least-once. With the new implementation, all three operations are idempotent because we disallowed duplicates. Putting the same values multiple times will result in the same final state.
 
-   7.3 After publishing his kvstore service, Bob notices that the get(key) function is often slow when it has a large array to return. Bob remembers the pass-by-reference trick he often uses and changes his get() function to return the memory address of the result array:
+7.3 After publishing his kvstore service, Bob notices that the get(key) function is often slow when it has a large array to return. Bob remembers the pass-by-reference trick he often uses and changes his get() function to return the memory address of the result array:
 
    ```go
    *int[] get(string key):
    	return &kvs[key]
    ```
 
-   Will his approach work? Why or why not?
+Will his approach work? Why or why not?
 
    > No, because the client machine doesn’t share the address space with kvstore and can’t access the memory location returned.
 
@@ -225,25 +225,25 @@
 
 3. You are hired by the augmented reality startup AR2 that needs to perform a complex image processing algorithm. Because mobile phones have little computing power, AR2 ’s algorithm gets unacceptably slow as image sizes increase. Your manager, Jaine, proposes to use RPC to perform the work on a remote, more powerful server. You measure the following numbers, assuming a base image scaling factor of N.
 
-   - The running time of AR2’s algorithm is $M(N) = 3N$ ms on a mobile phone. On the server, its $S(N) = N/3$ ms.
-   - Marshalling and unmarshalling take $(N/6 + 20)$ ms in total.
-   - The average RTT between a user and the server is 80 ms.
-   - Bandwidth is infinite between the user and the server.
+- The running time of AR2’s algorithm is $M(N) = 3N$ ms on a mobile phone. On the server, its $S(N) = N/3$ ms.
+- Marshalling and unmarshalling take $(N/6 + 20)$ ms in total.
+- The average RTT between a user and the server is 80 ms.
+- Bandwidth is infinite between the user and the server.
 
-   3(a) For what value of N is Jaine right, i.e., AR2 should be using an RPC instead of a local call?
+3(a) For what value of N is Jaine right, i.e., AR2 should be using an RPC instead of a local call?
 
    > When $3N \ge 80\text{ ms} + (N/6 + 20)\text{ ms} + N/3\text{ ms} = 100\text{ ms} + (N/2)\text{ ms}$. So, $N \ge 40$.
 
-   3(b) With geo-replication, AR2 is able to reduce the average RTT. How will N change? (Give a qualitative answer)
+3(b) With geo-replication, AR2 is able to reduce the average RTT. How will N change? (Give a qualitative answer)
 
    > It decreases, because the server’s computation becomes as fast as the phone’s for a lower value of N .
 
    3(c) As AR2 acquires
 
-   1. more and more powerful servers and
-   2. places them closer to users,
+1. more and more powerful servers and
+2. places them closer to users,
 
-   you notice that the total RPC time does not improve very much. Explain why, by pointing out the bottleneck, in two sentences or less.
+you notice that the total RPC time does not improve very much. Explain why, by pointing out the bottleneck, in two sentences or less.
 
    > The bottleneck is the marshalling time. No matter how much everything else is improved, the marshalling time will keep the RPC time high.
 
@@ -267,11 +267,11 @@
 
 2(a) Consistent hashing is used in a variety of distributed systems over more traditional hashing algorithms.
 
-   2(a.A) Describe one way that consistent hashing performs better when failures occur (e.g. in DHTs or in CDNs).
+2(a.A) Describe one way that consistent hashing performs better when failures occur (e.g. in DHTs or in CDNs).
 
    > Less content needs to be moved between nodes.
 
-   2(a.B) Describe one way that consistent hashes perform better when nodes have differing views on the availability of servers.
+2(a.B) Describe one way that consistent hashes perform better when nodes have differing views on the availability of servers.
 
    > Consistent hashing reduces the spread of requests across nodes when views are different.
 
@@ -286,40 +286,38 @@
 
 4. As the CMU’s Distributed Systems class graduates ventured into the world, they spread their description of class lectures. As a result, the popularity of video recordings of the lectures skyrocketed (unfortunately, mostly for the jokes rather than the technical content) and now Srini needs your help in managing the storage and delivery of the files. Srini starts by building an Akamai-like CDN to deliver the files for his web site www.srinilectures.com. As a first step, Srini:
 
-   1. registers the domain srini-lectures.com with two name servers ns1.srini-lectures.com and ns2.srini-lectures.com.
-   2. sets up two regional, low-level DNS servers - east-ns.srini-lectures.com and westns.srini-lectures.com - for clients on the east and west coast.
-   3. sets up two servers to deliver cached content with IP addresses 1.1.1.1 and 2.2.2.2. Srini expects users to get the 1.1.1.1 address for www.srini-lectures.com if they are on the east coast and 2.2.2.2 if they are on the west coast.
+1. registers the domain srini-lectures.com with two name servers ns1.srini-lectures.com and ns2.srini-lectures.com.
+2. sets up two regional, low-level DNS servers - east-ns.srini-lectures.com and westns.srini-lectures.com - for clients on the east and west coast.
+3. sets up two servers to deliver cached content with IP addresses 1.1.1.1 and 2.2.2.2. Srini expects users to get the 1.1.1.1 address for www.srini-lectures.com if they are on the east coast and 2.2.2.2 if they are on the west coast.
 
-   4(a) There are 6 name servers involved in the system:
+4(a) There are 6 name servers involved in the system:
 
-   - a.root-servers.net
+- a.root-servers.net
 
-   - a.gtld-servers.net
+- a.gtld-servers.net
 
-   - ns1.srini-lectures.com
-   - ns2.srini-lectures.com
-   - east-ns.srini-lectures.com
-   - west-ns.srini-lectures.com
+- ns1.srini-lectures.com
+- ns2.srini-lectures.com
+- east-ns.srini-lectures.com
+- west-ns.srini-lectures.com
 
-   For each of the following DNS records:
+For each of the following DNS records:
 
-   1) list *ALL* servers where the DNS record stored (do not list cached locations),
-   2) what will its TTL be (assume that the TTL can only be 1 minute or 1 day) and
-   3) why you chose that TTL (1-2 sentences)
+1) list *ALL* servers where the DNS record stored (do not list cached locations), 2) what will its TTL be (assume that the TTL can only be 1 minute or 1 day) and 3) why you chose that TTL (1-2 sentences)
 
-   A. NS record that points to ns1.srini-lectures.com
+A. NS record that points to ns1.srini-lectures.com
 
    > on a.gtld-servers.net with TTL 1 day
 
-   B. NS record that points to east-ns.srini-lectures.com
+B. NS record that points to east-ns.srini-lectures.com
 
    > on ns1.srini-lectures.com and ns2.srini-lectures.com with TTL 1 day
 
-    C. A record for www.srini-lectures.com
+C. A record for www.srini-lectures.com
 
    > on east-ns.srini-lectures.com and west-ns.srini-lectures.com with TTL 1 min
 
-   4(b) On the first query (i.e. no cached information at the local name server) for www.srini-lectures.com from New York - which of the 6 name servers listed are contacted?
+4(b) On the first query (i.e. no cached information at the local name server) for www.srini-lectures.com from New York - which of the 6 name servers listed are contacted?
 
    > a.root-servers.net
    >
@@ -329,17 +327,17 @@
    >
    > east-ns.srini-lectures.com
 
-   4(c) On a second query, 5 minutes after the previous query, for www.srinilectures.com from New York - which of the 6 name servers listed are contacted?
+4(c) On a second query, 5 minutes after the previous query, for www.srinilectures.com from New York - which of the 6 name servers listed are contacted?
 
    > east-ns.srini-lectures.com
 
-   Srini decides to move the content to a Chord DHT. He splits the lectures into 10-second chunks, which results in 65,536 ($2^{16}$) files. He uses SHA3-256, a 256-bit hash, to generate the identifiers used in his DHT. Finally, he recruits 1,024 ($2^{10}$) users to participate in the Chord DHT as storage nodes.
+Srini decides to move the content to a Chord DHT. He splits the lectures into 10-second chunks, which results in 65,536 ($2^{16}$) files. He uses SHA3-256, a 256-bit hash, to generate the identifiers used in his DHT. Finally, he recruits 1,024 ($2^{10}$) users to participate in the Chord DHT as storage nodes.
 
-   4(d)  How many hops does it typically take to lookup a single chunk?
+4(d)  How many hops does it typically take to lookup a single chunk?
 
    > log2(1024) = 10 hops
 
-   4(e) How many different hosts are typically in the Chord finger table at any node?
+4(e) How many different hosts are typically in the Chord finger table at any node?
 
    > log2(1024) = 10 hosts
 
@@ -391,18 +389,18 @@ Correct Explain briefly (1-2 sentences) where the bug is.
 
 6. (14 points) Three computers at CMU (A, B, and C) communicate using a protocol that implements the idea of Lamport clocks (they include their clock time stamp in messages). For reference, if you need a reminder, recall that the three rules of Lamport’s algorithm are:
 
-   1. At process $i$, increment $L_i$ before each event.
-   2. To send message $m$ at process $i$, apply Rule 1 and then include the current local time in the message, i.e., $\mathrm{send}(m, L_i)$.
-   3. To receive a message $(m, t)$ at process $j$, set $L_j = \max(L_j, t)$ and then apply Rule 1 before time-stamping the receive event.
+1. At process $i$, increment $L_i$ before each event.
+2. To send message $m$ at process $i$, apply Rule 1 and then include the current local time in the message, i.e., $\mathrm{send}(m, L_i)$.
+3. To receive a message $(m, t)$ at process $j$, set $L_j = \max(L_j, t)$ and then apply Rule 1 before time-stamping the receive event.
 
-   At the beginning of time, all three computers begin with their logical clock set to zero (0). Later, the following sequence of events occurs:
+At the beginning of time, all three computers begin with their logical clock set to zero (0). Later, the following sequence of events occurs:
 
-   - A sends message $M_1$ to B: “hi”.
-   - After sending $M_1$, A sends message $M_2$ to C: “hi”.
-   - After receiving $M_1$, B sends message $M_3$ to C: “A told me hi”.
-   - After receiving $M_3$ first and then $M_2$, C sends message $M_4$ to A: “B is boring”.
+- A sends message $M_1$ to B: “hi”.
+- After sending $M_1$, A sends message $M_2$ to C: “hi”.
+- After receiving $M_1$, B sends message $M_3$ to C: “A told me hi”.
+- After receiving $M_3$ first and then $M_2$, C sends message $M_4$ to A: “B is boring”.
 
-   6(a) Indicate the time included with the messages as they are sent at each step.
+6(a) Indicate the time included with the messages as they are sent at each step.
 
    ```
    Send(M1, _)
@@ -418,13 +416,13 @@ Correct Explain briefly (1-2 sentences) where the bug is.
    > Send(M4, 6)
    > ```
 
-   6(b) Maintaining all clock states from the previous question, three ADDITIONAL messages are sent:
+6(b) Maintaining all clock states from the previous question, three ADDITIONAL messages are sent:
 
-   - After receiving $M_4$, A sends message $M_5$ to B: “C is kind of random!”
-   - After receiving $M_5$, B sends message $M_6$ to A: “C is boring”.
-   - A receives message $M_6$.
+- After receiving $M_4$, A sends message $M_5$ to B: “C is kind of random!”
+- After receiving $M_5$, B sends message $M_6$ to A: “C is boring”.
+- A receives message $M_6$.
 
-   After all of these messages have been sent and received, what time does each computer think it is?
+After all of these messages have been sent and received, what time does each computer think it is?
 
    | A    | 11   |
    | ---- | ---- |
@@ -444,11 +442,11 @@ Correct Explain briefly (1-2 sentences) where the bug is.
    > recv(M6): A=11, B=10, C=6
    > ```
 
-   6(c) Is this a relatively or totally ordered system?
+6(c) Is this a relatively or totally ordered system?
 
    > Solution: This is a relatively ordered system.
 
-   6(d) Write out the vector time representation with the following messages as they are sent at each step.
+6(d) Write out the vector time representation with the following messages as they are sent at each step.
 
    ```
    Send(M1, [ ])
@@ -494,17 +492,17 @@ Correct Explain briefly (1-2 sentences) where the bug is.
 
 6. Three computers at CMU, A, B, and C communicate using a protocol that implements the idea of Lamport clocks (they include their clock timestamp in messages). For reference, if you need a reminder, recall that the three rules of Lamport’s algorithm are:
 
-   1. At process $i$, increment $L_i$ before each event.
-   2. To send message $m$ at process $i$, apply Rule 1 and then include the current local time in the message, i.e., $\mathrm{send}(m, L_i)$.
-   3. To receive a message $(m, t)$ at process $j$, set $L_j = \max(L_j, t)$ and then apply Rule 1 before time-stamping the receive event.
+1. At process $i$, increment $L_i$ before each event.
+2. To send message $m$ at process $i$, apply Rule 1 and then include the current local time in the message, i.e., $\mathrm{send}(m, L_i)$.
+3. To receive a message $(m, t)$ at process $j$, set $L_j = \max(L_j, t)$ and then apply Rule 1 before time-stamping the receive event.
 
-   At the beginning of time, all three computers begin with their logical clock set to zero (0). Later, the following sequence of events occurs:
+At the beginning of time, all three computers begin with their logical clock set to zero (0). Later, the following sequence of events occurs:
 
-   - A sends message $M_1$ to B: “hi”.
-   - After receiving $M_1$, B sends message $M_2$ to C: “A told me hi”.
-   - After receiving $M_2$, C sends message $M_3$ to A: “B is boring”.
+- A sends message $M_1$ to B: “hi”.
+- After receiving $M_1$, B sends message $M_2$ to C: “A told me hi”.
+- After receiving $M_2$, C sends message $M_3$ to A: “B is boring”.
 
-   6(a) Indicate the time included with the messages as they are sent at each step.
+6(a) Indicate the time included with the messages as they are sent at each step.
 
    ```
    Send(M1, _)
@@ -519,30 +517,29 @@ Correct Explain briefly (1-2 sentences) where the bug is.
    > Send(M3, 5)
    > ```
 
-   6(b) Maintaining all clock states from the previous question, three ADDITIONAL messages are sent:
+6(b) Maintaining all clock states from the previous question, three ADDITIONAL messages are sent:
 
-   - After receiving $M_3$, A sends message $M_4$ to B: “C is kind of random!”
-   - After receiving $M_4$, B sends message $M_5$ to A: “C is boring”.
-   - A receives message $M_5$.
+- After receiving $M_3$, A sends message $M_4$ to B: “C is kind of random!”
+- After receiving $M_4$, B sends message $M_5$ to A: “C is boring”.
+- A receives message $M_5$.
 
-   After all of these messages have been sent and received, what time does each computer think it is?
+After all of these messages have been sent and received, what time does each computer think it is?
 
    > A=10, B=9, C=5. Remember, receiving and sending are different events.
 
-   6(c) Is this a relatively or totally ordered system?
+6(c) Is this a relatively or totally ordered system?
 
    > This is a relatively ordered system.
 
    6(d) Reset all clocks to zero. This time:
 
-   - A sends message $M_1$ to B.
-   - The user of machine A is talking on the phone with the user of machine B. She tells him “I just sent you a message online. Please send a message to C right now.”
-   - B sends message $M_2$ to C.
+- A sends message $M_1$ to B.
+- The user of machine A is talking on the phone with the user of machine B. She tells him “I just sent you a message online. Please send a message to C right now.”
+- B sends message $M_2$ to C.
 
-   Once all of the messages have been sent and received, what times might C’s clock be set to under which circumstance?
+Once all of the messages have been sent and received, what times might C’s clock be set to under which circumstance?
 
-   > If B received the message before sending the message to C, then C’s clock would read 4.
-   > Otherwise, C’s clock would read 2.
+   > If B received the message before sending the message to C, then C’s clock would read 4. Otherwise, C’s clock would read 2.
 
 ### Mid 2010
 
@@ -556,51 +553,51 @@ Correct Explain briefly (1-2 sentences) where the bug is.
 
 1. RPC tries to make remote procedure calls look the same as local procedure calls. But the illusion isn’t perfect. Circle all of the options that correctly describe differences between a local function call and an RPC:
 
-   A. RPC calls require an extra parameter to identify the server.
+A. RPC calls require an extra parameter to identify the server.
 
-   B. RPC calls may have higher or variable latency.
+B. RPC calls may have higher or variable latency.
 
-   C. RPC calls are limited to call-by-value.
+C. RPC calls are limited to call-by-value.
 
-   D. RPC calls have different (more) failure modes. E. Local function calls require a malloc of a heap object to represent the return pointer.
+D. RPC calls have different (more) failure modes. E. Local function calls require a malloc of a heap object to represent the return pointer.
 
    > A,B,D
 
 8. For which of the following applications would UDP be preferable over TCP, ignoring annoying concerns such as firewalls that might block some protocols?
 
-   A. Streaming a live video over the internet
+A. Streaming a live video over the internet
 
-   B. Instant messaging/email
+B. Instant messaging/email
 
-   C. Logging in to your bank website
+C. Logging in to your bank website
 
-   D. Voice over IP
+D. Voice over IP
 
-   E. Large file transfers
+E. Large file transfers
 
-   F. Looking up a very small value from a directory service TCP / UDP
+F. Looking up a very small value from a directory service TCP / UDP
 
    > UDP, TCP, TCP, UDP, TCP, UDP
 
 11. Suppose each computer in a distributed system keeps an approximate real-time clock $R_i$ in addition to a Lamport-like clock $L_i$.
 
-   A computer's real-time clock $R_i$ is an always-increasing integer (i.e., for any two reads $r_1$, $r_2$ of $R_i$ such that $r_1 \to_i r_2$, we have $r_2 > r_1$), but the real-time clocks at different computers may drift relative to each other (i.e., $R_j - R_i$ is non-constant for $j \ne i$).
+A computer's real-time clock $R_i$ is an always-increasing integer (i.e., for any two reads $r_1$, $r_2$ of $R_i$ such that $r_1 \to_i r_2$, we have $r_2 > r_1$), but the real-time clocks at different computers may drift relative to each other (i.e., $R_j - R_i$ is non-constant for $j \ne i$).
 
-   Consider the following modification, Shamport, to Lamport's partial-ordering algorithm:
+Consider the following modification, Shamport, to Lamport's partial-ordering algorithm:
 
-   **Rule 1:** Before each event at computer $i$, set $L_i = \min(L_i + 1, R_i)$.
+**Rule 1:** Before each event at computer $i$, set $L_i = \min(L_i + 1, R_i)$.
 
-   **Rule 2:** When sending a message $m$, apply Rule 1 and include the time $L_i$ as part of the message (i.e., send $(m, L_i)$ instead of just $m$).
+**Rule 2:** When sending a message $m$, apply Rule 1 and include the time $L_i$ as part of the message (i.e., send $(m, L_i)$ instead of just $m$).
 
-   **Rule 3:** When receiving a message $(m, t)$ at computer $j$, set $L_j = \max(L_j, t)$ and then apply Rule 1 before timestamping the message-arrival event.
+**Rule 3:** When receiving a message $(m, t)$ at computer $j$, set $L_j = \max(L_j, t)$ and then apply Rule 1 before timestamping the message-arrival event.
 
-   Let the Shamport global time of an event $e$ at computer $i$ be $S(e) = L_i(e)$.
+Let the Shamport global time of an event $e$ at computer $i$ be $S(e) = L_i(e)$.
 
-   11(a) In the algorithm above, underline the difference between Shamport and Lamport's algorithm. (Underline as little as possible.)
+11(a) In the algorithm above, underline the difference between Shamport and Lamport's algorithm. (Underline as little as possible.)
 
    > Shamport's algorithm uses $L_i = \min(L_i + 1, R_i)$ in Rule 1 instead of $L_i = L_i + 1$. Otherwise the two algorithms are the same.
 
-   11(b) Let $e, e'$ be two events at computer $i$ such that $e \to_i e'$. Prove that $S(e') > S(e)$.
+11(b) Let $e, e'$ be two events at computer $i$ such that $e \to_i e'$. Prove that $S(e') > S(e)$.
 
    > The key observation is that any new event advances the logical clock.
    >
@@ -616,11 +613,7 @@ Correct Explain briefly (1-2 sentences) where the bug is.
    >
    > It suffices to prove the claim for two consecutive events \(f \to_i f'\) on computer \(i\), since the general case follows by chaining.
    >
-   > > **Why?**
-   > >
-   > > Consider the sequence of all events $e \ldots e'$ at computer $i$.
-   > >
-   > > If $S(e') \le S(e)$ then there must exist at least one pair of $f \to_i f'$ such that $S(f') \le S(f)$; otherwise each new event would advance the logical clock $L_i$, which would yield $L_i(e') > L_i(e)$ and thus $S(e') > S(e)$.
+   > > **Why?** > > Consider the sequence of all events $e \ldots e'$ at computer $i$. > > If $S(e') \le S(e)$ then there must exist at least one pair of $f \to_i f'$ such that $S(f') \le S(f)$; otherwise each new event would advance the logical clock $L_i$, which would yield $L_i(e') > L_i(e)$ and thus $S(e') > S(e)$.
    >
    > Let \(S(f)=t\), and let the real-time clock values at \(f,f'\) be \(r,r'\).
    >
@@ -642,13 +635,13 @@ Correct Explain briefly (1-2 sentences) where the bug is.
    >
    > Thus every consecutive event increases \(S\), so for any \(e\to_i e'\), \(S(e')>S(e)\).
 
-   11(c) Draw a time-series diagram in which $S(\mathrm{send}(m)) > S(\mathrm{receive}(m))$ for some message $m$. Be sure to compute the Shamport-time and label the values of the real-time clocks at all computers for any events in your diagram. Explain in 1-2 sentences why this unwanted behavior occurs.
+11(c) Draw a time-series diagram in which $S(\mathrm{send}(m)) > S(\mathrm{receive}(m))$ for some message $m$. Be sure to compute the Shamport-time and label the values of the real-time clocks at all computers for any events in your diagram. Explain in 1-2 sentences why this unwanted behavior occurs.
 
    <img src="assets/image-20260504010119299.png" alt="image-20260504010119299" style="zoom:50%;" />
 
-   >  **The fundamental problem is that the logical clock will never advance past the real-time clock** at each computer, so skew in the real-time clocks can cause the receive to be timestamped earlier than the send.
+   > **The fundamental problem is that the logical clock will never advance past the real-time clock** at each computer, so skew in the real-time clocks can cause the receive to be timestamped earlier than the send.
 
-   11(d) Suppose we know that the one-way latency of any message between any two computers $i, j$ is at least $x$ clock-ticks by any local clock. Also suppose we can synchronize $R_i$ and $R_j$ using an external time-source such that $|R_i - R_j| \le y$, always, for some integer $y$. Is there a value of $y$ small enough to guarantee that $S(\mathrm{send}(m)) < S(\mathrm{receive}(m))$ for any message $m$ between $i$ and $j$? If yes, compute the largest possible value of $y$ to guarantee this property, and explain why your answer is correct. If no, explain why.
+11(d) Suppose we know that the one-way latency of any message between any two computers $i, j$ is at least $x$ clock-ticks by any local clock. Also suppose we can synchronize $R_i$ and $R_j$ using an external time-source such that $|R_i - R_j| \le y$, always, for some integer $y$. Is there a value of $y$ small enough to guarantee that $S(\mathrm{send}(m)) < S(\mathrm{receive}(m))$ for any message $m$ between $i$ and $j$? If yes, compute the largest possible value of $y$ to guarantee this property, and explain why your answer is correct. If no, explain why.
 
    > Yes, if $y < x$.
    >
@@ -664,63 +657,63 @@ Correct Explain briefly (1-2 sentences) where the bug is.
 
 1. Which techniques are used in DNS to improve scalability?
 
-   A. Replication
+A. Replication
 
-   B. Recursive queries
+B. Recursive queries
 
-   C. Caching / Soft-State
+C. Caching / Soft-State
 
-   D. Partitioning of namespace
+D. Partitioning of namespace
 
    > A, C, D
 
 2. Which of the following are true about the Chord distributed hash table?
 
-   A. Has $O(\log N)$ lookup latency.
+A. Has $O(\log N)$ lookup latency.
 
-   B. Directly supports fuzzy or wildcard lookups for content.
+B. Directly supports fuzzy or wildcard lookups for content.
 
-   C. Uses content-based naming.
+C. Uses content-based naming.
 
-   D. Provides anonymity.
+D. Provides anonymity.
 
    > A, C
 
 3. Which of the following are commonly provided in RPC libraries?
 
-   A. Application-level failure handling
+A. Application-level failure handling
 
-   B. Data marshalling/unmarshalling
+B. Data marshalling/unmarshalling
 
-   C. Asynchronous function calls
+C. Asynchronous function calls
 
-   D. Exactly-once semantics
+D. Exactly-once semantics
 
-   E. At-most-once semantics
+E. At-most-once semantics
 
    > B, E
 
 4. Which of the following are advantages of using content-based naming for P2P file transfers?
 
-   A. The receiver can download a chunk using parallel TCP streams.
+A. The receiver can download a chunk using parallel TCP streams.
 
-   B. The receiver can route around failed links.
+B. The receiver can route around failed links.
 
-   C. The receiver can download a chunk of data from any source, not just the original seed.
+C. The receiver can download a chunk of data from any source, not just the original seed.
 
-   D. The receiver can verify that it received the correct data.
+D. The receiver can verify that it received the correct data.
 
    > C, D
 
 5. Which of the following statements are true? Please circle True or False:
 
-   6(a) In Google File System (GFS), when a client needs to access data, it contacts the master and gets the data from the master. (✅/❌)
+6(a) In Google File System (GFS), when a client needs to access data, it contacts the master and gets the data from the master. (✅/❌)
 
    > False
 
-   6(h) Recall the global “happens-before” relationship ($\to$) that captured the logical notions of time using both the local happens-before relationship at each server and the fact that a message must be sent before it can be received.
+6(h) Recall the global “happens-before” relationship ($\to$) that captured the logical notions of time using both the local happens-before relationship at each server and the fact that a message must be sent before it can be received.
 
-   For a Lamport logical clock $L$, if $e_1 \to e_2$ then $L(e_1) < L(e_2)$. (✅/❌)
+For a Lamport logical clock $L$, if $e_1 \to e_2$ then $L(e_1) < L(e_2)$. (✅/❌)
 
    > True
 
@@ -730,42 +723,42 @@ Correct Explain briefly (1-2 sentences) where the bug is.
 
 1.
 
-   Threads and Processes
+Threads and Processes
 
-   - It is less expensive to create a process than a thread.  (✅/ ❌ )
+- It is less expensive to create a process than a thread.  (✅/ ❌ )
      > False. Creating a process is usually more expensive because it needs a separate address space and more OS bookkeeping.
 
-   - Switching between threads is faster than switching between processes.  (✅/ ❌ )
+- Switching between threads is faster than switching between processes.  (✅/ ❌ )
      > True. Thread switches are usually cheaper because threads in the same process share the same address space.
 
-   - In order to switch between user threads, you need to enter the kernel.  (✅/ ❌ )
+- In order to switch between user threads, you need to enter the kernel.  (✅/ ❌ )
      > False. User-level threads can be switched entirely by a user-space thread library without entering the kernel.
 
-   - Threads share a heap and a stack.  (✅/ ❌ )
+- Threads share a heap and a stack.  (✅/ ❌ )
      > False. Threads share the heap, but each thread has its own stack.
 
-   Networking
+Networking
 
-   - The TCP initial handshake must be completed between the sender and every router on the path to the destination before communication can take place.  (✅/ ❌ )
+- The TCP initial handshake must be completed between the sender and every router on the path to the destination before communication can take place.  (✅/ ❌ )
      > False. TCP is end-to-end between the sender and receiver; routers only forward packets.
 
-   - The Internet service model allows a small amount of packet loss.  (✅/ ❌ )
+- The Internet service model allows a small amount of packet loss.  (✅/ ❌ )
      > True. The Internet provides best-effort delivery, so end hosts must tolerate packet loss.
 
-   - Domain Name Service (DNS) servers remember which clients have cached DNS replies so that the servers can send invalidation messages when name bindings change.  (✅/ ❌ )
+- Domain Name Service (DNS) servers remember which clients have cached DNS replies so that the servers can send invalidation messages when name bindings change.  (✅/ ❌ )
      > False. DNS cache consistency is mainly handled using TTLs, not server-pushed invalidations.
 
 2. Which of the following design assumptions apply to HDFS/GFS? (Circle all that apply)
 
-   A. Only amazingly powerful servers can handle the size and complexity of the workload.
+A. Only amazingly powerful servers can handle the size and complexity of the workload.
 
-   B. Any use of a centralized server would cause too much of a bottleneck.
+B. Any use of a centralized server would cause too much of a bottleneck.
 
-   C. Component failures are expected.
+C. Component failures are expected.
 
-   D. Files are huge by traditional standards.
+D. Files are huge by traditional standards.
 
-   E. File contents are often updated and overwritten.
+E. File contents are often updated and overwritten.
 
    > C, D.
 
@@ -773,10 +766,10 @@ Correct Explain briefly (1-2 sentences) where the bug is.
 
    <img src="assets/image-20260504013038008.png" alt="image-20260504013038008" style="zoom:67%;" />
 
-   - At what node do you expect to find key 10?
-   - At what node do you expect to find key 9?
-   - On average, how many hops are there when searching for a key?
-   - What route will a search for key 11 take, starting at node 3?
+- At what node do you expect to find key 10?
+- At what node do you expect to find key 9?
+- On average, how many hops are there when searching for a key?
+- What route will a search for key 11 take, starting at node 3?
 
    > Key 10 maps to $n_0$, and key 9 maps to $n_9$. Chord lookups take $O(\log N)$ hops on average. Starting at $n_3$ for key 11, the lookup goes $n_3 \to n_9 \to n_0$.
 
@@ -784,14 +777,14 @@ Correct Explain briefly (1-2 sentences) where the bug is.
 
    > Chord only supports exact-key lookup well, while recipe users are likely to search by partial names, ingredients, or categories. Hashing recipe names also destroys locality, so related recipes cannot be found together without building a separate index.
 
-   (6) Tell us what style of P2P system you would use, and what assumptions you think are reasonable for your cookie-storing-system:
+(6) Tell us what style of P2P system you would use, and what assumptions you think are reasonable for your cookie-storing-system:
 
-   - Number of nodes
-   - Number of recipes
-   - Number of queries/second
-   - What do queries look like?
+- Number of nodes
+- Number of recipes
+- Number of queries/second
+- What do queries look like?
 
-   Style of system AND a brief rationale for this decision:
+Style of system AND a brief rationale for this decision:
 
    > I would use a **Gnutella/KaZaA-style two-level P2P system**.
    >
@@ -818,7 +811,7 @@ Correct Explain briefly (1-2 sentences) where the bug is.
     L_3(m_6, recv) = 10
     ```
 
-    What is the value of $x$? If it cannot be determined, write "unknown".
+What is the value of $x$? If it cannot be determined, write "unknown".
 
     > $x = 7$. Message $m_5$ is sent by machine 4 with Lamport time 6, and machine 1's local clock before receiving it is 2, so the receive timestamp is $\max(2, 6) + 1 = 7$.
 
@@ -842,79 +835,78 @@ Correct Explain briefly (1-2 sentences) where the bug is.
 
 1. (8 points) Circle True or False as appropriate. If you don’t know the answer, come back at the end and GUESS; a blank answer is the same as a wrong answer, so guessing can only help.
 
-   1(a) DNS is delegated hierarchically by having the root nodes tell resolvers which servers to query for `.com`, and so on, until the client’s query can be answered. (✅/❌)
+1(a) DNS is delegated hierarchically by having the root nodes tell resolvers which servers to query for `.com`, and so on, until the client’s query can be answered. (✅/❌)
 
    > True.
 
-   1(b) DNS resolvers use Paxos and invalidation messages to maintain the consistency of cached records. (✅/❌)
+1(b) DNS resolvers use Paxos and invalidation messages to maintain the consistency of cached records. (✅/❌)
 
    > False.
 
-   1(c) Some Content Delivery Networks (CDNs) use DNS responses to direct clients to the closest CDN cache. (✅/❌)
+1(c) Some Content Delivery Networks (CDNs) use DNS responses to direct clients to the closest CDN cache. (✅/❌)
 
    > True.
 
 2. Peer to Peer
 
-   6(a) In a centralized P2P network (such as Napster), how many indices must be searched if a client wants to locate a particular file?
+6(a) In a centralized P2P network (such as Napster), how many indices must be searched if a client wants to locate a particular file?
 
    > 1
 
-   6(b) Name one major disadvantage of the centralized P2P system (from a distributed principles point of view)
+6(b) Name one major disadvantage of the centralized P2P system (from a distributed principles point of view)
 
    > - Single point of failure
    > - Server processes everything
    > - Server must keep track of a potentially very large number of clients
    > - more? (Copyright, no scalability)
 
-   6(c) Query flooding is an alternative design that solves some of the problems of centralized P2P and eliminates the central server. However, it changes the mechanics of peer interactions significantly. Explain, in one sentence each, how a newly joining node publishes the files they wish to make available:
+6(c) Query flooding is an alternative design that solves some of the problems of centralized P2P and eliminates the central server. However, it changes the mechanics of peer interactions significantly. Explain, in one sentence each, how a newly joining node publishes the files they wish to make available:
 
-   - In a centralized P2P network
-   - In a query-flooding P2P network
+- In a centralized P2P network
+- In a query-flooding P2P network
 
    > They send their list of files and metadata to the server.
    >
    > A query flooding p2p network: They don’t do anything - queries come to them.
    >
 
-   6(d) One popular improvement upon query flooding is to move to a “supernode” flooding architecture. Using $N$ as the number of nodes in the network and $S$ as the number of supernodes, where $S \ll N$, explain the benefit of moving to this supernode architecture.
+6(d) One popular improvement upon query flooding is to move to a “supernode” flooding architecture. Using $N$ as the number of nodes in the network and $S$ as the number of supernodes, where $S \ll N$, explain the benefit of moving to this supernode architecture.
 
    > Queries now require $O(S)$ messages instead of $O(N)$. In addition, if the nodes used as supernodes are more stable or have higher capacity, they can further improve the performance or stability of the network.
 
-   6(e) What is a common mechanism used to limit the propagation of queries in a flooding network?
+6(e) What is a common mechanism used to limit the propagation of queries in a flooding network?
 
    > TTL - time to live - scoping. Also known as hop count limits, etc.
 
-   6(f) List one typical criterion for selecting a node to be promoted to a supernode. Explain in one sentence why such a choice would improve network stability.
+6(f) List one typical criterion for selecting a node to be promoted to a supernode. Explain in one sentence why such a choice would improve network stability.
 
    > How long a node has been part of the network (time), because how long a node has been around is a good predictor of how long it will be around.
 
 7. Consistent Hashing
 
-   7(a) In a distributed hash table (DHT) using a ring mapping, explain how a key is mapped to a specific node?
+7(a) In a distributed hash table (DHT) using a ring mapping, explain how a key is mapped to a specific node?
 
    > Keys and nodes map to points in a ring space. A node handles all keys mapped between Predecessor and it.
 
-   7(b) In the most basic form of DHT systems, nodes simply track their predecessor and successor. Very briefly state what problem this leads to as the network grows larger.
+7(b) In the most basic form of DHT systems, nodes simply track their predecessor and successor. Very briefly state what problem this leads to as the network grows larger.
 
    > Performance problems as nodes forward a key resolution request to larger chains of neighbors.
 
-   7(c) The Chord scheme overcomes this problem by having each node maintain a “finger table”. Given starting node $j$ and destination node $k$, where $k > j$, how much is the distance between the two nodes reduced with each hop?
+7(c) The Chord scheme overcomes this problem by having each node maintain a “finger table”. Given starting node $j$ and destination node $k$, where $k > j$, how much is the distance between the two nodes reduced with each hop?
 
    > It decreases exponentially, or it is cut in half
 
-   7(d) In a Chord structured DHT with $N$ nodes, how many hops would a lookup operation require?
+7(d) In a Chord structured DHT with $N$ nodes, how many hops would a lookup operation require?
 
    > $O(\log N)$.
 
-   7(e) Assume a Chord network in which node $q$ is the successor of node $p$. During operation, node $p$ discovers that its successor link is no longer consistent because $q$ has updated its predecessor link. What does this change imply must have happened in the network?
+7(e) Assume a Chord network in which node $q$ is the successor of node $p$. During operation, node $p$ discovers that its successor link is no longer consistent because $q$ has updated its predecessor link. What does this change imply must have happened in the network?
 
    > A new node joined the network ’between’ p and q.
 
-   7(f) An optimization to Chord involves storing several nodes for each entry in the finger table instead of just one. Explain an important benefit this optimization confers in a globally distributed DHT.
+7(f) An optimization to Chord involves storing several nodes for each entry in the finger table instead of just one. Explain an important benefit this optimization confers in a globally distributed DHT.
 
-   > (1) This allows routing based on proximity, which would reduce slow routes that criss-cross the globe.
-   > (2) It provides a fallback in case one of the nodes in the finger table is unreachable.
+   > (1) This allows routing based on proximity, which would reduce slow routes that criss-cross the globe. (2) It provides a fallback in case one of the nodes in the finger table is unreachable.
 
 ## UW CSE 461 Computer Networks
 
@@ -1028,8 +1020,7 @@ How could this happen, and what should C do?
 
 1(a) If the buffer is completely full of TCP acknowledgment packets, how many packets are queued in the buffer? Assume **the TCP segment has no payload**, and the packet headers do not contain any IPv4 or TCP options. (3 points)
 
-> Ignoring the link-layer header and any minimum size restriction on the link-layer frame, a TCP ACK packet is 40 bytes long, consisting of a 20-byte IP header and a 20-byte TCP header. A 100,000-byte buffer can hold $100000/40 = 2500$ ACK packets.
-> **Why the TCP segment has no payload?**
+> Ignoring the link-layer header and any minimum size restriction on the link-layer frame, a TCP ACK packet is 40 bytes long, consisting of a 20-byte IP header and a 20-byte TCP header. A 100,000-byte buffer can hold $100000/40 = 2500$ ACK packets. **Why the TCP segment has no payload?**
 >
 > TCP header already has a Sequence Number (32) and an Acknowledgment Number (32).
 
@@ -1077,7 +1068,7 @@ B. A retransmission timeout at B, triggering a retransmission of the SYN-ACK pac
 
    <img src="assets/image-20260504105204357.png" alt="image-20260504105204357" style="zoom:33%;" />
 
-   For example, the ISP forwards all packets with destination addresses in 12.1.0.0/17 out link #2 toward the campus edge router. Both routers include a default forwarding entry 0.0.0.0/0 that can match any destination IP address.
+For example, the ISP forwards all packets with destination addresses in 12.1.0.0/17 out link #2 toward the campus edge router. Both routers include a default forwarding entry 0.0.0.0/0 that can match any destination IP address.
 
 3(a) How many IP addresses does the campus “own” in its 12.1.0.0/17 block? You can represent your answer as a power of two. (2 points)
 
@@ -1252,27 +1243,13 @@ B. A retransmission timeout at B, triggering a retransmission of the SYN-ACK pac
 >
 > - 不检查 source IP 是否属于这个 MAC
 >
->   > ```
->   > Ethernet src MAC = attacker MAC M_A
->   > IP src           = DNS server IP D
->   > UDP port         = 53
->   > ```
->   >
->   > gateway 检查 `IP D 是否真的属于 MAC M_A？` 就完蛋了
+> > ``` > Ethernet src MAC = attacker MAC M_A > IP src           = DNS server IP D > UDP port         = 53 > ``` > > gateway 检查 `IP D 是否真的属于 MAC M_A？` 就完蛋了
 >
 > - 不启用 DHCP snooping / IP source guard / dynamic ARP inspection
 >
 > - firewall 只粗略看 IP/port，而不严格验证 DNS 语义
 >
->   > 若
->   >
->   > ```
->   > 1. 必须是合法 DNS query / response
->   > 2. query name 长度和字符正常
->   > 3. response 必须对应之前的 query
->   > 4. 不允许异常大的 TXT record
->   > 5. 不允许高频率、长随机子域名
->   > ```
+> > 若 > > ``` > 1. 必须是合法 DNS query / response > 2. query name 长度和字符正常 > 3. response 必须对应之前的 query > 4. 不允许异常大的 TXT record > 5. 不允许高频率、长随机子域名 > ```
 >
 > ```
 > Before attack:
@@ -1610,13 +1587,13 @@ In the topology shown below, a client A (on the left side) joins a network and w
 
 <img src="assets/image-20260504134247520.png" alt="image-20260504134247520" style="zoom:33%;" />
 
-Assume the following: 
+Assume the following:
 
-- All the machines, except the client, already have their ARP caches full. 
-- DNS resolver C has an empty DNS cache. • http://example.net/index.html fits in a single packet. 
+- All the machines, except the client, already have their ARP caches full.
+- DNS resolver C has an empty DNS cache. • http://example.net/index.html fits in a single packet.
 - Client just joined the network and so all of its caches are empty (DNS, ARP, DHCP)
 
-When you are asked to write a packet with its headers, you should include both network and link-layer addresses. So a DNS query from client A to server C and the response should look like the following. Note that other packets may be involved with a full DNS lookup that we are not showing in this example. 
+When you are asked to write a packet with its headers, you should include both network and link-layer addresses. So a DNS query from client A to server C and the response should look like the following. Note that other packets may be involved with a full DNS lookup that we are not showing in this example.
 
 | Order | Link Src | Link Dst | Network Src | Network Dst | Protocol Description |
 | ----- | -------- | -------- | ----------- | ----------- | -------------------- |
@@ -1672,21 +1649,19 @@ When you are asked to write a packet with its headers, you should include both n
 
 2. TCP and Congestion Control (19 points)
 
-Consider the following graph of TCP throughput (NOT DRAWN TO SCALE), where the y-axis describes the TCP window size of the sender. We will later ask you to describe what happens on the right side of the graph as the sender continues to transmit. 
+Consider the following graph of TCP throughput (NOT DRAWN TO SCALE), where the y-axis describes the TCP window size of the sender. We will later ask you to describe what happens on the right side of the graph as the sender continues to transmit.
 
 <img src="assets/image-20260504135115369.png" alt="image-20260504135115369" style="zoom:33%;" />
 
 2(1) [3 points] The window size of the TCP sender decreases at the points marked by A, C, and D on the graph, which happens when a packet belonging to the stream is lost. Name the event which occurs that causes the sender to decrease its window.
 
-> A: Triple Duplicate ACK
-> C: Triple Duplicate ACK
-> D: Timeout
+> A: Triple Duplicate ACK C: Triple Duplicate ACK D: Timeout
 
 2(2) [4 points] Assume that the network has an MSS of 1000 bytes. If point A occurs 1 second after the sender begins its transfer, and the sender has written 15,000 bytes to the network by that time, what is the RTT of the network?
 
-> 1 RTT for client handshake (SYN -> SYN-ACK). Then window size grows during slow start: 1 MSS, 2 MSS, 4 MSS, 8 MSS = 15 MSS = 15,000 bytes. 
+> 1 RTT for client handshake (SYN -> SYN-ACK). Then window size grows during slow start: 1 MSS, 2 MSS, 4 MSS, 8 MSS = 15 MSS = 15,000 bytes.
 >
-> Note that A occurs at the point of detecting triple duplicate ACK, and therefore the client must have seen at least some ACKs from the 8 MSS windows. 
+> Note that A occurs at the point of detecting triple duplicate ACK, and therefore the client must have seen at least some ACKs from the 8 MSS windows.
 >
 > Hence a total of 5 RTTs over 1 second = 200 ms.
 
@@ -1704,21 +1679,11 @@ Consider the following graph of TCP throughput (NOT DRAWN TO SCALE), where the y
 
 3. Socket Programming (16 points)
 
-You are implementing a simple application to transfer a file from the client to the server
-using TCP.
+You are implementing a simple application to transfer a file from the client to the server using TCP.
 
-3(1) [ 5 points ] In the following, write the basic system calls you need to use in order to
-transfer the file. Assume that the client already has the IP address of the server. You
-don't need to show arguments, i.e., name resolution could have just been written as
-gethostbyname (not struct hostent * gethostbyname(const char
-*name)) and you don't need to show any other programmatic logic. Assume that the file
-can be written/read in a single call to send/recv.
+3(1) [ 5 points ] In the following, write the basic system calls you need to use in order to transfer the file. Assume that the client already has the IP address of the server. You don't need to show arguments, i.e., name resolution could have just been written as gethostbyname (not struct hostent * gethostbyname(const char *name)) and you don't need to show any other programmatic logic. Assume that the file can be written/read in a single call to send/recv.
 
-In the below table, provide a set of system calls in an appropriate order. Each line should
-have a single call at the client or server, not both. Some calls at the client and server can
-happen concurrently; just list them in a reasonable order (i.e., the write at the client
-should occur before the read at the server). Note: You might not need to use all the rows
-supplied. Remember to cleanup after you transmit the file.
+In the below table, provide a set of system calls in an appropriate order. Each line should have a single call at the client or server, not both. Some calls at the client and server can happen concurrently; just list them in a reasonable order (i.e., the write at the client should occur before the read at the server). Note: You might not need to use all the rows supplied. Remember to cleanup after you transmit the file.
 
 | Order | Client | Server |
 | ----: | ------ | ------ |
@@ -1736,13 +1701,9 @@ supplied. Remember to cleanup after you transmit the file.
 
 > Note there are multiple different acceptable answers.
 
-3(2) [10 points] Now consider the pseudocode of the client's send call in a bit more
-depth. Write some pseudocode (it doesn't need to compile, but should look C-like), how
-you would transmit a 100,000B file. In this code snippet, you should use arguments and
-return values to express the logic flow.
+3(2) [10 points] Now consider the pseudocode of the client's send call in a bit more depth. Write some pseudocode (it doesn't need to compile, but should look C-like), how you would transmit a 100,000B file. In this code snippet, you should use arguments and return values to express the logic flow.
 
-Your code should only be a few lines long; we're only interested in the logic immediately
-surrounding your use of the send system call.
+Your code should only be a few lines long; we're only interested in the logic immediately surrounding your use of the send system call.
 
 ```c
 // buf points to a buffer of size len
@@ -1768,61 +1729,39 @@ int sendall (int fd, char *buf, int len) {
 
 4(1) [6 points] IP Address Aggregation
 
-Suppose you are network operator for an ISP, and your ISP has two customer networks
-(MIT and Princeton). For the sake of simplicity, let’s assume that MIT only has 3 hosts
-with the following IP addresses, and Princeton only has 2 hosts:
+Suppose you are network operator for an ISP, and your ISP has two customer networks (MIT and Princeton). For the sake of simplicity, let’s assume that MIT only has 3 hosts with the following IP addresses, and Princeton only has 2 hosts:
 
 MIT:    18.0.0.1, 18.0.0.254, 18.255.255.254
 
 Princeton: 128.112.0.1, and 128.112.255.254
 
-You’ve heard that memory in router line cards is expensive, so you’d like to use as few
-entries as possible in your line cards. Your colleague at work says he has a solution
-that only requires two forwarding-table entries.
+You’ve heard that memory in router line cards is expensive, so you’d like to use as few entries as possible in your line cards. Your colleague at work says he has a solution that only requires two forwarding-table entries.
 
 (a) Give the IP prefix notation that your colleague uses to represent these two networks.
 
 > `18.0.0.0/8` and `128.112.0.0/16`
 
-(b) After you install the forwarding table entry your colleague suggests, you notice that
-you still see traffic for host 18.255.255.254, but you’ve stopped seeing any traffic for
-hosts 18.0.0.1 and 18.0.0.254. So, you come up with a new set of forwarding-table
-entries – three this time – that, once installed, causes you to receive traffic for all five
-hosts. What are these three IP prefixes?
+(b) After you install the forwarding table entry your colleague suggests, you notice that you still see traffic for host 18.255.255.254, but you’ve stopped seeing any traffic for hosts 18.0.0.1 and 18.0.0.254. So, you come up with a new set of forwarding-table entries – three this time – that, once installed, causes you to receive traffic for all five hosts. What are these three IP prefixes?
 
 > `18.0.0.0/8`, `18.0.0.0/24`, and `128.112.0.0./16`
 
 (c) Give one possible explanation why this change in part (b) is needed.
 
-> 18.0.0.0/24 is multi-homed from another provider and, given longest prefix
-> matching for preferred traffic, all traffic was going through its other provider.
+> 18.0.0.0/24 is multi-homed from another provider and, given longest prefix matching for preferred traffic, all traffic was going through its other provider.
 >
-> Similarly, some other ISP (perhaps again for multi-homing) could be
-> announcing any prefix > 8 bits, e.g., 18.0.0.0/16
+> Similarly, some other ISP (perhaps again for multi-homing) could be announcing any prefix > 8 bits, e.g., 18.0.0.0/16
 
 4(2) [ 4 points ] Ethernet and IP
 
-(a) Suppose Ethernet was the only existing LAN technology, so every host in the Internet
-was part of a local Ethernet and thus had a globally-unique Ethernet address. Would you
-recommend getting rid of IP addresses by simply using Ethernet addresses instead of IP
-addresses? Why or why not?
+(a) Suppose Ethernet was the only existing LAN technology, so every host in the Internet was part of a local Ethernet and thus had a globally-unique Ethernet address. Would you recommend getting rid of IP addresses by simply using Ethernet addresses instead of IP addresses? Why or why not?
 
-> No. It would not scale due to (1) the need for broadcast for discovery and (2)
-> forwarding tables would be large as MAC addresses are not topologically
-> assigned and thus cannot be aggregated.
+> No. It would not scale due to (1) the need for broadcast for discovery and (2) forwarding tables would be large as MAC addresses are not topologically assigned and thus cannot be aggregated.
 
-(b) What about the other way around, why do we not simply assign IP addresses to
-network adaptors, instead of dealing with both Ethernet and IP addresses?
+(b) What about the other way around, why do we not simply assign IP addresses to network adaptors, instead of dealing with both Ethernet and IP addresses?
 
-> No. Either you keep topological aggregation but then require adaptors to get
-> manually reassigned an IP address whenever moving (a configuration
-> nightmare), or adaptors have static IP addresses but then you would sacrifice
-> routing table aggregation (a scalability nightmare).
+> No. Either you keep topological aggregation but then require adaptors to get manually reassigned an IP address whenever moving (a configuration nightmare), or adaptors have static IP addresses but then you would sacrifice routing table aggregation (a scalability nightmare).
 
-4(3) Using TCP, a sender has sent out packets 1 through 20. The sender
-receives an ACK for packet 10, then it receives three ACKS for packet 11 (i.e., if the
-final byte of packet 11 was byte no. 5000, then these ACKs were for byte 5001).
-Given this result:
+4(3) Using TCP, a sender has sent out packets 1 through 20. The sender receives an ACK for packet 10, then it receives three ACKS for packet 11 (i.e., if the final byte of packet 11 was byte no. 5000, then these ACKs were for byte 5001). Given this result:
 
 (a) Which of the 20 packets can the sender assume are lost?
 
@@ -1832,8 +1771,7 @@ Given this result:
 
 > 1 - 11
 
-Now, the same sender resends the next missing packet and receives an ACK for packet
-16 in response. Based on this information:
+Now, the same sender resends the next missing packet and receives an ACK for packet 16 in response. Based on this information:
 
 (c) Which packets of the original 20 can the sender assume are still lost, if any?
 
@@ -1843,31 +1781,19 @@ Now, the same sender resends the next missing packet and receives an ACK for pac
 
 > 1-16
 
-4(4) [ 5 points ] Assume you have a network with three hosts – A, B, and C – all directly
-  connected to the same switch. Host A first attempts to open a TCP connection to B at
-  time 0, during which time he adds an entry to his ARP cache with a TTL of 60 seconds.
-  Host B begins transferring a large file to host A. A new host D connects to the network,
-  but is configured with the same IP address as already being used by A.
+4(4) [ 5 points ] Assume you have a network with three hosts – A, B, and C – all directly connected to the same switch. Host A first attempts to open a TCP connection to B at time 0, during which time he adds an entry to his ARP cache with a TTL of 60 seconds. Host B begins transferring a large file to host A. A new host D connects to the network, but is configured with the same IP address as already being used by A.
 
 <img src="assets/image-20260504150341701.png" alt="image-20260504150341701" style="zoom: 33%;" />
 
-At time 55 seconds, an application running on host D opens a TCP connection to an
-application on C. A few seconds later, the TCP transfer between hosts A and B breaks.
-What were the steps that led to this connection breaking?
+At time 55 seconds, an application running on host D opens a TCP connection to an application on C. A few seconds later, the TCP transfer between hosts A and B breaks. What were the steps that led to this connection breaking?
 
-> At time 60, host B’s ARP cache expires, so when it re-issues an ARP request for
-> the IP address shared by A and D, D’s answer is cached by B. Thus, B’s TCP packet
-> gets sent to MAC-D, who, not having such an open TCP connection, will reply with a
-> TCP-RST, causing B’s connection to break. (Similar for A and its ARP cache)
+> At time 60, host B’s ARP cache expires, so when it re-issues an ARP request for the IP address shared by A and D, D’s answer is cached by B. Thus, B’s TCP packet gets sent to MAC-D, who, not having such an open TCP connection, will reply with a TCP-RST, causing B’s connection to break. (Similar for A and its ARP cache)
 
-4(5) [ 6 points ] What transport layer protocol (TCP or UDP) you would use if your
-application needed one of the following properties and then give one succinct reason
-why. Be specific.
+4(5) [ 6 points ] What transport layer protocol (TCP or UDP) you would use if your application needed one of the following properties and then give one succinct reason why. Be specific.
 
 > (a) Speed - UDP – no connection setup or sender-side buffering
 >
-> (b) Long messages – TCP – as stream-of-bytes abstraction supports arbitrarily long
-> messages. Many stacks limit UDP messages to some maximum size (e.g., 64KB)
+> (b) Long messages – TCP – as stream-of-bytes abstraction supports arbitrarily long messages. Many stacks limit UDP messages to some maximum size (e.g., 64KB)
 >
 > (c) Short-duration interactions – UDP – No connection setup delay
 >
@@ -1879,31 +1805,19 @@ why. Be specific.
 
 5. Multiple choice (17 points)
 
-5(2) When a UDP segment arrives at a host, in order to direct the segment to the
-appropriate socket, the operating system’s network stack uses the following fields:
-(circle ALL that are true – 2 points)
+5(2) When a UDP segment arrives at a host, in order to direct the segment to the appropriate socket, the operating system’s network stack uses the following fields: (circle ALL that are true – 2 points)
 
-   (a) the source IP address.
-   ***(b) the destination IP address***
-   (c) the source port number
-   ***(d) the destination port number***
+(a) the source IP address.
+***(b) the destination IP address***
+(c) the source port number
+***(d) the destination port number***
 
-5(3) When a TCP segment belonging to an existing connection arrives at a host, in order to
-  direct the segment to the appropriate socket the operating system’s network stack uses
-  the following fields (circle ALL that are true – 2 points)
+5(3) When a TCP segment belonging to an existing connection arrives at a host, in order to direct the segment to the appropriate socket the operating system’s network stack uses the following fields (circle ALL that are true – 2 points)
 
-  ***(a) the source IP address.***
-  ***(b) the destination IP address***
-  ***(c) the source port number***
-  ***(d) the destination port number***
-
-5(6) Which of the following are advantages that RED has over drop-tail queuing? (circle
-   ALL that are true – 3 points)
-
-   ***(a) has fewer burst losses***
-   (b) has shorter queuing delays
-   (c) ensures roughly equal throughput for all flows
-   ***(d) ensures roughly equal throughput for all TCP flows***
+***(a) the source IP address.***
+***(b) the destination IP address***
+***(c) the source port number***
+***(d) the destination port number***
 
 ### Spring 2010 Final
 
@@ -1914,13 +1828,7 @@ Derived answers are supplied below based on the exam prompt and figures.
 
 1. Network system engineering (13 points)
 
-You have recently been hired by FinBook, the online social network for fish.
-FinBook currently runs on a single server. To support future growth, you hope to
-deploy multiple servers in multiple datacenters located at different points in the
-Internet, with a special focus on providing good performance and failure recovery.
-List some of the pros and cons of using each of the following technologies. Try to
-give the “best answer” and be specific. Vague comments such as “low overhead”
-will not get credit (overhead in terms of what?).
+You have recently been hired by FinBook, the online social network for fish. FinBook currently runs on a single server. To support future growth, you hope to deploy multiple servers in multiple datacenters located at different points in the Internet, with a special focus on providing good performance and failure recovery. List some of the pros and cons of using each of the following technologies. Try to give the “best answer” and be specific. Vague comments such as “low overhead” will not get credit (overhead in terms of what?).
 
 1(a) HTTP redirection
 
@@ -1962,8 +1870,7 @@ will not get credit (overhead in terms of what?).
 >
 > Disadvantage: the NAT/load-balancer is stateful and can become a bottleneck or single point of failure.
 
-1(e) ARP spoofing
-(unsolicited announcement of your MAC with other’s IP address)
+1(e) ARP spoofing (unsolicited announcement of your MAC with other’s IP address)
 
 1 advantage:
 
@@ -1975,13 +1882,7 @@ will not get credit (overhead in terms of what?).
 
 2. More network system engineering (13 points)
 
-2(a) You graduated from Princeton (yay!) and joined a social media startup that
-wants to rival Facebook (at least you hope). The startup doesn’t have any funding,
-so you took your implementation of simple router and are running it on a Linux box,
-using it as a router for your servers (instead of paying $$ to Cisco). As your
-company scaled, you started seeing some clients that use IPv6. Your servers
-understand IPv6, but your router doesn’t. Describe two ways in which you can
-extend your router to handle IPv6 traffic:
+2(a) You graduated from Princeton (yay!) and joined a social media startup that wants to rival Facebook (at least you hope). The startup doesn’t have any funding, so you took your implementation of simple router and are running it on a Linux box, using it as a router for your servers (instead of paying $$ to Cisco). As your company scaled, you started seeing some clients that use IPv6. Your servers understand IPv6, but your router doesn’t. Describe two ways in which you can extend your router to handle IPv6 traffic:
 
 Option 1: (answer <= 2 lines)
 
@@ -1991,34 +1892,7 @@ Option 2: (answer <= 2 lines)
 >
 > Option 2: tunnel IPv6 through IPv4 across the IPv4-only router, with encapsulation before the router and decapsulation after it.
 
-2(b) You are at Princeton for reunions and get a work phone call saying that the
-servers are running extremely slow and they believe the servers are under a DOS
-attack. You think this is your competitors (maybe Facebook is afraid of you after
-all!) and use your iPhone to ssh into your Linux machine. You remember that while
-implementing a flow table, 0 meant block and 1 meant allow. TCP’s protocol # is 6
-and UDP’s is 17. What entries will you add in the flow table to do the following:
-
-> - Allow all TCP traffic from Princeton (128.112.0.0/16)
-> - Ban all traffic from 66.220.0.0/16
-> - Allow UDP traffic to server 69.65.28.126:3333
->
-> Your entries should have the following format:
-> `<source IP, destination IP, protocol number, src Port, dst Port, 0 or 1>`
-
-> One reasonable rule set is:
->
-> `<128.112.0.0/16, *, 6, *, *, 1>`
->
-> `<66.220.0.0/16, *, *, *, *, 0>`
->
-> `<*, 69.65.28.126, 17, *, 3333, 1>`
-
-2(c) Your company has grown and now has a couple of thousand users. You said
-farewell to the your simple router implementation and finally paid some $$ to Cisco.
-You have multiple servers and routers in your (small) datacenter now. One day you
-show up at work and find that some clients cannot connect to your servers. In a
-panic, you start dumping traffic on the ingress gateway router of the problematic
-servers and see the following packets (partial headers):
+2(c) Your company has grown and now has a couple of thousand users. You said farewell to the your simple router implementation and finally paid some $$ to Cisco. You have multiple servers and routers in your (small) datacenter now. One day you show up at work and find that some clients cannot connect to your servers. In a panic, you start dumping traffic on the ingress gateway router of the problematic servers and see the following packets (partial headers):
 
 | Ver | Length | TOS | TTL | Protocol | Source Addr | Destination Addr |
 | --- | -----: | --: | --: | -------: | ----------- | ---------------- |
@@ -2031,21 +1905,17 @@ servers and see the following packets (partial headers):
 | 4 | 84 | 0 | 237 | 01 | 18.69.204.150 | 69.65.28.126 |
 | 4 | 40 | 0 | 208 | 06 | 121.69.24.120 | 69.65.28.126 |
 
-What is going wrong? Or, explain why this information is useless.
-(answer <= 2 lines)
+What is going wrong? Or, explain why this information is useless. (answer <= 2 lines)
 
 > Packets are caught in a routing loop: identical packets for `69.65.28.126` appear multiple times with lower TTL values. They will keep looping until their TTL expires.
 
 3. Distance-Vector Routing (9 points)
 
-The CS department at Princeton bought new Sun Fire V210 servers. They decided
-to run a distance-vector protocol for routing between these servers (even though it is
-a rather small network). They are currently configured as the picture below, with
-respective edge costs.
+The CS department at Princeton bought new Sun Fire V210 servers. They decided to run a distance-vector protocol for routing between these servers (even though it is a rather small network). They are currently configured as the picture below, with respective edge costs.
 
-The CS staff asked for your help. Write down each step of building the distance-
-vector routing table for ‘Eve’ so they can compare it to the output of their
-implementation. You can use abbreviations e.g., ‘A’ for Adam and ‘E’ for Eve.
+<img src="assets/image-20260504155906734.png" alt="Figure transcription: the topology has links $A-B=21$, $A-D=15$, $B-C=18$, $B-D=12$, $C-D=5$, $C-E=11$, and $D-E=17$." style="zoom:50%;" />
+
+The CS staff asked for your help. Write down each step of building the distance-vector routing table for ‘Eve’ so they can compare it to the output of their implementation. You can use abbreviations e.g., ‘A’ for Adam and ‘E’ for Eve.
 
 The initial routing table at node A is:
 
@@ -2056,7 +1926,13 @@ The initial routing table at node A is:
 | D | 15 | D |
 | E | ∞ | --- |
 
-Figure transcription: the topology has links $A-B=21$, $A-D=15$, $B-C=18$, $B-D=12$, $C-D=5$, $C-E=11$, and $D-E=17$.
+> Distance-vector 的更新公式是：
+>
+> $$
+> D_E(X) = \min_{v \in N(E)} \{ c(E,v) + D_v(X) \}
+> $$
+>
+> 其中 $N(E)=\{C,D\}$，因为 Eve 只直接连到 C 和 D。
 
 3(a) Show the initial routing table of node E:
 
@@ -2085,31 +1961,21 @@ Figure transcription: the topology has links $A-B=21$, $A-D=15$, $B-C=18$, $B-D=
 > | C | 11 | C |
 > | D | 16 | C |
 
-3(d) In some failure situations, the administrator notices that it takes an exceptionally
-long time for the routing protocol to stabilize in this network.
+3(d) In some failure situations, the administrator notices that it takes an exceptionally long time for the routing protocol to stabilize in this network.
 
 3(d)(1) What problem with the distance vector protocol is the cause?
 
 > The count-to-infinity problem.
 
-3(d)(2) The administrator is told that BGP does not suﬀer from this problem. What
-prevents BGP from having this problem?
+3(d)(2) The administrator is told that RIP does not suﬀer from this problem. Do you agree? Why or why not?
 
-> BGP is a path-vector protocol: each route advertisement carries the AS path, so a router can reject a route that already contains its own AS and avoid routing loops.
+> No. RIP can still suffer from count-to-infinity; it only **limits** the damage by defining infinity as 16 and using techniques like split horizon / poison reverse, which reduce but do not completely eliminate the problem.
 
 4. Routing, addressing, and tunneling (9 points)
 
-The above figure shows a network topology connecting two LANs. The LAN on
-the left uses a NAT to connect to the Internet and includes a client host H1. The
-LAN on the right includes a webserver H2. Packets between the two LANs are
-routed along the path shown by a heavy dark lines, which includes both an IP tunnel
-and an MPLS tunnel. All packets which traverse the path use both tunnels. The
-various network interfaces have IP and MAC addresses as shown.
+The above figure shows a network topology connecting two LANs. The LAN on the left uses a NAT to connect to the Internet and includes a client host H1. The LAN on the right includes a webserver H2. Packets between the two LANs are routed along the path shown by a heavy dark lines, which includes both an IP tunnel and an MPLS tunnel. All packets which traverse the path use both tunnels. The various network interfaces have IP and MAC addresses as shown.
 
-Source figure labels retained in text form:
-
-```text
-H1: 10.0.0.2 / MAC 1
+<img src="assets/image-20260504160632777.png" alt="H1: 10.0.0.2 / MAC 1
 NAT inside: 10.0.0.1 / MAC 2
 NAT outside: 1.2.3.4 / MAC 3
 Left-side router-facing link: 1.2.3.5 / MAC 4
@@ -2118,23 +1984,16 @@ IP/MPLS path labels: 1.2.3.6 / MAC 5, 1.2.3.7 / MAC 6, 1.2.3.8 / MAC 7,
                   1.2.4.4 / MAC 11, 2.0.0.1 / MAC 12, 2.0.0.2 / MAC 13
 Right-side LAN/router labels: 3.0.0.1 / MAC 14, 3.0.0.2 / MAC 15,
                               3.0.0.3 / MAC 16, 3.0.0.4 / MAC 17
-H2: 3.0.1.2 / MAC 18
-```
+H2: 3.0.1.2 / MAC 18" />
 
-H1 has established an HTTP session with web server H2 and data packets are
-flowing between the two machines. As an example, we have filled in the headers for
-packet 1 (traveling from the server H2 to the client H1). If there shouldn't be any
-source or destination field for the header type, write an "X" in that table entry.
+H1 has established an HTTP session with web server H2 and data packets are flowing between the two machines. As an example, we have filled in the headers for packet 1 (traveling from the server H2 to the client H1). If there shouldn't be any source or destination field for the header type, write an "X" in that table entry.
 
 | Header Type | Source | Destination |
 | ----------- | ------ | ----------- |
 | Ethernet | MAC 16 | MAC 15 |
 | IP | 3.0.1.2 | 1.2.3.4 |
 
-You have to fill in the header type and the source and destination address for the
-network and data-link layer headers for packets 2, 3, 4, and 5 (these packets are all
-traveling from the client H1 to the server H2). Note: You might not need to use all
-the rows supplied.
+You have to fill in the header type and the source and destination address for the network and data-link layer headers for packets 2, 3, 4, and 5 (these packets are all traveling from the client H1 to the server H2). Note: You might not need to use all the rows supplied.
 
 4(a) Header for packet 2:
 
@@ -2167,104 +2026,60 @@ the rows supplied.
 > | IP | 1.2.3.6 | 2.0.0.1 |
 > | IP | 1.2.3.4 | 3.0.1.2 |
 
+> ```
+> Ethernet header: 每一跳都会变，因为它只负责当前链路上的 next hop。
+> IP header: 端到端的内层 IP 通常不变；NAT 会改源 IP。
+> Tunnel header: 外层 IP / MPLS 是为了穿过 tunnel 临时加的。
+> ```
+
 ### 2009 Mid
 
 > PDF: <https://www.cs.princeton.edu/courses/archive/spring23/cos461/exams/spring09-cos461-exam1-answers.pdf>
 
-| PDF page(s) | Subpart ID(s) retained                              | CSC4303 overlap                                                                              |
-| ----------: | ------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-|         2-3 | 1(a), 1(b), 1(c), 1(d)                               | Transmission delay, TCP slow start, duplicate ACK vs timeout loss detection                  |
-|         4-6 | 2(a), 2(b), 2(c)                                     | TCP socket call ordering, TCP stream packetization, UDP datagram packetization               |
-|         7-8 | 3(a), 3(b)                                           | Web browser request flow with DHCP/ARP/DNS/TCP/HTTP/cache                                    |
-|        9-10 | 4(b), 4(c), 4(d), 4(e)                               | Layer-2 next-hop MAC, layer-3 source addressing, ARP                                          |
-|       11-12 | 5(f), 5(g), 5(h)                                     | DNS TTL/records, web caches, persistent HTTP                                                 |
-|       13-15 | 6(a), 6(b), 6(c), 6(d), 6(e), 6(f), 6(g), 6(h)       | Soft state, exponential backoff, TCP SYN retransmissions, DNS/UDP, NAT, ECN, protocol layers |
-
 
 1. Transporting a file (15 POINTS)
 
-Suppose your boss calls you up while visiting a client and says he left a 250,000 byte file on a
-server at the office, and he needs you to send it to him. The connection between the office and
-his current site is 2 million bits/second.
+Suppose your boss calls you up while visiting a client and says he left a 250,000 byte file on a server at the office, and he needs you to send it to him. The connection between the office and his current site is 2 million bits/second.
 
-1(a) [2 points] Assuming that all bandwidth is consumed by your data (e.g., there aren’t any
-packet headers, there’s no other traffic on the link, etc.) and that you can immediately start
-sending data at the maximum rate, how long will it take to transmit the file? (Easy)
+1(a) [2 points] Assuming that all bandwidth is consumed by your data (e.g., there aren’t any packet headers, there’s no other traffic on the link, etc.) and that you can immediately start sending data at the maximum rate, how long will it take to transmit the file? (Easy)
 
-> 250,000 bytes * (8 bits / 1 byte) * 1/2,000,000 bits/s = 1 second
+> 250,000 bytes * (8 bits / 1 byte) / 2,000,000 bits/s = 1 second
 
-1(b) [5 points] Now assume that you are sending the file via TCP, with a maximum segment
-size of 1000 bytes. You have to follow TCP’s transport algorithm, so you start transmitting the
-file at a low rate. How many network round trip times (RTTs) will it take to transmit the entire
-file? Again assume that all bandwidth is consumed by your data.
+1(b) [5 points] Now assume that you are sending the file via TCP, with a maximum segment size of 1000 bytes. You have to follow TCP’s transport algorithm, so you start transmitting the file at a low rate. How many network round trip times (RTTs) will it take to transmit the entire file? Again assume that all bandwidth is consumed by your data.
 
-> TCP needs to first establish a connection via a handshake (SYN/SYN-ACK) - 1 RTT
-> TCP then enters slow-start to transmit the file, so we run slow-start either until we've
-> transmitted the file or until we experience a loss (at 2Mbps). In slow-start, TCP will initially
-> transmit a window of 1 MSS (=1000 bytes) per RTT, then double the window size each round
-> (RTT). So, we have:
+> TCP needs to first establish a connection via a handshake (SYN/SYN-ACK) - **1 RTT** 
+>
+> TCP then enters slow-start to transmit the file, so we run slow-start either until we've transmitted the file or until we experience a loss (at 2Mbps). In slow-start, TCP will initially transmit a window of 1 MSS (=1000 bytes) per RTT, then double the window size each round (RTT). So, we have:
 >
 > 1 MSS, 2 MSS, 4, 8, 16, 32, 64, 128
 >
-> The sum of the above 8 transfers is 255 MSS = 255,000 bytes > 250,000 byte file, so we declare
-> ourselves finished after the 8th RTT.
+> The sum of the above 8 transfers is 255 MSS = 255,000 bytes > 250,000 byte file, so we declare ourselves finished after the 8th RTT.
 >
 > Thus, the total time to transmit the file would be 1 + 8 = 9 RTT.
 >
-> Note: One might debate what "transfer" means, so we also accepted 7.5 RTTs for the number of
-> runs in slow-start, as the final transfer of 128 might not strictly need to ACK. We did not take
-> off any points if people also included 1 RTT for FINs.
+> Note: One might debate what "transfer" means, so we also accepted 7.5 RTTs for the number of runs in slow-start, as the final transfer of 128 might not strictly need to ACK. We did not take off any points if people also included 1 RTT for FINs.
 
-1(c) [4 points] Let’s now consider how TCP reacts when it encounters packet loss (the “basic”
-variant we learned in class). Your boss now wants you to transmit a much larger file (say, 1
-GB). This time around, after TCP reaches an instantaneously transmission rate of 32,000 bytes
-per second, you notice that a single packet is lost. Assuming that you don’t currently have any
-other packets in transmission, what is the instantaneous rate TCP will send at after noticing that
-loss? How long (in terms of RTTs) will it take to reach 32,000 bytes per second again?
+1(c) [4 points] Let’s now consider how TCP reacts when it encounters packet loss (the “basic” variant we learned in class). Your boss now wants you to transmit a much larger file (say, 1 GB). This time around, after TCP reaches an instantaneously transmission rate of 32,000 bytes per second, you notice that a single packet is lost. Assuming that you don’t currently have any other packets in transmission, what is the instantaneous rate TCP will send at after noticing that loss? How long (in terms of RTTs) will it take to reach 32,000 bytes per second again?
 
-> This question was meant to seek how TCP reacts to detecting loss via a triple duplicate ACK. In
-> that case, TCP reacts by "MD" -- multiplicative decrease -- cutting its window size by half and
-> continuing by "AI" -- additive increase.
+> This question was meant to seek how TCP reacts to detecting loss via a triple duplicate ACK. In that case, TCP reacts by "MD" -- multiplicative decrease -- cutting its window size by half and continuing by "AI" -- additive increase.
 >
-> So the next transmission rate is 16,000 bytes per second, and it will take 16 RTTs to recover to
-> its prior levels (each RTT increases by 1 MSS = 1000 bytes).
+> So the next transmission rate is 16,000 bytes per second, and it will take **16 RTTs** to recover to its prior levels (each RTT increases by 1 MSS = 1000 bytes).
 
-1(d) [4 points] In the previous example of 1(c), would anything be different if all packets were
-lost after you reached 32,000 bytes per second, instead of just a single packet? If so, what is the
-next instantaneous rate TCP will send at in this example, and how long (in terms of RTTs) would
-it now take to reach 32,000 bytes per second again?
+1(d) [4 points] In the previous example of 1(c), would anything be different if all packets were lost after you reached 32,000 bytes per second, instead of just a single packet? If so, what is the next instantaneous rate TCP will send at in this example, and how long (in terms of RTTs) would it now take to reach 32,000 bytes per second again?
 
-> Because all packets are lost, we only detect loss through a timeout. This causes the sender's
-> window to be reduced to a single MSS (1000 bytes / RTT), at which time it enters "slow-start
-> restart". Namely, it will perform slowstart until half of its prior cwnd (16,000 bytes/second),
-> then do additive-increase from 16,000 to 32,000 bytes/second.
+> Because all packets are lost, we only detect loss through a timeout. This causes the sender's window to be reduced to a single MSS (1000 bytes / RTT), at which time it enters "slow-start restart". Namely, it will perform slowstart until half of its prior cwnd (16,000 bytes/second), then do additive-increase from 16,000 to 32,000 bytes/second.
 >
-> (In fact, the question as written didn't include quite enough information, as you actually do need
-> to know the RTT in this example in order to calculate the window size for "16,000 bytes /
-> seconds", i.e., if RTT is 500ms, window size is 8 MSS/RTT, while window size would be 16
-> MSS/RTT if RTT is 1s. Everybody just assumed implicitly that RTT=1s, and that the next rate
-> after the timeout was 1000 bytes/sec. We initially had written these questions with an explicit
-> RTT and asked you to solve the question in terms of time, rather than RTTs, but subsequently
-> removed this information to reduce needed calculations.)
+> (In fact, the question as written didn't include quite enough information, as you actually do need to know the RTT in this example in order to calculate the window size for "16,000 bytes / seconds", i.e., if RTT is 500ms, window size is 8 MSS/RTT, while window size would be 16 MSS/RTT if RTT is 1s. Everybody just assumed implicitly that RTT=1s, and that the next rate after the timeout was 1000 bytes/sec. We initially had written these questions with an explicit RTT and asked you to solve the question in terms of time, rather than RTTs, but subsequently removed this information to reduce needed calculations.)
 >
-> That said, assuming RTT=1s, then the answer is:
-> Slow-start from 1 MSS to 16 MSS = 4 RTTs, then additive increase 16-32 MSS = 16 RTTs
-> Total = 20 RTTs (we also accepted 21 RTTs given various ways to "count" these values)
+> That said, assuming RTT=1s, then the answer is: Slow-start from 1 MSS to 16 MSS = 4 RTTs, then additive increase 16-32 MSS = 16 RTTs Total = **20 RTTs** (we also accepted 21 RTTs given various ways to "count" these values)
 
 2. Sockets (16 POINTS)
 
-2(a) [10 points] In the first assignment, you used the socket API to write a simple client/server.
-For this question, there is a single client communicating with a single server using TCP. The
-client sends a very small amount of data using the send() function, and the server receives the
-data with a recv() call. Each of the following scenarios shows a diﬀerent order in which the
-socket calls are called on both the client and the server.
+2(a) [10 points] In the first assignment, you used the socket API to write a simple client/server. For this question, there is a single client communicating with a single server using TCP. The client sends a very small amount of data using the send() function, and the server receives the data with a recv() call. Each of the following scenarios shows a diﬀerent order in which the socket calls are called on both the client and the server.
 
-Assume all system calls are blocking, and there may be some latency between the client and
-server. We write the system call when it is initiated by the client and/or server; it returns
-sometime between then and when the next local system call is executed.
+Assume all system calls are blocking, and there may be some latency between the client and server. We write the system call when it is initiated by the client and/or server; it returns sometime between then and when the next local system call is executed.
 
-For each scenario, answer the following: Can the server ever get the data sent by the client? (Yes
-or No). If not, explain why not.
+For each scenario, answer the following: Can the server ever get the data sent by the client? (Yes or No). If not, explain why not.
 
 ```text
 i)
@@ -2298,8 +2113,7 @@ close()
             close()
 ```
 
-> No. Same explanation as (i). Also valid reason is that server isn't listening() when client
-> attempts to connect().
+> No. Same explanation as (i). Also valid reason is that server isn't listening() when client attempts to connect().
 
 ```text
 iii)
@@ -2352,23 +2166,17 @@ close()
 
 > Yes.
 
-2(b) [3 points] Suppose application A is using a stream (TCP) socket to transfer data to
-application B on a remote host. Suppose application A writes (sends()) data into the socket
-buffer ten times.
+2(b) [3 points] Suppose application A is using a stream (TCP) socket to transfer data to application B on a remote host. Suppose application A writes (sends()) data into the socket buffer ten times.
 
 i) Can the underlying network stack transmit more than ten data packets? If so, why?
 
-> Yes. If a write is larger than the MSS, then TCP might transmit it within two packets.
-> Certainly if your total number of written data is larger than 10 MSSs, you are guarnateed to have
-> more than 10 TCP packets. (Also accepted as a valid answer, though not what we were
-> expecting, was that additional packets could be caused by packet retransmission from loss.)
+> Yes. If a write is larger than the MSS, then TCP might transmit it within two packets. Certainly if your total number of written data is larger than 10 MSSs, you are guarnateed to have more than 10 TCP packets. (Also accepted as a valid answer, though not what we were expecting, was that additional packets could be caused by packet retransmission from loss.)
 
 ii) Can the underlying network stack transmit fewer than ten data packets? If so, why?
 
 > Yes. Small writes can be coalesced into single data packets using Nagle's algorithm.
 
-2(c) [3 points] Suppose application A is using a datagram (UDP) socket to transfer data to
-application B on a remote host. Suppose application A calls sendto() ten times.
+2(c) [3 points] Suppose application A is using a datagram (UDP) socket to transfer data to application B on a remote host. Suppose application A calls sendto() ten times.
 
 i) Can the underlying network stack transmit more than ten data packets? If so, why?
 
@@ -2380,81 +2188,73 @@ ii) Can the underlying network stack transmit fewer than ten data packets? If so
 
 3. Your Web Browser in action (17 POINTS)
 
-In the topology shown below, machine A is a desktop client, D is a local DHCP server, R is A's
-gateway router, S is a Web server, and C is a Web cache. NL is C's local nameserver, while NA
-is the nameserver authoritative for S. Client A is configured to use Web cache C for all requests
-(assume that the Web cache resolves the name for any Web server and that the client is
-configured with the IP address of the cache). All wires/links are Ethernet segments.
+In the topology shown below, machine A is a desktop client, D is a local DHCP server, R is A's gateway router, S is a Web server, and C is a Web cache. $N_L$ is C's local nameserver, while $N_A$ is the nameserver authoritative for S. Client A is configured to use Web cache C for all requests (assume that the Web cache resolves the name for any Web server and that the client is configured with the IP address of the cache). All wires/links are Ethernet segments.
+
+<img src="assets/image-20260504163834277.png" alt="image-20260504163834277" style="zoom:50%;" />
 
 Assume the following:
 
-- All the machines were just booted and their associated caches (ARP, DNS, Web, persistent
-  connections) are all empty
+- All the machines were just booted and their associated caches (ARP, DNS, Web, persistent connections) are all empty
 - http://S/index.html fits in a single packet
-- Persistent HTTP connections are used among A, C, and S (i.e. you should assume that once
-  any connection between these hosts is established it is never closed)
-- Web caches respond to TCP requests that look like packet two in table 1 below (e.g., GET
-  http://foo/bar/). They reply with the normal web cache contents.
+- Persistent HTTP connections are used among A, C, and S (i.e. you should assume that once any connection between these hosts is established it is never closed)
+- Web caches respond to TCP requests that look like packet two in table 1 below (e.g., GET http://foo/bar/). They reply with the normal web cache contents.
 
-3(a) [12 points] The user on machine A, requests the web page http://S/index.html. The table
-below shows a number of messages sent/received in servicing this request (this is not
-necessarily a complete list of all packets). In addition, there are a few bogus packets that are
-never sent/received. The packets are not listed in temporal order.
+3(a) [12 points] The user on machine A, requests the web page http://S/index.html. The table below shows a number of messages sent/received in servicing this request (this is not necessarily a complete list of all packets). In addition, there are a few bogus packets that are never sent/received. The packets are not listed in temporal order.
 
 | ID | SRC | DST | SRC Port | DST Port | Protocol | Contents |
 | -: | --- | --- | -------- | -------- | -------- | -------- |
 | 1 | C | DNS root | | DNS | UDP | Query for S |
 | 2 | A | C | | Web cache | TCP | GET http://S/index.html |
-| 3 | NL | DNS root | | DNS | UDP | Query for S |
+| 3 | $N_L$ | DNS root | | DNS | UDP | Query for S |
 | 4 | C | S | | HTTP | TCP | SYN |
 | 5 | C | S | | HTTP | TCP | GET index.html |
 | 6 | S | A | HTTP | | TCP | index.html |
 | 7 | A | Broadcast | | | ARP | Who is R |
 | 8 | C | A | Web cache | | TCP | index.html |
-| 9 | NL | C | DNS | | UDP | Address for S |
+| 9 | $N_L$ | C | DNS | | UDP | Address for S |
 | 10 | S | C | HTTP | | TCP | index.html |
 | 11 | A | Broadcast | | DHCP | UDP | DHCP Request from A |
-| 12 | NL | NA | | DNS | UDP | Query for S |
+| 12 | $N_L$ | $N_A$ | | DNS | UDP | Query for S |
 
 List the proper order of packets (in terms of their IDs) that are sent on the network:
 
 > 11, 7, 2, 3, 12, 9, 4, 5, 10, 8
+>
+> | ID     | SRC   | DST       | Protocol | Contents                |
+> | ------ | ----- | --------- | -------- | ----------------------- |
+> | **11** | A     | Broadcast | UDP      | DHCP Request from A     |
+> | **7**  | A     | Broadcast | ARP      | Who is R                |
+> | **2**  | A     | C         | TCP      | GET http://S/index.html |
+> | **3**  | $N_L$ | DNS root  | UDP      | Query for S             |
+> | **12** | $N_L$ | $N_A$     | UDP      | Query for S             |
+> | **9**  | $N_L$ | C         | UDP      | Address for S           |
+> | **4**  | C     | S         | TCP      | SYN                     |
+> | **5**  | C     | S         | TCP      | GET index.html          |
+> | **10** | S     | C         | TCP      | index.html              |
+> | **8**  | C     | A         | TCP      | index.html              |
 
-3(b) [5 points] Assume that the client A has no local Web or DNS cache and that cache C has no
-DNS cache. However, all other cacheable things are cached. On a subsequent request for
-http://S/ index.html, which of your items from your list in 3(a) would be eliminated? (Use the ID
-column to name the messages.)
+3(b) [5 points] Assume that the client A has no local Web or DNS cache and that cache C has no DNS cache. However, all other cacheable things are cached. On a subsequent request for http://S/ index.html, which of your items from your list in 3(a) would be eliminated? (Use the ID column to name the messages.)
 
 > 11, 7, 3, 12, 9, 4, 5, 10
 >
-> (The trickiest number was 9, because we said that C doesn't have a DNS cache. However, if it
-> has the object for http://S/index.html cached, it can serve it directly there without going to server
-> S, hence it never needs to do a DNS lookup on S in the first place.)
+> (The trickiest number was 9, because we said that C doesn't have a DNS cache. However, if it has the object for http://S/index.html cached, it can serve it directly there without going to server S, hence it never needs to do a DNS lookup on S in the first place.)
+>
+> | ID    | SRC  | DST  | Protocol | Contents                |
+> | ----- | ---- | ---- | -------- | ----------------------- |
+> | **2** | A    | C    | TCP      | GET http://S/index.html |
+> | **8** | C    | A    | TCP      | index.html              |
 
 4. A routed and bridged network (14 POINTS)
 
-```text
-                                        R2b.ip
-                                        R2b.mac
-                                           R2     R2c.ip
-SRC                                                                                          DST
-                                                  R2c.mac
-H1.ip                                   R2a.ip                                             H2.ip
-H1.mac                                  R2a.mac                                            H2.mac
+<img src="assets/image-20260504164541738.png" alt="image-20260504164541738" style="zoom:50%;" />
 
+Above is a picture of a network with 2 bridges and 1 router. Each interface is labeled with both an IP address and a MAC address. Imagine that host H1 is sending a packet to host H2. Please answer the following questions about this figure:
 
-            B1.ip                                                                B2.ip
-            B1a.mac           B1.ip
-                              B1c.mac                                            B2b.mac
-                                                            B2.ip         B2
-                   B1                                       B2a.mac
-                        B1.ip
-                        B1b.mac
-```
-
-Above is a picture of a network with 2 bridges and 1 router. Each interface is labeled with both
-an IP address and a MAC address. Imagine that host H1 is sending a packet to host H2. Please
-answer the following questions about this figure:
+> ```
+> Bridge/switch 看二层 MAC。
+> Router 改二层 next-hop MAC，但不改三层源/目的 IP。
+> Host 发往异网段时，二层目的 MAC 是默认网关的 MAC。
+> ```
 
 4(b) Just before the packet reaches bridge B1, what is its layer 2 destination?
 
@@ -2480,116 +2280,41 @@ Correct answers are marked in bold and underlined.
 
 **A. A query for an A record may return multiple IP addresses in the response.**
 B. A query for an NS record may return multiple IP addresses in the response.
-**C. A short TTL on an NS record reply runs the risk of increasing traffic at the root or
-GTLD nameservers.**
-D. A short TTL on an A record reply runs the risk of increasing traffic at the root or GTLD
-nameservers.
-
-5(g) Which of the following is/are true about web caches? (Circle ALL that are correct)
-
-**A. A web cache, or proxy server, is a network entity that satisfies HTTP requests from
-clients.**
-**B. A web cache is both a client and a server at the same time.**
-C. HTTP does not explicitly support caching or cache consistency.
-D. All HTTP objects are cacheable.
-
-5(h) Which of the following is/are true about persistent HTTP connections? (Circle ALL that are
-correct.)
-
-A. Persistent HTTP allows a server to track the client’s requests through a persistent session.
-**B. Only one TCP connection must be opened for downloading a "page", if that page does
-not include any embedded objects served by other servers.**
-C. Persistent HTTP shows the greatest performance advantage over nonpersistent HTTP when
-downloading a page with large objects.
-D. When the server has finished sending data for all objects referenced by the initially
-requested page, the server closes the connection.
-
-> For this question, we also marked correct if one circled A, as the question was perhaps
-> overly confusing (and virtually everybody got the answer wrong). Strictly speaking, persistent
-> HTTP does not establish application-layer sessions, that's typically done through cookies. This
-> is the case because "application-level" sessions exist independently of a single TCP connections.
-> It can more obviously be seen through the use of web proxies -- a web proxy can/will multiplex
-> requests from different clients over a single TCP connection with the server. That said, while 5(g)
-> and 5(h) should be answerable given assignment 2, this particular question (5(h)-A) might have
-> been difficult without lecture 16, so we decided to effectively give everybody credit.
+**C. A short TTL on an NS record reply runs the risk of increasing traffic at the root or GTLD nameservers.**
+D. A short TTL on an A record reply runs the risk of increasing traffic at the root or GTLD nameservers.
 
 6. Short Answer (22 points)
 
-6(a) [2 points] Explain the principle of soft state. Provide two examples of a network protocol or
-technology that abides by soft state.
+6(b) [2 points] List a protocol that use exponential backoff, and describe what/where problems would occur if it did not backoff.
 
-> Soft state refers to some type of stored state that is not "hard" (i.e., persistent, consistent,
-> explicit, etc). In the context of the applications we saw, soft state is often only stored
-> temporarily by some entity, often for only some explicit or implicit time period, and it must often
-> be constantly refreshed to survive network changes or failures or persist over time. Existence of
-> soft state should not be critical from receiving correct service; that is, it is often an optimization.
+> TCP congestion control uses exponential backoff (multiplicative decrease). If it did not backoff, congestion would build up at routers, and queues would continue to be full and continue to drop packets, leading to low throughput.
 >
-> Accepted answers: ARP tables, DNS caches, DHCP addresses that persist over leases, ...
 
-6(b) [2 points] List two protocols that use exponential backoff, and describe what/where
-problems would occur if each protocol did not backoff.
+6(c) [3 points] List three possible explanations for why host A would need to retransmit the SYN packet as part of establishing the TCP connection with B.
 
-> TCP congestion control uses exponential backoff (multiplicative decrease). If it did not backoff,
-> congestion would build up at routers, and queues would continue to be full and continue to drop
-> packets, leading to low throughput.
->
-> Ethernet CSMA/CD uses exponential backoff. If it did not backoff, collisions would continue to
-> occur on the shared medium, leading again to low goodput.
-
-6(c) [3 points] List three possible explanations for why host A would need to retransmit the
-SYN packet as part of establishing the TCP connection with B.
-
-> SYN packet from A to B dropped by router on path.
-> SYN packet dropped by B because B's receive backlog is full.
-> SYN-ACK packet from B to A dropped by router on path.
-> SYN-ACK not received by A before timeout occurs.
-> SYN dropped by firewall or NAT in front of B.
+> SYN packet from A to B dropped by router on path. SYN packet dropped by B because B's receive backlog is full. SYN-ACK packet from B to A dropped by router on path. SYN-ACK not received by A before timeout occurs. SYN dropped by firewall or NAT in front of B.
 
 6(d) [1 point] Give one reason that DNS lookups are run over UDP rather than TCP
 
-> DNS is a simple query/response protocol, thus avoids connection setup (at least 1 RTT) for
-> TCP and its state overhead. This is especially true as DNS queries and responses are typically
-> small and can thus often fit in a single packet. Because its a connectionless protocol, also more
-> amenable to anycast IP addresses for DNS servers, useful for failover. UDP headers are also
-> smaller than TCP headers, which reduced bandwidth overhead for queries.
+> DNS is a simple query/response protocol, thus avoids connection setup (at least 1 RTT) for TCP and its state overhead. This is especially true as DNS queries and responses are typically small and can thus often fit in a single packet. Because its a connectionless protocol, also more amenable to anycast IP addresses for DNS servers, useful for failover. UDP headers are also smaller than TCP headers, which reduced bandwidth overhead for queries.
 
 6(e) [2 points] Give two reasons that sites use Network Address Translators (NATs):
 
-> Allows multiple private addresses behind single public (dedicated) address, which is very
-> helpful if sites lack a sufficient number of public IP addresses (e.g., "space" pressure). In
-> general, NATs have helped "scale" IPv4.
+> Allows multiple private addresses behind single public (dedicated) address, which is very helpful if sites lack a sufficient number of public IP addresses (e.g., "space" pressure). In general, NATs have helped "scale" IPv4.
 >
 > NATs provide privacy about internal deployments.
 >
-> NATs can allow easily management of internal devices, so that machines can be
-> internally renumbered without changing their external (public) addresses.
+> NATs can allow easily management of internal devices, so that machines can be internally renumbered without changing their external (public) addresses.
 >
-> If explicit forwarding rules aren't configured in NATs, they often provide some security
-> mechanisms by playing the role of firewalls, e.g., only allowing TCP connections to be initiated
-> from internal nodes, as opposed to allowing external machines to connect to internal machines.
+> If explicit forwarding rules aren't configured in NATs, they often provide some security mechanisms by playing the role of firewalls, e.g., only allowing TCP connections to be initiated from internal nodes, as opposed to allowing external machines to connect to internal machines.
 >
 > ...
 
-6(f) [3 points] When a packet is going from a local-area network onto the wider Internet, what
-header fields might a Network Address Translator (NAT) change that is deployed on path?
+6(f) [3 points] When a packet is going from a local-area network onto the wider Internet, what header fields might a Network Address Translator (NAT) change that is deployed on path?
 
 > source IP address, source port, IP checksum, transport (TCP/UDP) checksum
 
-6(g) [3 points] How does explicit congestion notification (ECN) differ from traditional ways of
-detecting congestion on Internet paths? Describe one benefit for using ECN and one reason it
-might not widely be used today.
-
-> ECN signals to senders that congestion has occurred by marking packets explicitly, as
-> opposed to signalling by "dropped" packets. This allows end-hosts to react to congestion
-> without unnecessary loss, especially useful, for example, when routers might be using RED, or
-> for interactive application-level protocols such as telnet and web browsing that are very sensitive
-> to the delay caused by loss and retransmission. ECN is not widely used today, however, in that it
-> requires that both the sender, recipient, and network elements (routers) all support ECN, so it
-> creates a deployment challenge.
-
-6(h) [4 points] The OSI model is traditionally seen as a 7-layer stack consisting of the
-following. For several of the layers, give one or two examples of protocols that are associated
-with each layer:
+6(h) [4 points] The OSI model is traditionally seen as a 7-layer stack consisting of the following. For several of the layers, give one or two examples of protocols that are associated with each layer:
 
 | Layer | Examples |
 | ----- | -------- |
@@ -2605,15 +2330,6 @@ with each layer:
 
 Answer DOC: <https://www.cs.princeton.edu/courses/archive/spring23/cos461/exams/spring08-cos461-exam1-answers.doc>
 
-| Page(s) | Subpart ID(s) retained      | CSC4303 overlap                                                                                                 |
-| ------: | ------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-|     DOC | 1(a), 1(b), 1(c)             | IP addressing vs MAC addressing; host mobility; DHCP/ARP/MAC learning; hierarchical vs flat forwarding tables   |
-|     DOC | 3(a), 3(b), 3(c), 3(d)       | TCP receive window, goodput/congestion, retransmission timeout vs duplicate ACK, router queueing/buffering      |
-|     DOC | 4(a), 4(b), 4(c), 4(d)       | TCP three-way handshake, HTTP persistent connections, HTTP pipelining, TCP byte-stream read behavior            |
-|     DOC | 5(a), 5(b), 5(c), 5(d), 5(e) | NAT and FTP active/passive mode, payload rewriting, sequence/ACK adjustment, MTU fragmentation                  |
-|     DOC | 6(e)                         | DNS caching and DNS prefetching                                                                                 |
-|     DOC | 7(a), 7(b), 7(c), 7(d)       | traceroute TTL/ICMP behavior, route changes during measurement, TCP SYN/SYN-ACK RTT measurement, IP geolocation |
-
 
 1. Big MAC (15 points)
 
@@ -2625,7 +2341,11 @@ This question explores whether the Internet could be designed using only names (
 
 1(b) Today’s local area networks have several “boot-strapping” techniques, such as DHCP, ARP, and MAC learning.  In a world without IP addresses, which of these techniques would still be necessary?  Explain your answer.
 
-> DHCP would no longer be needed to assign an IP address or network mask to the host, though a similar mechanism may still be needed to configure the address of the local DNS server and the gateway router.  ARP would no longer be necessary, as there would be no need to map an IP address to a MAC address.  MAC learning would still be necessary to enable switches to learn how to forward frames to a host based on its MAC address.
+> DHCP would no longer be needed to assign an IP address or network mask to the host, though a similar mechanism may still be needed to configure the address of the local DNS server and the gateway router.  
+>
+> ARP would no longer be necessary, as there would be no need to map an IP address to a MAC address.  
+>
+> MAC learning would still be necessary to enable switches to learn how to forward frames to a host based on its MAC address.
 
 1(c) How would moving to an Internet based on MAC addresses affect the size of the forwarding tables in the network nodes (i.e., routers or switches)?
 
@@ -2635,7 +2355,8 @@ This question explores whether the Internet could be designed using only names (
 
 3(a) A home user upgrades from a dial-up connection to high-speed broadband, but does not see much improvement in Internet performance for visiting a Web site.  Give one reason why this might happen, even if the network and the Web server have ample capacity.
 
-> The size of the receiver window (RWIN) may limit the throughput.  In particular, the throughput is limited by the RWIN/RTT, where RTT is the round-trip time between the host and the Web server.  The home user can improve performance by changing the maximum TCP receiver window (e.g., from 16 KB to 64 KB).
+> The size of the receiver window (RWIN) may limit the throughput.  In particular, the throughput is limited by the RWIN/RTT, where RTT is the round-trip time between the host and the Web server.  The home user can improve performance by changing the maximum TCP receiver window (e.g., from 16 KB to 64 KB). 
+>
 > Also, most Web transfers are short (e.g., fewer than 10 packets long).  For these transfers, the download time is typically dominated by the round-trip time, as the TCP connection doesn’t get out of slow start and does not fill the receiver window.
 
 3(b) When a path through the Internet becomes overloaded, the total “goodput” seen by all end users can actually decrease.  Explain why.
@@ -2644,17 +2365,31 @@ This question explores whether the Internet could be designed using only names (
 
 3(c) Why are many packet losses in wireless networks detected by a timeout rather than a triple-duplicate acknowledgment?  What are the performance implications?
 
-> Wireless networks tend to experience bursty packet losses due to interference (e.g., signal blocked by a building).  This decreases the likelihood that, in the same TCP sending window, some packets are lost while others are successfully delivered.  The successful deliveries are necessary to trigger the receiver to send duplicate acknowledgments.  As such, bursty loss tends to require the sender to rely on the retransmission timeout to detect the loss.  (In addition, many wireless networks have relatively low capacity, leading the sender to have a relatively small congestion window.  This also decreases the likelihood that enough packets are successfully delivered to enable detection of an earlier packet loss by duplicate acknowledgments.  Similarly, wireless users may do smaller transfers, due to limited bandwidth or small screen sizes of PDAs, and small transfers offer less opportunity for multiple packets in flight during the same RTT.)
+> Wireless networks tend to experience bursty packet losses due to interference (e.g., signal blocked by a building).  This decreases the likelihood that, in the same TCP sending window, some packets are lost while others are successfully delivered.  The successful deliveries are necessary to trigger the receiver to send duplicate acknowledgments.  
+>
+> As such, bursty loss tends to require the sender to rely on the retransmission timeout to detect the loss.  
+>
+> (In addition, many wireless networks have relatively low capacity, leading the sender to have a relatively small congestion window.  This also decreases the likelihood that enough packets are successfully delivered to enable detection of an earlier packet loss by duplicate acknowledgments.  Similarly, wireless users may do smaller transfers, due to limited bandwidth or small screen sizes of PDAs, and small transfers offer less opportunity for multiple packets in flight during the same RTT.)
 
 3(d) A router maintains a queue of packets awaiting transmission on a link.  Selecting the right buffer size is a challenging problem.  Give one reason why a large buffer would be desirable.  Give two reasons why a larger buffer might be undesirable.
 
-> A larger buffer can temporarily accommodate a burst of packets without dropping any of them, avoiding unnecessary retransmissions.  However, a larger buffer would (i) increase the round-trip time leading to higher and more unpredictable delays, (ii) increase the time for the TCP senders to learn about impending congestion, and (iii) make the router more expensive (due to more memory chips and higher power requirements).
+> A larger buffer can temporarily accommodate a burst of packets without dropping any of them, avoiding unnecessary retransmissions.  
+>
+> However, a larger buffer would 
+>
+> (i) increase the round-trip time leading to higher and more unpredictable delays, 
+>
+> (ii) increase the time for the TCP senders to learn about impending congestion, and 
+>
+> (iii) make the router more expensive (due to more memory chips and higher power requirements).
 
 4. Caught in the Web (15 points)
 
 4(a) In the three-way handshake to open a TCP connection, host A sends a SYN, host B sends a SYN-ACK, and host A sends an ACK.  When can the TCP implementation at host A start sending data packets?  When can the TCP implementation at host B start sending data packets?  Explain why they cannot start sending any sooner.
 
-> Host A can start sending upon receiving the SYN-ACK, since that signals to host A that B is willing to accept traffic and knows A’s initial sequence number.  Host B can start sending traffic upon receiving the ACK, since that signals to host B that A is willing to accept traffic and knows B’s initial sequence number.
+> Host A can start sending upon receiving the SYN-ACK, since that signals to host A that B is willing to accept traffic and knows A’s initial sequence number.  
+>
+> Host B can start sending traffic upon receiving the ACK, since that signals to host B that A is willing to accept traffic and knows B’s initial sequence number.
 
 4(b) HTTP/1.1 supports persistent connections, where multiple request-response exchanges use the same TCP connection.  With pipelining, the client might send multiple requests before receiving any responses. How does the server know where one request ends and the next begins?
 
@@ -2662,47 +2397,80 @@ This question explores whether the Internet could be designed using only names (
 
 4(c) Following up on question 4(b), the underlying TCP implementation does not ensure that each read() or recv() call returns a single complete HTTP request.  Give two reasons (or examples) why the TCP implementation in the operating system cannot do this.
 
-> The TCP implementation provides a stream-of-bytes abstraction, without any knowledge of the syntax of the application-layer message(s).  Also, the application-layer message may be larger than the operating system’s receiver buffer and/or the buffer provided by the application, making it impossible for the operating system to provide the entire request in response to a single read() or recv() call.  Also, it is possible that the full request (even if it could fit in the buffer) has not arrived yet, causing the read/recv call to return only the data that has arrived thus far.
+> The TCP implementation provides a stream-of-bytes abstraction, without any knowledge of the syntax of the application-layer message(s).  
+>
+> Also, the application-layer message may be larger than the operating system’s receiver buffer and/or the buffer provided by the application, making it impossible for the operating system to provide the entire request in response to a single read() or recv() call.  
+>
+> Also, it is possible that the full request (even if it could fit in the buffer) has not arrived yet, causing the read/recv call to return only the data that has arrived thus far.
 
 4(d) Give two reasons why persistent connections and pipelining were added to HTTP/1.1.  Why, then, do Web browsers typically disable pipelining by default?
 
-> These features were added to HTTP to (i) avoid the extra TCP traffic needed to open and close many TCP connections, (ii) avoid repeating slow start and the whole process of relearning the congestion state of the path through the network, (iii) to ensure fairness across different Web clients receiving traffic over the same path, and (iv) to reduce the number of round-trip delays experienced by the user in downloading a Web page.
-> Web browsers often disable pipelining because (i) parallel connections may allow the client to experience higher throughput (possibly at the expense of other users) and (ii) parallel connections enable the simultaneous download and display of multiple embedded images.
+> These features were added to HTTP to 
+>
+> (i) avoid the extra TCP traffic needed to open and close many TCP connections, 
+>
+> (ii) avoid repeating slow start and the whole process of relearning the congestion state of the path through the network, 
+>
+> (iii) to ensure fairness across different Web clients receiving traffic over the same path, and 
+>
+> (iv) to reduce the number of round-trip delays experienced by the user in downloading a Web page. 
+>
+> Web browsers often disable pipelining because 
+>
+> (i) parallel connections may allow the client to experience higher throughput (possibly at the expense of other users) and 
+>
+> (ii) parallel connections enable the simultaneous download and display of multiple embedded images.
 
 5. Losing Control (15 points)
 
 The File Transfer Protocol (FTP) is an application-layer protocol used to transfer data from one computer to another.  FTP runs over TCP.  The server, by default, listens on port 21 for incoming connections.  The FTP client uses this connection as a “control” connection for sending commands (e.g., to list files, request file transfers, and change directories).  The actual file transfer uses a separate TCP connection.  Hence, unlike HTTP which has a single connection for both control and data, FTP has “out of band” control over a separate connection.
 
-The client and the server need to agree on the port numbers to use for the separate data-transfer connection.  In one solution, called “active mode,” the client opens a socket with a dynamic port and sends the IP address and port number to the server (using the existing control connection) so the server knows what client address and port number to use for the data-transfer connection.  (For example, the client on IP address 192.168.0.1 that chose port 49152 for the data connection might send a command like “PORT 192.168.0.1 49152” over the control connection.)
+The client and the server need to agree on the port numbers to use for the separate data-transfer connection.  In one solution, called “active mode,” the client opens a socket with a dynamic port and sends the IP address and port number to the server (using the **existing control connection**) so the server knows what client address and port number to use for the data-transfer connection.  (For example, the client on IP address 192.168.0.1 that chose port 49152 for the data connection might send a command like “PORT 192.168.0.1 49152” over the control connection.)
 
 5(a) Active mode can cause problems when the client host resides behind a NAT box.  Why?
 
-> The NAT box maps the IP address and port number of the client’s data connection to new values.  As such, the arguments the client sends in the PORT command (sent over the control connection) would not match the values the NAT box would use.  In addition, the server would have trouble initiating a data connection to a client lying behind a NAT box, without the NAT box already having a table entry for the associated connection; since the client has not transmitted any packets on the data connection yet, the NAT box would not yet have an entry installed when the server sends the initial SYN packet.  Worse yet, the IP address in the PORT command is a private, non-routable address, so the FTP server would not be able to direct a packet with this destination address to the appropriate place.
+> The NAT box maps the IP address and port number of the client’s data connection to new values.  As such, the arguments the client sends in the PORT command (sent over the control connection) would not match the values the NAT box would use.  
+>
+> In addition, the server would have trouble initiating a data connection to a client lying behind a NAT box, without the NAT box already having a table entry for the associated connection; since the client has not transmitted any packets on the data connection yet, the NAT box would not yet have an entry installed when the server sends the initial SYN packet.  
+>
+> Worse yet, the IP address in the PORT command is a private, non-routable address, so the FTP server would not be able to direct a packet with this destination address to the appropriate place.
 
 5(b) Suppose a NAT box wanted to correctly handle clients running “active mode” FTP.  What actions would the NAT box need to perform on FTP control messages from the client?
 
 > The NAT box would need to parse the messages sent on the FTP control connection (i.e., on port 21) to extract the arguments of the PORT command.  The NAT box would need to create a table entry for the data connection and modify the arguments in the PORT message accordingly, so the FTP server can successfully create and use the data connection.
+>
+> FTP-aware NAT:
+>
+> ```
+> 1. 观察 FTP 控制连接，也就是 TCP port 21
+> 2. 解析 TCP payload 里的 PORT command
+> 3. 找出 client 想开的 data port
+> 4. 分配一个公网地址和公网端口
+> 5. 在 NAT table 里提前创建 data connection 的映射
+> 6. 把 PORT command 改写成公网地址和公网端口
+> ```
 
 5(c) Why might these operations change the size of underlying IP packets associated with the control connection?  How could the NAT handle the change in packet sizes?
 
-> The IP address and port numbers used by the NAT box may have a different number of decimal digits, when represented as the arguments in the PORT command.  As such, the NAT box must change the packet sizes, as well as the TCP sequence numbers (when sending to the server) and acknowledgment numbers (when directing return packets to the client) to remain consistent.  If the packet size increases, the new packet may exceed the MTU, requiring the NAT box to fragment the IP packets.
+> The IP address and port numbers used by the NAT box may have a different number of decimal digits, when represented as the arguments in the PORT command.  As such, the NAT box must change the packet sizes, as well as the TCP sequence numbers (when sending to the server) and acknowledgment numbers (when directing return packets to the client) to remain consistent.  
+>
+> If the packet size increases, the new packet may exceed the MTU, requiring the NAT box to fragment the IP packets.
 
 5(d) What challenges are introduced if other applications (besides FTP control) use port 21?  What challenges are introduced if the FTP client and FTP server encrypt their communications?
 
-> If another application uses port 21, the NAT may mistakenly think the connection is an FTP control connection and try to parse the messages.  If the other application also sends the string “PORT”, the NAT box may mistakenly modify the packet contents, leading to unpredictable affects.
-> If the FTP client and server encrypt their communications, the NAT box cannot parse the PORT command (in the payload of TCP connection) and correctly map the IP address and port number.  This can lead to significant confusion for users, when their FTP client works fine in the absence of encryption and then mysteriously does not work when encryption is enabled.
+> If another application uses port 21, the NAT may mistakenly think the connection is an FTP control connection and try to parse the messages.  If the other application also sends the string “PORT”, the NAT box may mistakenly modify the packet contents, leading to unpredictable affects. If the FTP client and server encrypt their communications, the NAT box cannot parse the PORT command (in the payload of TCP connection) and correctly map the IP address and port number.  This can lead to significant confusion for users, when their FTP client works fine in the absence of encryption and then mysteriously does not work when encryption is enabled.
+>
+> 问题：它假设 port 21 一定是明文 FTP control traffic。
 
 5(e) FTP has an alternate way to establish the data-transfer connection, called “passive mode,” where the server selects a port number and instructs the client (using the existing control connection) to establish the data-transfer connection.  Why is passive mode easier than active mode in the presence of client-side NAT boxes?
 
-> In passive mode, the server selects an address and port number, and sends them to the client over the control connection.  The client-side NAT does not need to modify the address and port number used by the remote server.  (That said, passive mode is challenging in the presence of a server-side NAT box, though this is a much less common configuration.)
-> If you are curious to learn more about the interaction of FTP and NAT, see
-> http://en.wikipedia.org/wiki/File_Transfer_Protocol#FTP_and_NAT_devices
+> In passive mode, the server selects an address and port number, and sends them to the client over the control connection.  The client-side NAT does not need to modify the address and port number used by the remote server.  (That said, passive mode is challenging in the presence of a server-side NAT box, though this is a much less common configuration.) If you are curious to learn more about the interaction of FTP and NAT, see http://en.wikipedia.org/wiki/File_Transfer_Protocol#FTP_and_NAT_devices
 
 6. A Rose by Any Other Name (15 points)
 
 This question explores the challenges of the Domain Name System.
 
-6(e) A local DNS server typically discards cached name-to-address mappings when the time-to-live expires.  Alternatively, the local DNS server could optimistically issue a new query for the cached domain name.  Given one advantage and one disadvantage of that approach.
+6(e) A local DNS server typically discards cached name-to-address mappings when the time-to-live expires.  Alternatively, the local DNS server could optimistically issue a new query for the cached domain name (**prefetch**).  Given one advantage and one disadvantage of that approach.
 
 > By “prefetching” the name-to-address mapping, the local DNS server can hide the DNS look-up delay, improving the performance experienced by the end user.  However, prefetching introduces extra DNS queries and network load to look up name-to-address mappings that may never be needed.
 
@@ -2710,16 +2478,17 @@ This question explores the challenges of the Domain Name System.
 
 7(a) Traceroute capitalizes on the “Time To Live” field in the IP packet header to measure the forwarding path from one host to another.  Give two reasons why a hop in traceroute might show a “*” (i.e., no IP address for the router at that hop in the path).
 
-> The packet may have been lost on the forward path.
+> The packet may have been lost on the forward path. 
+>
 > The TIME_EXCEEDED packet may have been lost on the reverse path.
 >
 > The router may have been configured not to send TIME_EXCEEDED messages.
-> The packet may have encountered a firewall or NAT that drops the packet.
+>
+>  The packet may have encountered a firewall or NAT that drops the packet.
 
 7(b) Traceroute may report a path that does not exist.  For example, traceroute could return a path A-B-C (where A, B, and C are IP addresses) when there is no link between routers B and C.  Give one example where that could happen.  (Draw a picture if useful.)
 
-> The route to the remote destination may have changed during the measurement process.  For example, suppose the route from A to Z changed from A-B-Y-Z to A-D-C-Z.  Then, the first traceroute probe would return “B” and the second would return “C”, even though nodes B and C are not directly connected.
-> Another possibility is that a middlebox (such as a transparent proxy or firewall) lies between B and C; these middleboxes do not typically decrement the TTL value or send TIME_EXCEEDED messages.
+> The route to the remote destination may have changed during the measurement process.  For example, suppose the route from A to Z changed from A-B-Y-Z to A-D-C-Z.  Then, the first traceroute probe would return “B” and the second would return “C”, even though nodes B and C are not directly connected. Another possibility is that a middlebox (such as a transparent proxy or firewall) lies between B and C; these middleboxes do not typically decrement the TTL value or send TIME_EXCEEDED messages.
 
 7(c) The delay between a TCP sender transmitting a SYN packet and receiving the SYN-ACK packet provides an estimate of the round-trip time between a client and a server.  Give one reason why, on average, the SYN/SYN-ACK delay is larger than a typical round-trip delay between a client and server.  Assume all DNS and ARP look-ups have already completed.
 
@@ -2727,8 +2496,10 @@ This question explores the challenges of the Domain Name System.
 
 7(d) Determining the geographic location of an Internet host, based on its IP address, is challenging.  Propose two techniques that could be used to infer the rough location.
 
-> The DNS name, found by performing an address-to-name look-up, may reveal the location, e.g., “nslookup(12.122.16.158)” returns “tbr1.n54ny.ip.att.net”, which is at 54th street in Manhattan.
-> The whois database may reveal the location, e.g., “whois –h whois.arin.net 128.112.12.58” returns an entry with 87 Prospect Avenue in Princeton, New Jersey.
+> The DNS name, found by performing an address-to-name look-up, may reveal the location, e.g., “nslookup(12.122.16.158)” returns “tbr1.n54ny.ip.att.net”, which is at 54th street in Manhattan. 
+>
+> The whois database may reveal the location, e.g., “whois –h whois.arin.net 128.112.12.58” returns an entry with 87 Prospect Avenue in Princeton, New Jersey. 
+>
 > Sending probes (such as “ping”) from a host can reveal the round-trip latency to the remote destination.  Sending such probes from many vantage points can be used to “triangulate” the location of the remote host.
 >
 > Sending a traceroute to the remote host would reveal the names of many of the routers along the path.  The names of the routers near the destination would reveal the likely location of the host.
@@ -2757,6 +2528,8 @@ This question explores how to set the (configurable) link weights in link-state 
 
 1(c) In the picture below, the nodes are routers, the edges are links, and the integers correspond to the link weight on each direction of the link.  (That is, the link a-b and the link b-a both have weight 10.)  Put arrows on the edges to show the shortest path from every node to the destination node d.  That is, show the “sink tree” leading to node d. (2 points)
 
+<img src="assets/image-20260504171602296.png" alt="image-20260504171602296" style="zoom:33%;" />
+
 > Nodes a and g take a direct path to d.  The other nodes go left until they reach a, d, or g.
 
 1(d) Suppose the link f-e is overloaded with traffic.  Identify a single weight change (on just one link) that would divert traffic from source f to destination d away from the f-e edge without affecting the path between any other source-destination pairs.  Avoid any reliance on how routers choose between multiple paths with the same (smallest) cost. (4 points)
@@ -2766,6 +2539,8 @@ This question explores how to set the (configurable) link weights in link-state 
 2. Route Views (10 POINTS)
 
 This question explores the role of routing policy on BGP routing.  In the picture below, the nodes are Autonomous Systems (ASes).  Dotted lines correspond to peer-peer relationships, and solid arrows correspond to provider-customer relationships, with the arrow pointing from provider to customer.  Every node prefers customer-learned routes over routes through peer ASes, and peer-learned routes over routes through provider ASes.  Among routes through the same kind of neighbor, each AS prefers shorter AS paths over longer ones.  An AS does not export routes learned from one peer or provider to other peers or providers.
+
+<img src="assets/image-20260504171720308.png" alt="image-20260504171720308" style="zoom:50%;" />
 
 2(a) Draw all of the paths to destination AS d.  That is, draw the “sink tree” leading to d.  Circle any ASes that do not have any route to d. (2 points)
 
@@ -2982,8 +2757,7 @@ The remainder of this question focuses on BitTorrent.
 
 1(e) Why is BitTorrent vulnerable to incomplete downloads?  What steps are taken to prevent it? (2 points)
 
-> After downloading the complete file, peers may leave the system rather than remaining to provide chunks to others.
-> The “rarest chunk first” policy increases the likelihood that each chunk is available from at least one active peer.  The “random chunk” policy also helps by distributing the chunks across the peers.
+> After downloading the complete file, peers may leave the system rather than remaining to provide chunks to others. The “rarest chunk first” policy increases the likelihood that each chunk is available from at least one active peer.  The “random chunk” policy also helps by distributing the chunks across the peers.
 
 1(f) BitTorrent is primarily useful for popular files.  Suggest ways to extend BitTorrent to work better for less popular files. (2 points)
 
@@ -2995,8 +2769,7 @@ The first two questions concern a shortest-path, link-state routing protocol run
 
 2(a) Suppose the link between nodes k and m fails.  Before the failure, what is the shortest path from node i to node j?  What is the new path after the failure, when routing-protocol convergence completes? (2 points)
 
-> Before the failure: i-k-m-j (cost 6)
-> After the failure: i-r-n-j (cost 8)
+> Before the failure: i-k-m-j (cost 6) After the failure: i-r-n-j (cost 8)
 
 2(b) A transient forwarding-loop might occur during routing-protocol convergence.  Involving what nodes?  List two examples of what would happen to the data packets sent from i to j during this period. (3 points)
 
@@ -3014,8 +2787,7 @@ The remaining parts of the question focus on interdomain routing using BGP.
 
 3(a) Suppose a server transmits one frame of a video every second, and the client starts playing the video at one frame per second as soon as the first frame arrives.  Suppose the first ten frames arrive at times 0, 1.2, 1.99, 4.17, 4.01, 5.03, 8.05, 7.50, 8.90, 8.99, all in seconds.  Which frames reach the client too late for playout?  How much extra playout delay is needed to ensure that all frames have arrived by the time the client needs to play them? (2 points)
 
-> Starting with frame 0 at time 0, frame i should play at time i.  Hence, the frames arriving too late to play are frame 1 (1.2 instead of 1), 3 (4.17 instead of 3), 4 (4.01 instead of 4), 5 (5.03 instead of 5), 6 (8.05 instead of 6), 7 (7.50 instead of 7), and 8 (8.90 instead of 8).  Only frames 2 (1.99 instead of 2) and 9 (8.99 instead of 9) arrive in time.
-> The worse offender is frame 6 that arrive 2.05 seconds early.  A playout time of 2.05 seconds is enough to ensure that all frames arrive in time for playout.
+> Starting with frame 0 at time 0, frame i should play at time i.  Hence, the frames arriving too late to play are frame 1 (1.2 instead of 1), 3 (4.17 instead of 3), 4 (4.01 instead of 4), 5 (5.03 instead of 5), 6 (8.05 instead of 6), 7 (7.50 instead of 7), and 8 (8.90 instead of 8).  Only frames 2 (1.99 instead of 2) and 9 (8.99 instead of 9) arrive in time. The worse offender is frame 6 that arrive 2.05 seconds early.  A playout time of 2.05 seconds is enough to ensure that all frames arrive in time for playout.
 
 3(b) List three reasons why TCP is ill-suited to transmitting interactive audio and video?  Why is it often used anyway? (3 points)
 
@@ -3036,8 +2808,7 @@ The remaining parts of the question focus on interdomain routing using BGP.
 >
 > Differences:
 >
-> · Virtual circuits tend to reserve bandwidth to offer performance guarantees, whereas routers/switches do not reserve resources for TCP connections.
-> · Routers/switches have state for forwarding packets on behalf of each virtual circuit, but not for TCP connections.
+> · Virtual circuits tend to reserve bandwidth to offer performance guarantees, whereas routers/switches do not reserve resources for TCP connections. · Routers/switches have state for forwarding packets on behalf of each virtual circuit, but not for TCP connections.
 
 4. Ethernet and Wireless (10 points)
 
@@ -3059,13 +2830,11 @@ The remaining parts of the question focus on interdomain routing using BGP.
 
 5(c) Routing overlays like Resilient Overlay Networks (RONs) can, by definition, be deployed without requiring the support of the underlying network.  Yet, support from the underlying network could undoubtedly help RON run better.  List two ideas for changes to the “underlay” to support RON. (4 points)
 
-> Active probing wastes network resources.  Instead, the routers could explicitly notify the overlay nodes about changes in network conditions.
-> Forwarding packets through intermediate hosts wastes bandwidth going in and out of the intermediate host’s network, and the processing of the packets on the intermediate host can add unnecessary latency.  Instead, the routers could support packet “deflections” that forward packets through intermediate points inside the network, without traveling in and out of the intermediate host.
+> Active probing wastes network resources.  Instead, the routers could explicitly notify the overlay nodes about changes in network conditions. Forwarding packets through intermediate hosts wastes bandwidth going in and out of the intermediate host’s network, and the processing of the packets on the intermediate host can add unnecessary latency.  Instead, the routers could support packet “deflections” that forward packets through intermediate points inside the network, without traveling in and out of the intermediate host.
 
 5(d) Napster’s central directory and Gnutella’s query flooding represent two extremes in how to support queries for content in peer-to-peer file-sharing systems.  List two advantages and two disadvantages of the Napster approach over the Gnutella approach.  (4 points)
 
-> Advantages: A central directory leads to a simpler protocol, and reduces the overhead for processing queries (since queries go directly to the central server rather than hopping multiple times through an overlay, as in Gnutella).
-> Disadvantages: The central directory is a single point of failure or attack.  Also, the central directory does not scale.  In addition, the central directory was a point of legal vulnerability for Napster.
+> Advantages: A central directory leads to a simpler protocol, and reduces the overhead for processing queries (since queries go directly to the central server rather than hopping multiple times through an overlay, as in Gnutella). Disadvantages: The central directory is a single point of failure or attack.  Also, the central directory does not scale.  In addition, the central directory was a point of legal vulnerability for Napster.
 
 6. Application-Layer Protocols (10 POINTS)
 
@@ -3083,8 +2852,7 @@ The remaining parts of the question focus on interdomain routing using BGP.
 
 6(d) Web proxy caches and content distribution networks (CDNs) both reduce the time for a client to download Web pages by moving content closer to the users.  Give two reasons why CDNs have been more widely deployed (and successful) than Web proxy caching. (2 points)
 
-> The content providers can contract with CDNs to deliver their content, which improves performance, reduces cost, and makes their site robust to unexpected surges in demand.  In contrast, the content provider cannot require millions of sites throughout the world to deploy proxy servers.
-> Also, proxies cannot cache all content.  Some content is uncacheable because it is dynamically generated.  CDNs can run the server software that generates the dynamic content.
+> The content providers can contract with CDNs to deliver their content, which improves performance, reduces cost, and makes their site robust to unexpected surges in demand.  In contrast, the content provider cannot require millions of sites throughout the world to deploy proxy servers. Also, proxies cannot cache all content.  Some content is uncacheable because it is dynamically generated.  CDNs can run the server software that generates the dynamic content.
 
 7. Layering (10 points)
 
@@ -3110,16 +2878,13 @@ In source routing, the end host or edge router computes the path through the net
 
 8(3)(a) List three advantages of source routing, relative to today’s intradomain and interdomain routing protocols. (3 points)
 
-> · The sender could exploit knowledge of the performance or reliability of the links.
-> · The sender could pick a path that matches the application requirements (e.g., low delay vs. high throughput)
+> · The sender could exploit knowledge of the performance or reliability of the links. · The sender could pick a path that matches the application requirements (e.g., low delay vs. high throughput)
 >
-> · The sender could pick paths that avoid untrusted links or ASes.
-> · The sender could react quickly to changes in network conditions (e.g., failure) by rerouting to a new path.
+> · The sender could pick paths that avoid untrusted links or ASes. · The sender could react quickly to changes in network conditions (e.g., failure) by rerouting to a new path.
 
 8(3)(b) List three disadvantages of source routing, relative to today’s routing system. (3 points)
 
-> · The sender would need to perform extra work.
-> · The packet could not easily adapt its route in mid stream.
+> · The sender would need to perform extra work. · The packet could not easily adapt its route in mid stream.
 >
 > · The packets would be larger, because of needing to carry the path information.
 >
@@ -3133,8 +2898,7 @@ In source routing, the end host or edge router computes the path through the net
 
 > · Otherwise, they would lose control over the flow of traffic, leading to congestion and lost revenue (when customers pick paths that contradict the ISP’s business incentives).
 >
-> · The ISP would be much more vulnerable to denial-of-service attacks.
-> · Source routing requires extra processing on the routers, leading to extra overhead.
+> · The ISP would be much more vulnerable to denial-of-service attacks. · Source routing requires extra processing on the routers, leading to extra overhead.
 
 ### Spring 2006 Mid
 
@@ -3242,8 +3006,7 @@ Assume that the IP router in question is connected to an Ethernet network.
 
 1(b) Suppose a link has a propagation delay of P seconds and transmits R cells per second.  Suppose a cell arrives when the link has Q other cells awaiting transmission, and has just started transmitting the first cell.  What delay does the new cell experience, as a function of P, R, and Q?
 
-> Propagation delay of P seconds
-> With Q other packets in the queue, must wait for Q+1 transmissions at one every 1/R seconds.
+> Propagation delay of P seconds With Q other packets in the queue, must wait for Q+1 transmissions at one every 1/R seconds.
 >
 > So, the total delay is P + (Q+1)/R
 
@@ -3487,8 +3250,7 @@ Model solution TXT: <https://www.cs.cmu.edu/afs/cs/academic/class/15213-f15/www/
 1. (20 points):
 Short answer and multiple choice questions on a variety of stimulating and refreshing topics.
 
-1(1) Label the following networking system calls 1,2,3,4 or 5, in the order they should be called. [2 pts]
-(label with an X if the call is not used; a blank will receive no credit)
+1(1) Label the following networking system calls 1,2,3,4 or 5, in the order they should be called. [2 pts] (label with an X if the call is not used; a blank will receive no credit)
 
 | Call | Client | Server |
 | ---- | ------ | ------ |
@@ -3522,10 +3284,7 @@ Model solution TXT: <https://www.cs.cmu.edu/afs/cs/academic/class/15213-f15/www/
 
 6. Network Programming (12 points):
 
-6(a) Consider a logging daemon, whose purpose is simply to accept messages from clients and log them to a file. (This is sometimes used in secure networks to ensure that, even if a cracker breaks into one computer, he can’t erase his traces from the logs because they are stored elsewhere.)
-In the following table, please list the system and/or library calls that each side of the connection would make. Each row should contain the name of a single system or library call, placed in the appropriate column. Please list the calls in the order they are called, not the order they return.
-Please only include network-related operations (accept, bind, close, connect, listen, read, socket, and write).
-You should make the following assumptions:
+6(a) Consider a logging daemon, whose purpose is simply to accept messages from clients and log them to a file. (This is sometimes used in secure networks to ensure that, even if a cracker breaks into one computer, he can’t erase his traces from the logs because they are stored elsewhere.) In the following table, please list the system and/or library calls that each side of the connection would make. Each row should contain the name of a single system or library call, placed in the appropriate column. Please list the calls in the order they are called, not the order they return. Please only include network-related operations (accept, bind, close, connect, listen, read, socket, and write). You should make the following assumptions:
 
 - The server finishes initializing before the client starts.
 - The server only serves a single client.
@@ -3593,9 +3352,7 @@ Below is some code for a concurrent echo server. We have left out the error hand
 
 Please fill in those blanks with appropiate error handling code. Do not print out any messages, just modify the control flow.
 
-> On socket error: exit(-1);
-> On recv error: break;
-> On send error: break;
+> On socket error: exit(-1); On recv error: break; On send error: break;
 
 6(b) Network Bugs
 Assuming all system calls succeed (and therefore the error handling code you wrote in part A is never executed), please locate the 2 logic bugs in this code and describe them. (A logic bug is one where the programmer misunderstood the way in which their program will execute and will produce unwanted behavior under certain input conditions).
