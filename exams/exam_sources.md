@@ -261,13 +261,6 @@
 
 > PDF: <https://www.synergylabs.org/courses/15-440/assignments/Fall2016-Midterm-II-WithSolutions.pdf>
 
-| PDF page(s) | Problem / subpart ID(s) retained      | CSC4303 overlap                                                             |
-| ----------: | ------------------------------------- | --------------------------------------------------------------------------- |
-|           2 | Question 1(a), 1(b)                   | MapReduce reducer key-space partitioning; virtualization overcommit         |
-|           3 | Question 2(a.A), 2(a.B)               | Consistent hashing and failure/view divergence                              |
-|         3-4 | Question 2(b), 2(c.A), 2(c.B), 2(e)   | Virtualization isolation; MapReduce stragglers/master failure; DNS resilience |
-|         6-7 | Question 4(a), 4(b), 4(c), 4(d), 4(e) | DNS/CDN hierarchy; Chord lookup and finger-table reasoning                  |
-
 1(a) For a particular MapReduce phase with $M$ and $R$ nodes respectively, each reducer node handles $1/R$ of the intermediate key-values by default. (✅/❌)
 
 > True. Each reducer node handles $1/R$ of the possible key space and fetches the corresponding intermediate key-values from each of the $M$ mappers.
@@ -587,7 +580,7 @@ Correct Explain briefly (1-2 sentences) where the bug is.
 
    > A,B,D
 
-   8. For which of the following applications would UDP be preferable over TCP, ignoring annoying concerns such as firewalls that might block some protocols? 
+2. (8) For which of the following applications would UDP be preferable over TCP, ignoring annoying concerns such as firewalls that might block some protocols? 
 
    A. Streaming a live video over the internet 
 
@@ -603,57 +596,85 @@ Correct Explain briefly (1-2 sentences) where the bug is.
 
    > UDP, TCP, TCP, UDP, TCP, UDP
 
-11. Suppose each computer in a distributed system keeps an approximate real-time clock $R_i$ in addition to a Lamport-like clock $L_i$.
+3. (11) Suppose each computer in a distributed system keeps an approximate real-time clock $R_i$ in addition to a Lamport-like clock $L_i$.
 
-    A computer's real-time clock $R_i$ is an always-increasing integer: for any two reads $r_1, r_2$ of $R_i$ such that $r_1 \to_i r_2$, we have $r_2 > r_1$. The real-time clocks at different computers may drift relative to each other, so $R_j - R_i$ is non-constant for $j \ne i$.
+   A computer's real-time clock $R_i$ is an always-increasing integer (i.e., for any two reads $r_1$, $r_2$ of $R_i$ such that $r_1 \to_i r_2$, we have $r_2 > r_1$), but the real-time clocks at different computers may drift relative to each other (i.e., $R_j - R_i$ is non-constant for $j \ne i$).
 
-    Consider the following modification, **Shamport**, to Lamport's partial-ordering algorithm:
+   Consider the following modification, Shamport, to Lamport's partial-ordering algorithm:
 
-    **Rule 1:** Before each event at computer $i$, set $L_i = \min(L_i + 1, R_i)$.
+   **Rule 1:** Before each event at computer $i$, set $L_i = \min(L_i + 1, R_i)$.
 
-    **Rule 2:** When sending a message $m$, apply Rule 1 and include the time $L_i$ as part of the message, i.e., send $(m, L_i)$ instead of just $m$.
+   **Rule 2:** When sending a message $m$, apply Rule 1 and include the time $L_i$ as part of the message (i.e., send $(m, L_i)$ instead of just $m$).
 
-    **Rule 3:** When receiving a message $(m, t)$ at computer $j$, set $L_j = \max(L_j, t)$ and then apply Rule 1 before timestamping the message-arrival event.
+   **Rule 3:** When receiving a message $(m, t)$ at computer $j$, set $L_j = \max(L_j, t)$ and then apply Rule 1 before timestamping the message-arrival event.
 
-    Let the Shamport global time of an event $e$ at computer $i$ be $S(e) = L_i(e)$.
+   Let the Shamport global time of an event $e$ at computer $i$ be $S(e) = L_i(e)$.
 
-    11(a) In the algorithm above, underline the difference between Shamport and Lamport's algorithm. (Underline as little as possible.)
+   11(a) In the algorithm above, underline the difference between Shamport and Lamport's algorithm. (Underline as little as possible.)
 
-    > Shamport's algorithm uses $L_i = \min(L_i + 1, R_i)$ in Rule 1 instead of $L_i = L_i + 1$. Otherwise the two algorithms are the same.
+   > Shamport's algorithm uses $L_i = \min(L_i + 1, R_i)$ in Rule 1 instead of $L_i = L_i + 1$. Otherwise the two algorithms are the same.
 
-    11(b) Let $e, e'$ be two events at computer $i$ such that $e \to_i e'$. Prove that $S(e') > S(e)$.
+   11(b) Let $e, e'$ be two events at computer $i$ such that $e \to_i e'$. Prove that $S(e') > S(e)$.
 
-    > The key observation is that any new event advances the logical clock. There are three common pitfalls: $e$ and $e'$ need not be consecutive; send and receive events still include local events at computer $i$; and the $L_i$ clocks here are not ordinary Lamport clocks.
-    >
-    > Consider the sequence of all events $e, \ldots, e'$ at computer $i$. If $S(e') \le S(e)$, then some consecutive pair of events $f, f'$ with $f \to_i f'$ must have $S(f') \le S(f)$; otherwise every consecutive step would strictly increase the Shamport time, implying $S(e') > S(e)$. Thus it is enough to show $L_i(f') > L_i(f)$ for every consecutive pair $f \to_i f'$.
-    >
-    > Let $(t, r)$ be the logical-clock and real-time-clock values for event $f$, and let $(t', r')$ be the corresponding values for event $f'$. Because $R_i$ is always increasing and $f \to_i f'$, we have $r' > r$. Also, after timestamping $f$, Rule 1 has capped the logical clock by the real-time clock, so $t \le r$. Therefore $r' > t$.
-    >
-    > If $f'$ is a normal local event, Rule 1 gives $t' = \min(t + 1, r')$. Both $t + 1$ and $r'$ are greater than $t$, so $t' > t$.
-    >
-    > If $f'$ is a send event, Rule 2 affects the clock only by applying Rule 1 before the send timestamp is recorded. This is the same argument as the normal local-event case, so again $t' > t$.
-    >
-    > If $f'$ is a receive event for message $(m, t_m)$, Rule 3 followed by Rule 1 gives $t' = \min(\max(t, t_m) + 1, r')$. Since $\max(t, t_m) + 1 > t$ and $r' > t$, we again have $t' > t$.
-    >
-    > Therefore every consecutive local step increases $L_i$, so $S(e') > S(e)$.
-
-    11(c) Draw a time-series diagram in which $S(\mathrm{send}(m)) > S(\mathrm{receive}(m))$ for some message $m$. Explain in 1-2 sentences why this unwanted behavior occurs.
-
-    > This can happen when the receiver's real-time clock is behind the sender's. On receive, the node first raises $L_j$ using the message timestamp, but Rule 1 then caps the logical clock at the slower real-time clock, so the receive event can be timestamped earlier than the send.
-
-    11(d) Suppose every one-way message latency is at least $x$ clock ticks by any local clock, and external synchronization guarantees $|R_i - R_j| \le y$. Is there a value of $y$ small enough to guarantee $S(\mathrm{send}(m)) < S(\mathrm{receive}(m))$ for any message?
-
-    > Yes. It is enough to have $y < x$: the minimum propagation delay then exceeds the maximum real-clock skew, so the receiver's real-time clock is still ahead of the sender's timestamp when Rule 1 is applied.
+   > The key observation is that any new event advances the logical clock. 
+   >
+   > There are a couple common pitfalls to avoid: 
+   >
+   > (1) $e$ and $e'$ are not necessarily consecutive events; other intervening events can affect the Shamport clock. 
+   >
+   > (2) Events at computer $i$ include the local side of send and receive events, so you need to include possible applications of Rule 2 and Rule 3 in your proof. 
+   >
+   > (3), reading the problem correctly to understand that the logical clocks $L_i$ here are not Lamport clocks, and thus you cannot blindly apply the rules for Lamport clocks from class. 
+   >
+   > ---
+   >
+   > It suffices to prove the claim for two consecutive events \(f \to_i f'\) on computer \(i\), since the general case follows by chaining.
+   >
+   > > **Why?**
+   > >
+   > > Consider the sequence of all events $e \ldots e'$ at computer $i$. 
+   > >
+   > > If $S(e') \le S(e)$ then there must exist at least one pair of $f \to_i f'$ such that $S(f') \le S(f)$; otherwise each new event would advance the logical clock $L_i$, which would yield $L_i(e') > L_i(e)$ and thus $S(e') > S(e)$.
+   >
+   > Let \(S(f)=t\), and let the real-time clock values at \(f,f'\) be \(r,r'\). 
+   >
+   > Since every event timestamp is obtained after applying Rule 1, we have \(t \le r\). 
+   >
+   > Since \(R_i\) is always increasing and \(f \to_i f'\), we have \(r'>r\), hence \(r'>t\).
+   >
+   > (1) If \(f'\) is a local or send event, then
+   > $$
+   > S(f')=\min(t+1,r').
+   > $$
+   > Both \(t+1\) and \(r'\) are \(>t\), so \(S(f')>t=S(f)\).
+   >
+   > (2) If \(f'\) is a receive event with message timestamp \(t_m\), then
+   > $$
+   > S(f')=\min(\max(t,t_m)+1,r').
+   > $$
+   > Here \(\max(t,t_m)+1>t\) and \(r'>t\), so again \(S(f')>S(f)\).
+   >
+   > Thus every consecutive event increases \(S\), so for any \(e\to_i e'\), \(S(e')>S(e)\).
+   
+   11(c) Draw a time-series diagram in which $S(\mathrm{send}(m)) > S(\mathrm{receive}(m))$ for some message $m$. Be sure to compute the Shamport-time and label the values of the real-time clocks at all computers for any events in your diagram. Explain in 1-2 sentences why this unwanted behavior occurs.
+   
+   <img src="assets/image-20260504010119299.png" alt="image-20260504010119299" style="zoom:50%;" />
+   
+   >  **The fundamental problem is that the logical clock will never advance past the real-time clock** at each computer, so skew in the real-time clocks can cause the receive to be timestamped earlier than the send.
+   
+   11(d) Suppose we know that the one-way latency of any message between any two computers $i, j$ is at least $x$ clock-ticks by any local clock. Also suppose we can synchronize $R_i$ and $R_j$ using an external time-source such that $|R_i - R_j| \le y$, always, for some integer $y$. Is there a value of $y$ small enough to guarantee that $S(\mathrm{send}(m)) < S(\mathrm{receive}(m))$ for any message $m$ between $i$ and $j$? If yes, compute the largest possible value of $y$ to guarantee this property, and explain why your answer is correct. If no, explain why.
+   
+   > Yes, if $y < x$. 
+   >
+   > Consider a diagram similar to the part above, but with $\mathrm{send}(m)$ at $(t, r)$ and $\mathrm{receive}(m)$ at $(t', r')$. 
+   >
+   > To prove: $$t' > t$$
+   >
+   > Because the propagation delay of $m$ is at least $x$ clock-ticks and the clock-skew is at most $y$, we have $r' \ge (r - y) + x$ and therefore that $r' > r \ge t$ if $x - y > 0$. Rule 3 is applied to timestamp the receive event, yielding $t' = \min(\max(l, t) + 1, r')$, where $l$ was the value of the logical clock before receiving $m$. Because $\max(x, t) + 1 > t$ and $r' > t$, we have $t' > t$ and therefore that $S(\mathrm{receive}(m)) > S(\mathrm{send}(m))$.
 
 ### Final 2009
 
 > PDF: <https://www.cs.cmu.edu/~dga/15-440/F12/final2009-solve.pdf>
-
-| PDF page(s) | Problem / subpart ID(s) retained | CSC4303 overlap                                                                |
-| ----------: | -------------------------------- | ------------------------------------------------------------------------------ |
-|           2 | Question 1, 2, 3, 4              | DNS scalability; Chord; RPC library responsibilities; content-based P2P naming |
-|           3 | Question 6(a), 6(h)              | GFS data path; Lamport happens-before implication                              |
-|        8-11 | Question 14                      | MapReduce-style distributed data processing                                    |
 
 1. Which techniques are used in DNS to improve scalability?
 
@@ -705,123 +726,50 @@ Correct Explain briefly (1-2 sentences) where the bug is.
 
    > C, D
 
-6. Which of the following statements are true? Please circle True or False:
+5. Which of the following statements are true? Please circle True or False:
 
    6(a) In Google File System (GFS), when a client needs to access data, it contacts the master and gets the data from the master. (✅/❌)
 
    > False
 
-   6(h) Recall the global “happens-before” relationship ($\to$) that captured the logical notions of time using both the local happens-before relationship at each server and the fact that a message must be sent before it can be received. True or false: For a Lamport logical clock $L$, if $e_1 \to e_2$ then $L(e_1) < L(e_2)$. (✅/❌)
+   6(h) Recall the global “happens-before” relationship ($\to$) that captured the logical notions of time using both the local happens-before relationship at each server and the fact that a message must be sent before it can be received. 
+
+   For a Lamport logical clock $L$, if $e_1 \to e_2$ then $L(e_1) < L(e_2)$. (✅/❌)
 
    > True
-
-14. Recall the statuses twitter dataset we provided for Project 3, which contained data of the form:
-
-   ```text
-   postid <tab> status-message
-   ```
-
-   In Twitter, some status-messages are repeats of earlier status messages. These repeated messages are preceded by “RT” followed by the original status message. For example:
-
-   ```text
-   142412141      I need puppies but youtube is blocked.
-   584923144      Puppies are awesome!
-   929483834      RT Puppies are awesome!
-   872935923      RT Puppies are awesome!
-   423135125      Meow mix meow mix please retwitter
-   723917388      RT I need puppies but youtube is blocked.
-   629359237      RT Puppies are awesome!
-   562983948      RT Meow mix meow mix please retwitter
-   729385724      RT Meow mix meow mix please retwitter
-   912383444      Taking 15-440 final exam, lolol.
-   ```
-
-   In this problem, your goal is to identify the most “retweeted” status messages using the MapReduce style of programming. You must write one or more Map and Reduce functions whose final output contains a sorted list of post ids that have been “retweeted”/repeated, sorted by the number of times they have been retweeted. If run on the above example, the output would be:
-
-   ```text
-   1        I need puppies but youtube is blocked.
-   2        Meow mix meow mix please retwitter
-   3        Puppies are awesome!
-   ```
-
-   Only retweeted statuses should appear in the output. The output should be sorted by the number of retweets from fewest to most. You can use any reasonable pseudocode you choose (Java-like or C++-like); we will grade based on the algorithm, not having semicolons correct. You can use two types: Integers and Strings. You can assume the existence of STL-like string functions for your convenience. You can iterate over lists using the for construct as shown below:
-
-   ```text
-   for item in list {
-      (do something with item)
-   }
-   ```
-
-   You should use the “emit(key,value)” pseudocode for the output of functions.
-
-   ```text
-   // Assume line has been parsed into post id and status already
-   Map(int postid, String status) {
-
-   }
-
-   // Fill in the appropriate types in the brackets
-   Reduce(<          > key, List<          > values) {
-
-   }
-   ```
-
-   Use the page below should you need more Map and Reduce functions. Declare them as above.
-
-   > Solution:
-   >
-   > ```text
-   > Map(int postid, String status) {
-   >   if (status.substring(0,2) == "RT") {
-   >     emit(v.substring(3), 1);
-   >   }
-   > }
-   >
-   > Reduce(String key, List<int> values) {
-   >   int sum = 0;
-   >   for value in values {
-   >      sum += value;
-   >   }
-   >
-   >   if (sum > 0) {
-   >     emit(key, sum);
-   >   }
-   > }
-   >
-   > Map2(String status, int count) {
-   >   emit(count, status);
-   > }
-   >
-   > Reduce2(int count, String status) {
-   >   emit(count, status);
-   > }
-   > ```
 
 ### Final 2010
 
 > PDF: <https://www.cs.cmu.edu/~dga/15-440/F12/final2010-solve.pdf>
 
-| PDF page(s) | Problem / subpart ID(s) retained | CSC4303 overlap                                                                               |
-| ----------: | -------------------------------- | --------------------------------------------------------------------------------------------- |
-|           2 | Question 1, 2                    | TCP handshake misconception; Internet best effort; DNS TTL/invalidation; GFS/HDFS assumptions |
-|         5-6 | Question 4, 5, 6                 | Chord/P2P lookup and design trade-offs                                                        |
-|           9 | Question 11, 12                  | Lamport timestamp ordering                                                                    |
+1.
 
-1. **True/False and select the right answers.** Circle the one that best applies. The original source includes additional logging, Tor, and distributed mutual-exclusion subitems; only the CSC4303-relevant networking subitems are retained here.
+   Threads and Processes
 
-   1(a) The TCP initial handshake must be completed between the sender and every router on the path to the destination before communication can take place. (✅/❌)
+   - It is less expensive to create a process than a thread.  (✅/ ❌ )
+     > False. Creating a process is usually more expensive because it needs a separate address space and more OS bookkeeping.
 
-   > False. The TCP three-way handshake is end-to-end between the two hosts; routers forward packets and do not participate in a TCP connection.
+   - Switching between threads is faster than switching between processes.  (✅/ ❌ )
+     > True. Thread switches are usually cheaper because threads in the same process share the same address space.
 
-   1(b) The Internet service model allows a small (a percent or two) amount of packet loss. In other words, end-hosts must be able to deal with a small amount of loss. (✅/❌)
+   - In order to switch between user threads, you need to enter the kernel.  (✅/ ❌ )
+     > False. User-level threads can be switched entirely by a user-space thread library without entering the kernel.
 
-   > True. IP provides best-effort delivery, so reliability and recovery from loss are handled by transport protocols or applications.
+   - Threads share a heap and a stack.  (✅/ ❌ )
+     > False. Threads share the heap, but each thread has its own stack.
 
-   1(c) Domain Name Service (DNS) servers remember which clients have cached DNS replies so that the servers can send invalidation messages when name bindings change. (✅/❌)
+   Networking
 
-   > False. DNS cache freshness is controlled by TTLs; authoritative servers do not track all caching clients and push invalidations to them.
+   - The TCP initial handshake must be completed between the sender and every router on the path to the destination before communication can take place.  (✅/ ❌ )
+     > False. TCP is end-to-end between the sender and receiver; routers only forward packets.
 
-2. Which of the following design assumptions apply to HDFS/GFS? (Circle all that apply.)
+   - The Internet service model allows a small amount of packet loss.  (✅/ ❌ )
+     > True. The Internet provides best-effort delivery, so end hosts must tolerate packet loss.
+
+   - Domain Name Service (DNS) servers remember which clients have cached DNS replies so that the servers can send invalidation messages when name bindings change.  (✅/ ❌ )
+     > False. DNS cache consistency is mainly handled using TTLs, not server-pushed invalidations.
+
+2. Which of the following design assumptions apply to HDFS/GFS? (Circle all that apply)
 
    A. Only amazingly powerful servers can handle the size and complexity of the workload.
 
@@ -835,44 +783,37 @@ Correct Explain briefly (1-2 sentences) where the bug is.
 
    > C, D.
 
-4. Suppose the following Chord setup:
+4. (4) Suppose the above Chord setup:
 
-   - Identifier circle: $0,1,\ldots,11$.
-   - Active nodes: $n_0$, $n_3$, $n_6$, and $n_9$.
-   - Successor table:
-
-   | Node | $i=0$ | $i=1$ | $i=2$ |
-   | ---- | ----- | ----- | ----- |
-   | $n_0$ | $\mathrm{succ}(1)=n_3$ | $\mathrm{succ}(2)=n_3$ | $\mathrm{succ}(4)=n_6$ |
-   | $n_3$ | $\mathrm{succ}(4)=n_6$ | $\mathrm{succ}(5)=n_6$ | $\mathrm{succ}(7)=n_9$ |
-   | $n_6$ | $\mathrm{succ}(7)=n_9$ | $\mathrm{succ}(8)=n_9$ | $\mathrm{succ}(10)=n_0$ |
-   | $n_9$ | $\mathrm{succ}(10)=n_0$ | $\mathrm{succ}(11)=n_0$ | $\mathrm{succ}(13)=n_0$ |
-
-   Answer the following:
+   <img src="assets/image-20260504013038008.png" alt="image-20260504013038008" style="zoom:67%;" />
 
    - At what node do you expect to find key 10?
    - At what node do you expect to find key 9?
    - On average, how many hops are there when searching for a key?
    - What route will a search for key 11 take, starting at node 3?
-
+   
    > Key 10 maps to $n_0$, and key 9 maps to $n_9$. Chord lookups take $O(\log N)$ hops on average. Starting at $n_3$ for key 11, the lookup goes $n_3 \to n_9 \to n_0$.
-
-5. Suppose you want to build a large distributed system to store cookie recipes. Each cookie is stored using the recipe’s name (“Grandma’s Arsenic Cookie Surprise”). Unlike many P2P systems, in this one, the recipe data is small, so you wanted to store the actual data in the P2P system instead of leaving it on the original nodes. A friend says “Hey, I hear that Chord is very efficient – it doesn’t take many lookups to find the node containing the data.” Explain to your friend why directly throwing this data into a DHT such as chord, with key = recipe name, value = recipe data, is a really bad design decision. Brief - two sentences or so.
+   
+4. (5) Suppose you want to build a large distributed system to store cookie recipes. Each cookie is stored using the recipe’s name (“Grandma’s Arsenic Cookie Surprise”). Unlike many P2P systems, in this one, the recipe data is small, so you wanted to store the actual data in the P2P system instead of leaving it on the original nodes. A friend says “Hey, I hear that Chord is very efficient – it doesn’t take many lookups to find the node containing the data.” Explain to your friend why directly throwing this data into a DHT such as chord, with `key = recipe name, value = recipe data`, is a really bad design decision. Brief - two sentences or so.
 
    > Chord only supports exact-key lookup well, while recipe users are likely to search by partial names, ingredients, or categories. Hashing recipe names also destroys locality, so related recipes cannot be found together without building a separate index.
 
-6. Tell us what style of P2P system you would use, and what assumptions you think are reasonable for your cookie-storing-system:
+   (6) Tell us what style of P2P system you would use, and what assumptions you think are reasonable for your cookie-storing-system:
 
    - Number of nodes
    - Number of recipes
    - Number of queries/second
    - What do queries look like?
 
-   Give the style of system and a brief rationale for this decision.
+   Style of system AND a brief rationale for this decision:
 
-   > A centralized or replicated index is a better fit than a pure DHT if the recipe corpus is moderate and queries are keyword/category searches rather than exact-key lookups. The recipe data is small enough to replicate or cache, while the index can support richer search over names, ingredients, and tags.
+   > I would use a **Gnutella/KaZaA-style two-level P2P system**.
+   >
+   > Assumptions: tens of thousands of nodes, millions of small recipes, moderate query load, and queries are mostly keyword/ingredient/category searches rather than exact recipe-name lookups.
+   >
+   > Ordinary peers store replicated recipe data and report their recipes to supernodes. Supernodes maintain temporary indexes and search among themselves, which supports flexible recipe search better than Chord while avoiding the cost of flooding every query to all peers.
 
-11. Consider a system with four machines that uses Lamport timestamps for logical ordering. Let $L_i(m_j,\mathrm{send})$ be the Lamport logical time for machine $i$ sending message $j$, and let $L_i(m_j,\mathrm{recv})$ be the Lamport logical time for machine $i$ receiving message $j$. Each local clock is initialized to $0$. Answer the questions below based on these timestamps:
+11. (11) Consider a system with four machines that uses Lamport timestamps for logical ordering. Let $L_i(m_j,\mathrm{send})$ be the Lamport logical time for machine $i$ sending message $j$, and let $L_i(m_j,\mathrm{recv})$ be the Lamport logical time for machine $i$ receiving message $j$. Each local clock is initialized to $0$. Answer the questions below based on these timestamps:
 
     ```text
     L_1(m_1, send) = 1
@@ -895,7 +836,7 @@ Correct Explain briefly (1-2 sentences) where the bug is.
 
     > $x = 7$. Message $m_5$ is sent by machine 4 with Lamport time 6, and machine 1's local clock before receiving it is 2, so the receive timestamp is $\max(2, 6) + 1 = 7$.
 
-12. For the following, circle which event happened first. If it cannot be determined, circle "unknown."
+12. (12) For the following, circle which event happened first. If it cannot be determined, circle "unknown."
 
     | Option 1 | Option 2 | Unknown |
     | -------- | -------- | ------- |
@@ -905,6 +846,8 @@ Correct Explain briefly (1-2 sentences) where the bug is.
     | $L_2(m_3,\mathrm{send})$ | $L_4(m_6,\mathrm{send})$ | unknown |
     | $L_4(m_6,\mathrm{send})$ | $L_1(m_7,\mathrm{send})$ | unknown |
 
+    > <img src="assets/lamport_sequence_equal_spacing_clear2.png" alt="lamport_sequence_equal_spacing_clear2" style="zoom: 33%;" />
+    >
     > $L_1(m_1,\mathrm{send})$; unknown; $L_3(m_4,\mathrm{send})$; unknown; unknown.
 
 ### Final 2011
@@ -932,19 +875,18 @@ Correct Explain briefly (1-2 sentences) where the bug is.
 
    > True.
 
-   1(d) The Map step of MapReduce provides a way to store and retrieve items according to their keys. (✅/❌)
+2. Peer to Peer
 
-   > False.
-
-6. Peer to Peer
-
-   6(a) In a centralized P2P network (such as the old Napster), how many indices must be searched if a client wants to locate a particular file?
+   6(a) In a centralized P2P network (such as Napster), how many indices must be searched if a client wants to locate a particular file?
 
    > 1
 
    6(b) Name one major disadvantage of the centralized P2P system (from a distributed principles point of view)
 
-   > - Single point of failure - Server processes everything - Server must keep track of a potentially very large number of clients - more?
+   > - Single point of failure 
+   > - Server processes everything 
+   > - Server must keep track of a potentially very large number of clients 
+   > - more? (Copyright, no scalability)
 
    6(c) Query flooding is an alternative design that solves some of the problems of centralized P2P and eliminates the central server. However, it changes the mechanics of peer interactions significantly. Explain, in one sentence each, how a newly joining node publishes the files they wish to make available:
 
@@ -953,9 +895,8 @@ Correct Explain briefly (1-2 sentences) where the bug is.
 
    > They send their list of files and metadata to the server.
    >
-   > A query flooding p2p network:
+   > A query flooding p2p network: They don’t do anything - queries come to them.
    >
-   > They don’t do anything - queries come to them.
 
    6(d) One popular improvement upon query flooding is to move to a “supernode” flooding architecture. Using $N$ as the number of nodes in the network and $S$ as the number of supernodes, where $S \ll N$, explain the benefit of moving to this supernode architecture.
 
@@ -973,7 +914,7 @@ Correct Explain briefly (1-2 sentences) where the bug is.
 
    7(a) In a distributed hash table (DHT) using a ring mapping, explain how a key is mapped to a specific node?
 
-   > Keys and nodes map to points in a ring space. A node handles all keys mapped between it and its successor.
+   > Keys and nodes map to points in a ring space. A node handles all keys mapped between Predecessor and it.
 
    7(b) In the most basic form of DHT systems, nodes simply track their predecessor and successor. Very briefly state what problem this leads to as the network grows larger.
 
@@ -1414,7 +1355,7 @@ Practice Problems: Link-State Routing. C receives contradictory LSPs: one from A
 |         7-8 | Question 4(a), 4(b), 4(c), 4(d)                                  | Routing/addressing/tunneling headers, NAT, IP/MAC/MPLS                                                                                           |
 
 
-Source note: the URL is an exam PDF, not an official answer key. Where the answer is directly inferable from standard networking material, a concise derived answer is included; figure-dependent items without enough context are marked prompt-only.
+Source note: the URL is an exam PDF, not an official answer key; retained items in this section have no official solution text in the source.
 
 QUESTION 1: Network system engineering (13 points)
 
@@ -1422,31 +1363,41 @@ You have recently been hired by FinBook, the online social network for fish. Fin
 
 1(A) HTTP redirection
 
-> Advantage: the front end can make a per-request server-selection decision and redirect the client to a better datacenter. Disadvantage: it adds at least one HTTP round trip and exposes the redirection choice to the client.
+> 1 advantage:
+>
+> 1 disadvantage:
 
 1(B) DNS server-selection
 
-> Advantage: it is transparent to clients and works with ordinary URLs. Disadvantages: DNS caching and TTLs make changes slow to take effect, and the DNS resolver's location may be a poor proxy for the client's location.
+> 1 advantage:
+>
+> 2 disadvantages:
 
 1(C) IP anycast
 
-> Advantages: clients can use one stable IP address, and routing can naturally direct traffic to a nearby replica. Disadvantages: routing changes can move a flow to a different datacenter, and operators have coarse control over load compared with application-level redirection.
+> 2 advantage:
+>
+> 2 disadvantages:
 
 1(D) NAT + load-balancer
 
-> Advantage: it hides the backend servers behind one public address and can distribute requests among them. Disadvantage: the load balancer can become a bottleneck or single point of failure unless it is replicated.
+> 1 advantage:
+>
+> 1 disadvantage:
 
 1(E) ARP spoofing (unsolicited announcement of your MAC with other’s IP address)
 
-> Advantage: it can redirect traffic on a LAN without changing client configuration. Disadvantage: it is fragile, local to one broadcast domain, and looks like an attack rather than a clean failover mechanism.
+> 1 advantage:
+>
+> 1 disadvantage:
 
 QUESTION 2: More network system engineering (13 points)
 
 2(a) You graduated from Princeton (yay!) and joined a social media startup that wants to rival Facebook (at least you hope). The startup doesn’t have any funding, so you took your implementation of simple router and are running it on a Linux box, using it as a router for your servers (instead of paying $$ to Cisco). As your company scaled, you started seeing some clients that use IPv6. Your servers understand IPv6, but your router doesn’t. Describe two ways in which you can extend your router to handle IPv6 traffic:
 
-> Option 1: implement dual-stack IPv4/IPv6 forwarding in the router, including IPv6 parsing, longest-prefix lookup, hop-limit decrement, and neighbor discovery.
+> Option 1: (answer <= 2 lines)
 >
-> Option 2: tunnel IPv6 packets over IPv4 to an IPv6-capable gateway, so the existing IPv4 router forwards encapsulated traffic.
+> Option 2: (answer <= 2 lines)
 
 2(b) You are at Princeton for reunions and get a work phone call saying that the servers are running extremely slow and they believe the servers are under a DOS attack. You think this is your competitors (maybe Facebook is afraid of you after all!) and use your iPhone to ssh into your Linux machine. You remember that while implementing a flow table, 0 meant block and 1 meant allow. TCP’s protocol # is 6 and UDP’s is 17. What entries will you add in the flow table to do the following:
 
@@ -1454,13 +1405,8 @@ QUESTION 2: More network system engineering (13 points)
 > - Ban all traffic from 66.220.0.0/16
 > - Allow UDP traffic to server 69.65.28.126:3333
 >
-> One suitable priority-ordered rule set is:
->
-> ```text
-> <66.220.0.0/16, *, *, *, *, 0>
-> <128.112.0.0/16, *, 6, *, *, 1>
-> <*, 69.65.28.126, 17, *, 3333, 1>
-> ```
+> Your entries should have the following format:
+> `<source IP, destination IP, protocol number, src Port, dst Port, 0 or 1>`
 
 2(c) Your company has grown and now has a couple of thousand users. You said farewell to the your simple router implementation and finally paid some $$ to Cisco. You have multiple servers and routers in your (small) datacenter now. One day you show up at work and find that some clients cannot connect to your servers. In a panic, you start dumping traffic on the ingress gateway router of the problematic servers and see the following packets (partial headers):
 
@@ -1477,8 +1423,6 @@ QUESTION 2: More network system engineering (13 points)
 
 What is going wrong? Or, explain why this information is useless. (Answer in at most two lines.)
 
-> This information is mostly insufficient: the partial IP headers do not show TCP/UDP ports, TCP flags, checksums, return traffic, or forwarding-table state, so they do not identify why connections fail.
-
 QUESTION 3: Distance-Vector Routing (9 points)
 
 The CS department at Princeton bought new Sun Fire V210 servers. They decided to run a distance-vector protocol for routing between these servers (even though it is a rather small network). They are currently configured as the picture below, with respective edge costs.
@@ -1494,42 +1438,23 @@ The initial routing table at node A is:
 | D | 15 | D |
 | E | ∞ | --- |
 
-The topology has links $A-B=21$, $A-D=15$, $B-C=18$, $B-D=12$, $C-D=5$, $C-E=11$, and $D-E=17$.
+Figure transcription: the topology has links $A-B=21$, $A-D=15$, $B-C=18$, $B-D=12$, $C-D=5$, $C-E=11$, and $D-E=17$.
 
 3(a) Show the initial routing table of node E:
 
-> | Destination | Cost | Next Hop |
-> | ----------- | ---: | -------- |
-> | A | ∞ | --- |
-> | B | ∞ | --- |
-> | C | 11 | C |
-> | D | 17 | D |
+> Destination / Cost / Next Hop: A, B, C, D
 
 3(b) Show the routing table of node E after one iteration of the algorithm:
 
-> | Destination | Cost | Next Hop |
-> | ----------- | ---: | -------- |
-> | A | 32 | D |
-> | B | 29 | C or D |
-> | C | 11 | C |
-> | D | 16 | C |
+> Destination / Cost / Next Hop: A, B, C, D
 
 3(c) Show the routing table of node E after two iterations of the algorithm:
 
-> | Destination | Cost | Next Hop |
-> | ----------- | ---: | -------- |
-> | A | 31 | C |
-> | B | 28 | C |
-> | C | 11 | C |
-> | D | 16 | C |
+> Destination / Cost / Next Hop: A, B, C, D
 
 3(d.i) In some failure situations, the administrator notices that it takes an exceptionally long time for the routing protocol to stabilize in this network. What problem with the distance vector protocol is the cause?
 
-> Count-to-infinity.
-
 3(d.ii) The administrator is told that BGP does not suffer from this problem. What prevents BGP from having this problem?
-
-> BGP is a path-vector protocol: each route carries the AS path, so a router can detect and reject routes that already contain itself.
 
 QUESTION 4: Routing, addressing, and tunneling (9 points)
 
@@ -1561,19 +1486,19 @@ You have to fill in the header type and the source and destination address for t
 
 4(a) Header for packet 2:
 
-> Prompt-only retained from the source PDF; no official answer key was available in the source for this figure-dependent table.
+> Header Type / Source / Destination
 
 4(b) Header for packet 3:
 
-> Prompt-only retained from the source PDF; no official answer key was available in the source for this figure-dependent table.
+> Header Type / Source / Destination
 
 4(c) Header for packet 4:
 
-> Prompt-only retained from the source PDF; no official answer key was available in the source for this figure-dependent table.
+> Header Type / Source / Destination
 
 4(d) Header for packet 5:
 
-> Prompt-only retained from the source PDF; no official answer key was available in the source for this figure-dependent table.
+> Header Type / Source / Destination
 
 ### 2009 Mid
 
