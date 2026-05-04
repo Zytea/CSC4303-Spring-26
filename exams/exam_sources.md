@@ -840,12 +840,6 @@ Correct Explain briefly (1-2 sentences) where the bug is.
 
 > PDF: <https://www.cs.cmu.edu/~dga/15-440/F12/final2011-solve.pdf>
 
-| PDF page(s) | Problem / subpart ID(s) retained            | CSC4303 overlap                                                     |
-| ----------: | ------------------------------------------- | ------------------------------------------------------------------- |
-|         2-3 | Question 1(a), 1(b), 1(c)                  | DNS hierarchy; DNS caching; CDN via DNS                             |
-|       10-11 | Question 6(a), 6(b), 6(c), 6(d), 6(e), 6(f) | Napster, query flooding, supernodes, flooding limits                |
-|       12-13 | Question 7(a), 7(b), 7(c), 7(d), 7(e), 7(f) | DHT/Chord ring mapping, finger table, successor, fallback/proximity |
-
 1. (8 points) Circle True or False as appropriate. If you don’t know the answer, come back at the end and GUESS; a blank answer is the same as a wrong answer, so guessing can only help.
 
    1(a) DNS is delegated hierarchically by having the root nodes tell resolvers which servers to query for `.com`, and so on, until the client’s query can be answered. (✅/❌)
@@ -928,13 +922,6 @@ Correct Explain briefly (1-2 sentences) where the bug is.
 
 > PDF: <https://courses.cs.washington.edu/courses/cse461/23sp/samples/sample-midterm2-key.pdf>
 
-| PDF page(s) | Problem / subpart ID(s) retained     | CSC4303 overlap                                                                               |
-| ----------: | ------------------------------------ | --------------------------------------------------------------------------------------------- |
-|           2 | Question 1(a), 1(d), 1(e)             | Layering, internetworking, encapsulation                                                      |
-|         3-4 | Question 3(a), 3(b), 3(c), 3(d)       | ICMP, NAT, IPv6 motivation, tunneling                                                         |
-|           5 | Question 4(a), 4(b), 4(c), 4(d)       | Routing vs forwarding, longest-prefix matching, local/gateway forwarding, routing scalability |
-|           6 | Question 5(a), 5(b), 5(c), 5(d), 5(e) | Distance-vector vs link-state routing, convergence, RIP, OSPF/IS-IS                           |
-
 1(a) How are hosts with two different link layers (e.g., WiFi and Ethernet) able to communicate?
 
 > Layering lets the IP layer decapsulate data from one link layer and encapsulate it in another.
@@ -1009,11 +996,6 @@ Correct Explain briefly (1-2 sentences) where the bug is.
 
 > PDF: <https://courses.cs.washington.edu/courses/cse461/23sp/section/4-midterm-review.pdf>
 
-| PDF page(s) | Problem / subpart ID(s) retained                                 | CSC4303 overlap                                           |
-| ----------: | ---------------------------------------------------------------- | --------------------------------------------------------- |
-|       12-16 | Practice Problems: Bandwidth Allocation; Practice Problems: AIMD | Max-min fairness and AIMD calculations                    |
-|       53-54 | Practice Problems: Link-State Routing                            | Link-state routing convergence and inconsistent LSP views |
-
 12-13 Bandwidth Allocation. Four flows A, B, C, and D share a 10 Mbps link. 
 
 Demands are A=1 Mbps, B=2 Mbps, C=10 Mbps, and D=infinite. 
@@ -1036,41 +1018,20 @@ How could this happen, and what should C do?
 >
 > C should keep flooding and recomputing from the newest LSPs; eventually the old LSP will be superseded and both sides will agree again.
 
-### Winter 2017 Mid
-
-> PDF: <https://courses.cs.washington.edu/courses/cse461/22wi/practice-materials/midterm-2.3.17.pdf>
-
-| PDF page(s) | Problem / subpart ID(s) retained | CSC4303 overlap                                                |
-| ----------: | -------------------------------- | -------------------------------------------------------------- |
-|         4-5 | Question 3(a), 3(b)              | Spanning-tree convergence and loop-free bridged topology       |
-
-3(a) For the given topology, fill out each step of the spanning tree algorithm until it reaches steady state. Ties are broken by lowest address.
-
-> Root A wins. The steady-state tree uses edges A-B, A-C, B-D, C-E, C-F, E-G, and E-H. One round-by-round set of best tuples is: Round 1: A=(A,A,0), B=(A,A,1), C=(A,A,1), D=(B,B,1), E=(C,C,1), F=(C,C,1), G=(E,E,1), H=(E,E,1). Round 2: D=(A,B,2), E=(A,C,2), F=(A,C,2), G=(C,E,2), H=(C,E,2). Round 3: G=(A,E,3), H=(A,E,3), with the other nodes unchanged.
-
-3(b) Draw the resultant spanning tree on the network.
-
-> Keep links A-B, A-C, B-D, C-E, C-F, E-G, and E-H; disable the remaining links D-F and F-G.
-
-
 ## Princeton COS 461 Computer Networks
 
 ### Spring 2012 Mid
 
 > PDF: <https://www.cs.princeton.edu/courses/archive/spring23/cos461/exams/spring12-cos461-exam1-answers.pdf>
 
-| PDF page(s) | Problem / subpart ID(s) retained                           | CSC4303 overlap                                                                 |
-| ----------: | ---------------------------------------------------------- | ------------------------------------------------------------------------------- |
-|           2 | Question 1(a), 1(b), 1(c)                                  | TCP ACK size, bufferbloat/queueing, VoIP priority                               |
-|           3 | Question 2(a), 2(b), 2(c)                                  | TCP three-way handshake timing and lost final ACK                               |
-|         4-5 | Question 3(a), 3(b), 3(c), 3(d), 3(e); Question 4(b), 4(c) | IP prefix/default forwarding/TTL; temporary link-state loops and metric changes |
-|           6 | Question 5(a), 5(b), 5(c), 5(d)                            | Socket close/FIN, TCP byte stream receive, EOF handling                         |
-|        9-10 | Question 7(a), 7(b)                                        | DNS/web redirection/captive-portal flow                                         |
+1 A router has a 100,000-byte FIFO buffer, with an upload bandwidth of 1 Mbps or 125,000 bytes per second. MTU = 1000 bytes.
 
-
-1(a) If the router’s buffer is completely full of TCP acknowledgment packets, how many packets are queued in the buffer? Assume the TCP segment has no payload, and the packet headers do not contain any IPv4 or TCP options. (3 points)
+1(a) If the buffer is completely full of TCP acknowledgment packets, how many packets are queued in the buffer? Assume **the TCP segment has no payload**, and the packet headers do not contain any IPv4 or TCP options. (3 points)
 
 > Ignoring the link-layer header and any minimum size restriction on the link-layer frame, a TCP ACK packet is 40 bytes long, consisting of a 20-byte IP header and a 20-byte TCP header. A 100,000-byte buffer can hold $100000/40 = 2500$ ACK packets.
+> **Why the TCP segment has no payload?**
+>
+> TCP header already has a Sequence Number (32) and an Acknowledgment Number (32).
 
 1(b) Suppose the buffer is completely full. How long does it take the router to transmit all of the bytes in the buffer? (3 points)
 
@@ -1080,17 +1041,43 @@ How could this happen, and what should C do?
 
 > At worst, the VoIP packet arrives just as the router starts transmitting a full-sized (i.e., 1000-byte) non-VoIP packet, forcing the VoIP packet to wait for $1000/125000 = 0.008$ seconds, or 8 msec.
 
-2(a) What is the earliest time that A can start sending data to B? (3 points)
+2. Host A initiates a TCP connection with host B by sending a SYN packet, and B responds with a SYN-ACK packet. Upon receiving the SYN-ACK packet, A responds with an ACK packet. 
 
-> Immediately after receiving the SYN-ACK packet from B. Once the SYN-ACK arrives, A knows that B has A's initial sequence number and is ready to accept data packets from A.
+2(a) What is the earliest time that A can start sending data to B? 
 
-2(b) What is the earliest time that B can start sending data to A? (3 points)
+A. Immediately after sending the SYN packet to B 
 
-> Immediately after receiving the ACK packet from A. Once the ACK arrives, B knows that A has B's initial sequence number and is ready to accept data packets from B.
+B. Immediately after receiving the SYN-ACK packet from B
 
-2(c) Suppose the ACK packet from A gets lost. What ultimately triggers A to retransmit the lost ACK packet? Assume no other packets get lost and no data packets are sent. (4 points)
+C. Immediately after receiving data from B
 
-> A retransmission timeout at B triggers retransmission of the SYN-ACK packet. ACK packets are not retransmitted by themselves, so A does not experience a retransmission timeout for the lost ACK. If B does not receive an ACK for the SYN-ACK, then B will retransmit the presumed-lost SYN-ACK after the retransmission timeout expires.
+> B. Once the SYN-ACK arrives, A knows that B has A's initial sequence number and is ready to accept data packets from A.
+
+2(b) What is the earliest time that B can start sending data to A? 
+
+A. Immediately after receiving the SYN packet from A
+
+B.  Immediately after sending the SYN-ACK packet to A
+
+C.  Immediately after receiving the ACK packet from A
+
+D. Immediately after receiving data from A
+
+> C. Once the ACK arrives, B knows that A has B's initial sequence number and is ready to accept data packets from B.
+
+2(c) Suppose the ACK packet from A gets lost. What ultimately triggers A to retransmit the lost ACK packet? Assume no other packets get lost and no data packets are sent. 
+
+A. A retransmission timeout at A
+
+B. A retransmission timeout at B, triggering a retransmission of the SYN-ACK packet
+
+> B. ACK packets are not retransmitted by themselves, so A does not experience a retransmission timeout for the lost ACK. If B does not receive an ACK for the SYN-ACK, then B will retransmit the presumed-lost SYN-ACK after the retransmission timeout expires.
+
+3. A small university campus is assigned a large address block 12.1.0.0/17, but is only using a portion of these addresses (in 12.1.1.0/24) to number its computers. The campus uses a single Internet Service Provider (ISP) to reach the rest of the Internet. This picture shows the forwarding tables on the ISP’s router (on the left) and the campus edge router (on the right):
+
+   <img src="assets/image-20260504105204357.png" alt="image-20260504105204357" style="zoom:33%;" />
+
+   For example, the ISP forwards all packets with destination addresses in 12.1.0.0/17 out link #2 toward the campus edge router. Both routers include a default forwarding entry 0.0.0.0/0 that can match any destination IP address.
 
 3(a) How many IP addresses does the campus “own” in its 12.1.0.0/17 block? You can represent your answer as a power of two. (2 points)
 
@@ -1114,46 +1101,283 @@ How could this happen, and what should C do?
 
 4(b) Consider the network below that runs a link-state routing protocol that computes shortest paths as a sum of link weights. The number on each link is the weight of the link in each direction (e.g., links b-c and c-b both have weight 2). Suppose nodes a, b, and d send packets to destination node c. If link d-c (and c-d) fails, which of nodes a, b, and d could conceivably see their packets stuck in a temporary forwarding loop? Which ones would not? (3 points)
 
+<img src="assets/image-20260504105555525.png" alt="image-20260504105555525" style="zoom:33%;" />
+
 > a and d can loop, but not b
 
-4(c) Using the same figure as 4(b), what minimum sequence of weight settings for link d-c avoids blackholes or loops during planned maintenance?
+4(c) Using the same figure as 4(b), suppose the network operator is taking link d-c (and c-d) down for planned maintenance. The network operator wants to temporarily set the weight of the link to a higher value, to coax nodes to move away from paths that use the link without creating any blackholes or loops. What minimum sequence of weight settings for link d-c avoids blackholes or loops during planned maintenance?
 
-> First change the d-c cost to 3 so node a shifts to the upper path. Then change the cost to 5 or higher so node d shifts to the upper path. Finally shut down d-c after nobody is using it.
+> First change the d-c cost to 3 so node a shifts to the upper path. 
+>
+> Then change the cost to 5 or higher so node d shifts to the upper path. 
+>
+> Finally shut down d-c after nobody is using it.
+
+5. This question concerns the relationship between socket calls at the application layer and the behavior of the transport layer. Consider a reliable stream (i.e., TCP) socket between application processes A and B running on two different hosts.
 
 5(a) Suppose process A calls send() to send 10,000 bytes of data, and the operating system begins sending the data as a sequence of packets destined to B. If process A calls close() on the socket before the operating system finishes transmitting the data, will the remaining data be sent to B? Why or why not? (3 points)
 
 > Yes. The operating system continues transmitting the remaining data to B to ensure ordered, reliable delivery of the byte stream.
+>
+> 因为`close()` 的语义是“我（进程 A）没有更多数据要发送了”
 
 5(b) Suppose process A calls close() after the operating system has transmitted all of the outstanding data. What kind of packet does the operating system send in response to A’s call to close()? (2 points)
 
 > TCP FIN packet
 
-5(c) Explain why B may need to perform multiple calls to recv() to receive all 10,000 bytes of data from A. (3 points)
+5(c) Explain why B may need to perform multiple calls to `recv()` to receive all 10,000 bytes of data from A. (3 points)
 
 > The data may not reach B in its entirety at the same time, since it is split into multiple packets. These packets may experience different delays due to congestion, retransmission, and receive-window constraints.
+>
+> 因为`recv(10000)` 的意思是“我最多想读 10,000 字节”，但如果此时内核里只有 500 字节，它会立即返回这 500 字节，剩下的需要再次调用 `recv()` 去拿。
 
-5(d) Suppose B’s operating system has learned that A has closed its end of the connection. Once process B has read all of the data from A, what does B’s next call to recv() return? (2 points)
+5(d) Suppose B’s operating system has learned that A has closed its end of the connection. Once process B has read all of the data from A, what does B’s next call to `recv()` return? (2 points)
 
 > A 0, indicating the end of the stream.
 
+6. An IP address relates to a host’s location in the Internet topology, but is not easily translated to a precise geographic location. This question concerns mapping an IP address to a location.
+
+6a) Give two examples of how knowing a client’s rough geographic location can improve an Internet service. 
+
+> - Customizing the content to the user’s location (e.g., showing weather, advertisements, traffic reports, etc. related to the user’s presumed location) 
+> - Blacking out access to sites disallowed in certain geographic regions (e.g., due to local laws, commercial restrictions on showing sporting events in the local area, etc.) 
+> - CDN: Directing clients to the closest Web server offering a given service.
+
+6b) Propose a technique to infer the geographic location associated with an IP address, without cooperation from the end user. Explain how your technique works, and what assumptions it makes. 
+
+> - Performing a traceroute to the client address, and looking for geographically-meaningful names late in the traceroute path (e.g., “yale-univer.car2.stamford1.level3.net”) 
+> - Performing pings to measure latency to reach the client from multiple vantage points with known geographic locations, and triangulating to infer the client’s location - Altering the design of the routing system to include geographic information (though this requires substantial control over the entire Internet, making this approach unrealistic in practice) 
+> - Performing a reverse DNS lookup on the client IP address (though most client’s don’t have DNS names, and these names often don’t reveal location information), or performing a “whois” query to find the address of the organization that owns the IP address
+
+6c) Give an example where your technique will not produce accurate results. 
+
+> - If the client lies at the end of a high-latency link (e.g., a satellite) 
+> - If routers near the client do not participate in traceroute (e.g., do not send ICMP responses) 
+> - If the client’s machine does not respond to ping requests 
+> - If the organization in whois covers a very large geographic region (e.g., the address of corporate headquarters may not reveal the client’s location all that accurately)
+> - Tunnelling like VPN 1)  Encapsulate the client’s traffic in a tunnel to a server in a different location 2) false the ping measurement 3) hide from traceroute 4) false the whois information
+
+7. Some WiFi hotspots offer wireless access for a fee. When a user connects to the access point, a DHCP server assigns them an IP address, network mask, gateway router, and local DNS server. When the user tries to access a Web site, the hotspot directs the HTTP request to a “pay wall” where the user can enter credit card information, and only then can the user access the requested Web site. These hotpots typically allow DNS queries through the pay wall, though, since the user’s Web browser needs to use DNS to map domain names to IP addresses.
+
 7(a) Suppose, before the user pays, the hotspot only allows the user to send and receive UDP packets with source or destination port 53 (the port number used for DNS). Assume the hotspot allows any such traffic to travel to and from the user, independent of the destination IP address. Briefly describe the design of a system that would allow the user to access arbitrary sites on the Internet via the hotspot without paying. The user may need to deploy parts of the system ahead of time. Include a picture. (5 points)
 
-> The user can run a proxy that listens on UDP port 53. The client can encapsulate an IP packet (say, containing a TCP segment) inside UDP packets sent to the proxy, and the proxy can send the traffic to arbitrary Internet services at the client’s request. The responses can be encapsulated and sent back to the client using UDP packets with port 53. To ensure reliability, the client and the proxy can acknowledge received UDP packets and retransmit unacknowledged packets.
+> The user can run a proxy that listens on UDP port 53. The client can encapsulate an IP packet (say, containing a TCP segment) inside UDP packets sent to the proxy, and the proxy can send the traffic to arbitrary Internet services at the client’s request. The responses can be encapsulated and sent back to the client using UDP packets with port 53. 
+>
+> To ensure reliability, the client and the proxy can acknowledge received UDP packets and retransmit unacknowledged packets.
+>
+> ```
+> Before payment:
+> 
+> User laptop
+> +-------------------+
+> | Browser           |
+> | wants google.com  |
+> +---------+---------+
+>           |
+>           | TCP/IP packet
+>           v
+> +-------------------+
+> | Local tunnel app  |
+> | encapsulate TCP   |
+> | into UDP dst 53   |
+> +---------+---------+
+>           |
+>           | UDP packet, dst port 53
+>           v
+> ================================================
+>  Hotspot pay wall
+>  Allows UDP traffic with src/dst port 53
+> ================================================
+>           |
+>           v
+> +--------------------------+
+> | User's proxy on Internet |
+> | listens on UDP port 53   |
+> | decapsulates packet      |
+> | forwards to real site    |
+> +------------+-------------+
+>              |
+>              | normal TCP/HTTP/HTTPS
+>              v
+>         Arbitrary website
+> ```
 
 7(b) Now suppose that the hotspot only allows DNS queries (i.e., correctly formed DNS requests sent to UDP port 53) destined to the IP address of its own local DNS server, and DNS responses from that server. Design a new solution that allows the user to access arbitrary Internet sites without paying. Include a picture. Note that you should not use this technique in real life to evade paying for Internet service! (5 points)
 
-> The user can run a proxy that acts as an authoritative DNS server for a domain the user has registered (say, jrex.com). To communicate with the proxy, the client sends a DNS request to the hotspot’s local DNS server, with the contents of the message embedded in the domain name (e.g., here-is-my-message.jrex.com). This will trigger the local DNS server to direct the query to the jrex.com authoritative server, which can encode a message in the DNS response (e.g., using the four bytes of the IP address to encode four characters, or using DNS TXT records to encode more information. As in the previous question, the client and the proxy need to acknowledge and retransmit the UDP packets to ensure reliable delivery. The domain names could even embed sequence and acknowledgment information (e.g., here-is-mymessage-X.jrex.com, where X is a number). This class of solutions is known as “DNS tunneling.” Several students offered a different answer that was also valid. The idea is to hijack the hotspot’s local DNS server by sending a forged ARP response for the DNS server’s IP address, learned by the client in DHCP bootstrapping. Now the client can send UDP port 53 packets, and follow the approach in part 7a of the question. Note that this approach may be easier for the hotspot administrators to detect, since the local DNS server would suddenly be carrying no traffic. (That said, even the solution above is relatively easy to detect if the hotspot administrators are monitoring DNS query/response loads on a per-client basis.) Other students offered another answer that was also valid. The client could snoop on DHCP, ARP, or flooded packets to learn the IP addresses of other users who have (presumably) paid for service. The client can then send a forged ARP response for another client’s IP address, and be able to receive packets sent to that address. The client can start sending packets from that address, too, allowing free communication. (This might be detected by the other user, and in fact that user may sometimes send traffic, causing the switches to shift traffic back to the old client. As such, the crafty client would need to repeatedly hijack the original client.)
+> The user can run a proxy that acts as an authoritative DNS server for a domain the user has registered (say, jrex.com). To communicate with the proxy, the client sends a DNS request to the hotspot’s local DNS server, with the contents of the message embedded in the domain name (e.g., here-is-my-message.jrex.com). This will trigger the local DNS server to direct the query to the jrex.com authoritative server, which can encode a message in the DNS response (e.g., using the four bytes of the IP address to encode four characters, or using DNS TXT records to encode more information. As in the previous question, the client and the proxy need to acknowledge and retransmit the UDP packets to ensure reliable delivery. The domain names could even embed sequence and acknowledgment information (e.g., here-is-mymessage-X.jrex.com, where X is a number). This class of solutions is known as “DNS tunneling.” 
+>
+> ```
+> User laptop
+> +-------------------+
+> | Local tunnel app  |
+> | encodes message   |
+> | into domain name  |
+> +---------+---------+
+>           |
+>           | DNS query:
+>           | abc123.seq5.jrex.com
+>           v
+> ================================================
+>  Hotspot pay wall
+>  Only allows DNS query to local DNS server
+> ================================================
+>           |
+>           v
+> +-----------------------+
+> | Hotspot local DNS     |
+> | does recursive lookup |
+> +----------+------------+
+>            |
+>            | query for *.jrex.com
+>            v
+> +-----------------------------+
+> | User's authoritative DNS    |
+> | server for jrex.com         |
+> | decodes message             |
+> | acts as proxy               |
+> +-------------+---------------+
+>               |
+>               | normal Internet access
+>               v
+>         Arbitrary website
+> ```
+>
+> 问题：
+>
+> - 低带宽，高延迟，DNS cache，异常流量
+>
+> Several students offered a different answer that was also valid. The idea is to hijack the hotspot’s local DNS server by sending a forged ARP response for the DNS server’s IP address, learned by the client in DHCP bootstrapping. Now the client can send UDP port 53 packets, and follow the approach in part 7a of the question. Note that this approach may be easier for the hotspot administrators to detect, since the local DNS server would suddenly be carrying no traffic. (That said, even the solution above is relatively easy to detect if the hotspot administrators are monitoring DNS query/response loads on a per-client basis.)
+>
+> 其他假设：
+>
+> - 不检查 source IP 是否属于这个 MAC
+>
+>   > ```
+>   > Ethernet src MAC = attacker MAC M_A
+>   > IP src           = DNS server IP D
+>   > UDP port         = 53
+>   > ```
+>   >
+>   > gateway 检查 `IP D 是否真的属于 MAC M_A？` 就完蛋了
+>
+> - 不启用 DHCP snooping / IP source guard / dynamic ARP inspection
+>
+> - firewall 只粗略看 IP/port，而不严格验证 DNS 语义
+>
+>   > 若
+>   >
+>   > ```
+>   > 1. 必须是合法 DNS query / response
+>   > 2. query name 长度和字符正常
+>   > 3. response 必须对应之前的 query
+>   > 4. 不允许异常大的 TXT record
+>   > 5. 不允许高频率、长随机子域名
+>   > ```
+>
+> ``` 
+> Before attack:
+> 
+> +----------------+                      +----------------+
+> | Unpaid client  |                      | Real DNS server|
+> | IP = C         |                      | IP = D         |
+> | MAC = M_C      |                      | MAC = M_D      |
+> +-------+--------+                      +-------+--------+
+>         |                                       ^
+>         | DNS query to D                        |
+>         v                                       |
+> +----------------+                             |
+> | Hotspot gateway|-----------------------------+
+> | ARP: D -> M_D  |
+> | Policy:        |
+> | only allow DNS |
+> | with server D  |
+> +-------+--------+
+>         |
+>         v
+>      Internet
+> 
+> ---
+> 
+> ARP spoofing:
+> 
+> Attacker tells gateway:
+> "DNS server IP D is at my MAC M_C"
+> 
+> +----------------+
+> | Unpaid client  |
+> | MAC = M_C      |
+> | spoofs IP = D  |
+> +-------+--------+
+>         |
+>         | IP src = D
+>         | UDP src/dst port = 53
+>         | dst = remote proxy P
+>         v
+> +----------------+
+> | Hotspot gateway|
+> | ARP: D -> M_C  |
+> | thinks packet  |
+> | is from DNS D  |
+> | so allows it   |
+> +-------+--------+
+>         |
+>         v
+> +----------------+
+> | Remote proxy P |
+> | on Internet    |
+> +----------------+
+> ```
+>
+> Other students offered another answer that was also valid. The client could snoop on DHCP, ARP, or flooded packets to learn the IP addresses of other users who have (presumably) paid for service. The client can then send a forged ARP response for another client’s IP address, and be able to receive packets sent to that address. The client can start sending packets from that address, too, allowing free communication. (This might be detected by the other user, and in fact that user may sometimes send traffic, causing the switches to shift traffic back to the old client. As such, the crafty client would need to repeatedly hijack the original client.)
+>
+> ```
+> Normal case:
+> 
+> Paid user
+> +-------------+
+> | IP = P      |
+> | MAC = M_P   |
+> +------+------+ 
+>        |
+>        | normal traffic
+>        v
+> +----------------+
+> | Hotspot gateway|
+> | P has paid     |
+> +----------------+
+>        |
+>        v
+>    Internet
+>    
+> ---
+> 
+> ARP spoofing:
+> 
+> Attacker says to gateway:
+> "paid user's IP P is at my MAC M_A"
+> 
+> +----------------+
+> | Hotspot gateway|
+> | ARP table:     |
+> | P -> M_A       |
+> +-------+--------+
+>         |
+>         | packets for paid user IP P
+>         v
+> +----------------+
+> | Attacker laptop|
+> | MAC = M_A      |
+> | spoofs IP = P  |
+> +-------+--------+
+>         |
+>         | traffic appears to come from paid IP P
+>         v
+>     Internet   
+> ```
 
 ### Spring 2012 Final
 
 > PDF: <https://www.cs.princeton.edu/courses/archive/spring23/cos461/exams/spring12-cos461-exam2-answer.pdf>
-
-| PDF page(s) | Problem / subpart ID(s) retained | CSC4303 overlap                                           |
-| ----------: | -------------------------------- | --------------------------------------------------------- |
-|           2 | Question 1(a), 1(b), 1(c), 1(d)  | Skype/P2P supernodes; BitTorrent tit-for-tat              |
-|           5 | Question 4(a), 4(b), 4(c), 4(d)  | DHCP registration, IP/MAC binding, ARP miss handling      |
-|           6 | Question 5(a)                    | Longest-prefix matching and prefix-priority routing rules |
-
 
 1(a) The Skype peer-to-peer IP telephony application sometimes has a user machine serve as a “super node” to support communication between two other users. When are super nodes needed, and why? (3 points)
 
@@ -1171,6 +1395,12 @@ How could this happen, and what should C do?
 
 > Just slightly above the fifth peer, or just above 4 Mbps.
 
+3a) Traceroute can sometimes return a path that does not even exist in the Internet topology. E.g., hop i may not be connected to hop i+1. Give one reason why this might happen. 
+
+> A routing change during the traceroute probe 
+>
+> Load balancers that spread traffic over multiple paths
+
 4(a) Many enterprise networks only allow registered machines to access the local area network. Some of these networks configure the DHCP server to assign a computer (or MAC address) the same IP address every time it connects to the network. Give one reason why. (3 points)
 
 > Tracking traffic by IP address is much easier if an IP address corresponds to the same user at all time.
@@ -1187,10 +1417,6 @@ How could this happen, and what should C do?
 
 > The dropped packets must be retransmitted at a higher layer (e.g., TCP). E.g., a dropped SYN packet, in particular, would have a long retransmission timeout.
 
-5(a) An OpenFlow switch can serve as an IP router. Suppose the “IP router” OpenFlow application has forwarding rules for three IP prefixes: (i) 12.1.2.0/24 forwards out link 1, (ii) 12.0.0.0/8 forwards out link 2, and (iii) 12.1.0.0/16 forwards out link 3. What priority order should these rules have in the OpenFlow switch, starting with the highest priority? (2 points)
-
-> The highest priority should go to the longest prefixes. That is, rule 1 should have priority over rule 3, which should have priority over rule 2.
-
 ### Spring 2011 Mid
 
 > PDF: <https://www.cs.princeton.edu/courses/archive/spring23/cos461/exams/spring11-cos461-exam1-answers.pdf>
@@ -1201,6 +1427,15 @@ How could this happen, and what should C do?
 |         4-5 | Question 2(a), 2(b), 2(c), 2(d)  | TCP ACK arithmetic, FIN/close, window/congestion behavior       |
 |        8-10 | Question 4                       | IP headers, prefix filters, and routing/filtering rule behavior |
 
+1. Routing, addressing, and tunneling
+
+<img src="assets/image-20260504115546375.png" alt="image-20260504115546375" style="zoom:50%;" />
+
+The above figure shows a network topology. The LAN on the left uses a NAT to connect to the Internet and includes a client host H1. The LAN on the right includes a webserver H2. Packets between the two endpoints are routed along the path shown by a heavy dark lines, which includes two IPv4 tunnels. All packets which traverse the path use both tunnels. The various network interfaces have IP and MAC addresses as shown. 
+
+H1 has established an HTTP session with web server H2 and data packets are flowing between the two machines. As an example, we have filled in the headers for packet 1 (traveling from the server H2 to the client H1). Note that you should order your headers from “outermost” in, as shown: Ethernet should be listed before IP, because the Ethernet packet exists first on the wire. Header Type Source Destination Ethernet MAC 16 MAC 15 IP 3.0.1.2 1.2.3.4
+
+You only have to fill in the header type and the source and destination address for the network and datalink layer headers for packets 2, 3, and 4 (these packets are all traveling from the client H1 to the server H2, as marked on the figure with heavy black arrows and numbers). Note: You might not need to use all the rows supplied.
 
 1(a) Header for packet 2 traveling from H1 to H2.
 
@@ -1230,9 +1465,17 @@ How could this happen, and what should C do?
 
 > Cross traffic from other senders can change over time, so the amount of congestion and the sender's window at later loss points can differ.
 
-4. Short answers on Ethernet/IP, NAT/firewall rules, TCP ACKs, and socket writes.
+4.1(a) Suppose Ethernet was the only LAN technology and the Internet were one large switched Ethernet. Give two networking reasons this is a bad idea.
 
-   > Ethernet-only Internet designs do not scale because flooding/ARP/spanning tree do not scale and MAC addresses are not hierarchical. Assigning IP addresses directly to adapters would lose topological aggregation or require renumbering on movement. With one public NAT address and about 100,000 simultaneous hosts, the NAT can run out of ports. A public web server behind NAT needs port forwarding from public port 80 to the internal server. The firewall should allow SYNs to 1.2.3.4:80, allow SYN-ACKs, allow outbound SYNs from 1.0.0.0/8, deny other inbound SYNs, and allow the rest. ACK 8001 proves three 1000-byte segments were received; duplicate ACKs suggest segment 8001-9000 may be lost; ACK 12001 means none of the original ten are still suspected lost and seven segments were definitely received. A socket read returning 0 means EOF from a remote FIN; a short write of 500 means only part of the requested buffer was accepted, so the program must write the remaining bytes.
+   > Broadcast/flooding-based discovery would not scale, and MAC addresses are not hierarchical, so forwarding tables could not be aggregated like IP prefixes.
+
+4.1(b) Why not simply assign IP addresses to network adaptors instead of using both MAC and IP addresses?
+
+   > Either adaptors would need renumbering whenever they move, or static adaptor IPs would sacrifice topological aggregation and make routing tables too large.
+
+4.2-4.4 Short answers on NAT/firewall rules, TCP ACKs, and socket writes.
+
+   > With one public NAT address and about 100,000 simultaneous hosts, the NAT can run out of ports. A public web server behind NAT needs port forwarding from public port 80 to the internal server. The firewall should allow SYNs to 1.2.3.4:80, allow SYN-ACKs, allow outbound SYNs from 1.0.0.0/8, deny other inbound SYNs, and allow the rest. ACK 8001 proves three 1000-byte segments were received; duplicate ACKs suggest segment 8001-9000 may be lost; ACK 12001 means none of the original ten are still suspected lost and seven segments were definitely received. A socket read returning 0 means EOF from a remote FIN; a short write of 500 means only part of the requested buffer was accepted, so the program must write the remaining bytes.
 
 ### 2010 Mid
 
@@ -1491,8 +1734,8 @@ You have to fill in the header type and the source and destination address for t
 |         2-3 | Question 1(A), 1(B), 1(C), 1(D)                               | Transmission delay, TCP slow start, duplicate ACK vs timeout loss detection                  |
 |         4-6 | Question 2(A), 2(B), 2(C)                                     | TCP socket call ordering, TCP stream packetization, UDP datagram packetization               |
 |         7-8 | Question 3(A), 3(B)                                           | Web browser request flow with DHCP/ARP/DNS/TCP/HTTP/cache                                    |
-|        9-10 | Question 4(A), 4(B), 4(C), 4(D), 4(E), 4(F), 4(G)             | Routing vs bridging, layer-2/layer-3 addressing, ARP                                         |
-|       11-12 | Question 5(C), 5(F), 5(G), 5(H)                               | ARP/bridges, DNS TTL/records, web caches, persistent HTTP                                    |
+|        9-10 | Question 4(B), 4(C), 4(D), 4(E)                               | Layer-2 next-hop MAC, layer-3 source addressing, ARP                                          |
+|       11-12 | Question 5(F), 5(G), 5(H)                                     | DNS TTL/records, web caches, persistent HTTP                                                 |
 |       13-15 | Question 6(A), 6(B), 6(C), 6(D), 6(E), 6(F), 6(G), 6(H)       | Soft state, exponential backoff, TCP SYN retransmissions, DNS/UDP, NAT, ECN, protocol layers |
 
 
@@ -1532,10 +1775,6 @@ You have to fill in the header type and the source and destination address for t
 
 > 11, 7, 3, 12, 9, 4, 5, and 10 are eliminated.
 
-4(A) In the routed and bridged network, how many datalink networks are shown?
-
-> 3, corresponding to the networks hanging off router R2.
-
 4(B) Just before the packet reaches bridge B1, what is its layer-2 destination?
 
 > `R2a.mac`.
@@ -1551,18 +1790,6 @@ You have to fill in the header type and the source and destination address for t
 4(E) When H1 sends out an ARP query, what is the reply to that query?
 
 > `R2a.mac` has `R2a.ip`.
-
-4(F) Does the entry `B2a.mac` appear in B1’s forwarding table?
-
-> No. `B2a.mac` is on a different datalink network than B1.
-
-4(G) Will SRC’s Ethernet device receive packets with destination `R2a.mac`? Why or why not?
-
-> The official solution accepted both yes and no with correct reasoning. No, if B1 has learned the relevant MAC locations and filters the frame; yes, if SRC is in the same local broadcast domain as the sender or if B1 has not yet learned the addresses and floods the frame.
-
-5(C) Which statements are true about ARP and learning bridges?
-
-> C only: a host's ARP table maps IP addresses to MAC addresses.
 
 5(F) Which statements are true about DNS?
 
