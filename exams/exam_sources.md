@@ -2511,7 +2511,6 @@ Answer DOC: <https://www.cs.princeton.edu/courses/archive/spring23/cos461/exams/
 | Page(s) | Subpart ID(s) retained | CSC4303 overlap                                           |
 | ------: | -------------------------------- | --------------------------------------------------------- |
 |     DOC | 1(a), 1(b), 1(c), 1(d)  | Link-state routing weights and shortest-path behavior     |
-|     DOC | 2(a), 2(b), 2(c), 2(d)  | BGP routing policy and RouteViews-style routing reasoning |
 
 
 1. Weighting it Out (10 points)
@@ -2535,28 +2534,6 @@ This question explores how to set the (configurable) link weights in link-state 
 1(d) Suppose the link f-e is overloaded with traffic.  Identify a single weight change (on just one link) that would divert traffic from source f to destination d away from the f-e edge without affecting the path between any other source-destination pairs.  Avoid any reliance on how routers choose between multiple paths with the same (smallest) cost. (4 points)
 
 > The h-i link should be changed to 2.  That makes the cost of path f-i-h-g-d decrease from 28 to 21, which is less than the cost 22 of the path f-e-d.
-
-2. Route Views (10 POINTS)
-
-This question explores the role of routing policy on BGP routing.  In the picture below, the nodes are Autonomous Systems (ASes).  Dotted lines correspond to peer-peer relationships, and solid arrows correspond to provider-customer relationships, with the arrow pointing from provider to customer.  Every node prefers customer-learned routes over routes through peer ASes, and peer-learned routes over routes through provider ASes.  Among routes through the same kind of neighbor, each AS prefers shorter AS paths over longer ones.  An AS does not export routes learned from one peer or provider to other peers or providers.
-
-<img src="assets/image-20260504171720308.png" alt="image-20260504171720308" style="zoom:50%;" />
-
-2(a) Draw all of the paths to destination AS d.  That is, draw the “sink tree” leading to d.  Circle any ASes that do not have any route to d. (2 points)
-
-> The paths are b-a-d, g-d, and h-e-d.  Nodes c, f , and i cannot reach d.
-
-2(b) What path does e take to reach i?  Suppose f decides to terminate the peering relationship with AS e.  Can AS e still reach destination i?  If so, what is the new path? (2 points)
-
-> Node e takes the path e-f-i.  With the e-f link removed, the path is e-b-c-f-i.  The path e-h-i is not used because e’s customer h would not advertise a peer-learned route to its provider.
-
-2(c) In the original picture from 2(a), suppose ASes a and b provide a “dump” of all BGP routes they learn for every destination to a public measurement repository.  Suppose a researcher extracts all links from all AS paths in those “dumps” and uses them to construct a view of the AS-level topology of the network.  Draw a picture of the resulting inferred topology.  (3 points)
-
-> The graph is missing the peering edges d-e, d-f, g-h, and h-i. Node a learns only customer-learned routes from its customer d and peer b, allowing it to learn a-d, a-d-g, a-b, a-b-e, and a-b-e-h.  Node b learns only customer learned routes from its two peers a and b, and its customer c, allowing it to learn the routes that a learned, plus b-e and b-e-h from e, as well as b-c, b-c-f, and b-c-f-i from c.
-
-2(d) What is the minimum set of ASes that must provide “dumps” of every AS path they learn for every edge in the graph to be visible in at least one dump?  List the ASes.  (3 points)
-
-> Two nodes: b and h (or e and h).  Node h has paths h-g (to g), h-i (to i), h-e (to e).  It learns the paths h-e-d, h-e-f, h-e-b, h-e-b-a, and h-e-b-c from e.  However, since e is using the path e-d to reach d and the path e-f to reach f, e does not announce the paths e-b-a-d or e-b-c-f, even though e does learn those paths.  As such, the dump for node h reveals all edges except a-d and c-f, which are in a routing-table dump at either e or b.
 
 ### Spring 2007 Mid
 
