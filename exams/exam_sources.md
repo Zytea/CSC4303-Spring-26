@@ -1511,81 +1511,86 @@ Consider the following graph of TCP throughput (NOT DRAWN TO SCALE), where the y
 
 4. QUESTION 4: Short Answers (15 points)
 
-4.1 Ethernet and IP
+4.1 [3 points] Ethernet and IP
 
-4.1(a) Suppose the Internet were built as one large switched Ethernet with globally unique Ethernet addresses. Give two networking reasons this is a bad idea.
+4.1(a) [2 points] Suppose Ethernet was the only existing LAN technology, so every host in the Internet was part of a local Ethernet and thus had a globally-unique Ethernet address. Your friend suggests that IP isn't necessary anymore, and the entire Internet could just be one large, switched Ethernet instead. Give two reasons why using existing Ethernet protocols for this is a bad idea from a networking perspective.
 
-> Any two of: flooding for unknown destinations does not scale; ARP or spanning-tree flooding does not scale; MAC addresses are flat rather than hierarchical, so switches cannot aggregate forwarding entries like IP prefixes.
+> Accepted answer examples:
+> 1. Flooding does not scale for broadcast transmission when an address has not been learned by a switch.
+> 2. Even with switched Ethernet, flooding does not scale for ARP or spanning tree.
+> 3. MAC addresses are not hierarchical, so switches could not aggregate addresses into compact routing tables like IP prefixes.
 
-4.1(b) Why not simply assign IP addresses directly to network adaptors instead of using both MAC and IP addresses?
+4.1(b) [1 point] What about the other way around: why do we not simply assign IP addresses to network adaptors, instead of dealing with both MAC and IP addresses? Give one reason.
 
-> Either IP would lose topological aggregation and make routing tables too large, or mobile/end hosts would need to participate in routing updates or a global ARP-like lookup when they move.
+> Accepted answer examples:
+> 1. This would give up topological addressing and aggregation, leading to large routing tables.
+> 2. End hosts would need to announce addresses when they migrate, or the Internet would need something equivalent to global ARP for IP addresses.
 
-4.2 NAT and firewall rules
+4.2 [4 points] NAT and bidirectional firewall
 
-4.2(a) A company has about 100,000 machines simultaneously using port-based NAT through a single public IP address. What problem can arise?
+4.2(a) [1 point] The corporate network has about 100,000 machines simultaneously using port-based NAT. What problem could arise if the network only has one public IP address?
 
-> A single public IP has only about 65K transport ports, so the NAT can run out of external port mappings. New connections may fail, or mappings may churn and break existing connections.
+> There are more machines wanting external communication than available ports, roughly 65K. NAT requests may fail, or port mappings may be reassigned in a way that breaks ongoing connections.
 
-4.2(b) The company wants a web server behind the NAT, and only that server, to be reachable from the public Internet. What setup is needed?
+4.2(b) [1 point] The company wants one web server behind the NAT, and only this server, accessible from the public Internet. What do you need to set up?
 
-> Configure static port forwarding from the NAT public address on port 80 to the internal web server's private address on port 80.
+> Manually configure port forwarding: public NAT address port 80 maps to the internal web server's private address port 80.
 
-4.2(c) Now assume the company is not NATted, owns prefix `1.0.0.0/8`, and has a web server at `1.2.3.4:80`. What TCP firewall rules allow only that server to accept incoming connections?
+4.2(c) [2 points] The corporate network is not NATted, owns prefix `1.0.0.0/8`, and the web server is `1.2.3.4:80`. Fill in firewall rules so the server, and only the server, can accept incoming TCP connections.
 
-| Source IP   | Source Port | Dest IP | Dest Port | TCP Flags | Allow/Deny |
-| ----------- | ----------- | ------- | --------- | --------- | ---------- |
-| `*`         | `*`         | `1.2.3.4` | `80`    | `SYN`     | `ALLOW`    |
-| `*`         | `*`         | `*`     | `*`       | `SYN-ACK` | `ALLOW`    |
-| `1.0.0.0/8` | `*`         | `*`     | `*`       | `SYN`     | `ALLOW`    |
-| `*`         | `*`         | `*`     | `*`       | `SYN`     | `DENY`     |
-| `*`         | `*`         | `*`     | `*`       | `*`       | `ALLOW`    |
+| Source IP   | Source Port | Dest IP   | Dest Port | TCP Flags | Allow/Deny |
+| ----------- | ----------- | --------- | --------- | --------- | ---------- |
+| `*`         | `*`         | `1.2.3.4` | `80`      | `SYN`     | `ALLOW`    |
+| `*`         | `*`         | `*`       | `*`       | `SYN-ACK` | `ALLOW`    |
+| `1.0.0.0/8` | `*`         | `*`       | `*`       | `SYN`     | `ALLOW`    |
+| `*`         | `*`         | `*`       | `*`       | `SYN`     | `DENY`     |
+| `*`         | `*`         | `*`       | `*`       | `*`       | `ALLOW`    |
 
-4.3 TCP ACKs
+4.3 [4 points] TCP ACKs
 
-Using TCP, a sender has sent ten 1000-byte data segments. The sender's initial sequence number is 5000. A segment carrying sequence numbers 20001 through 21000 may be referred to as "segment 21000".
+Using TCP, a sender has sent ten data segments, each 1000 bytes. The sender's ISN is 5000. A segment containing sequence numbers 20001 through 21000 may be called "segment 21000".
 
-4.3(a) After the sender receives `ACK 8001`, how many TCP segments does it know were definitely received?
+4.3(a) [1 point] After receiving `ACK 8001`, how many TCP segments does the sender know the receiver definitely received?
 
-> 3 segments: segments 6000, 7000, and 8000.
+> 3 packets: 6000, 7000, 8000.
 
-4.3(b) The sender then receives two more `ACK 8001` packets. Which segment might be lost and should be retransmitted?
+4.3(b) [1 point] The sender subsequently receives two more packets with `ACK 8001`. Which segment might be lost and should be retransmitted?
 
-> The segment carrying bytes 8001-9000, i.e. segment 9000.
+> Packet 8001-9000.
 
-4.3(c) After retransmitting that segment, the sender receives `ACK 12001`. Which of the original ten segments might still be lost?
+4.3(c) [1 point] After retransmitting this segment, the sender receives `ACK 12001`. Which original segments might still be lost?
 
 > None.
 
-4.3(d) Which of the original ten segments were definitely received?
+4.3(d) [1 point] Which original segments were definitely received?
 
-> 7 segments, covering bytes 5001-12000.
+> 7 packets, bytes 5001-12000.
 
-4.4 UNIX socket programming
+4.4 [4 points] UNIX socket programming
 
-4.4(a) A proxy is downloading a web object over an open TCP connection, and `read()` on the socket returns 0.
+4.4(a) A proxy is downloading a web object from an origin webserver through an open TCP connection. Its latest `read()` call returns 0.
 
-4.4(a.1) What does this signify for a UNIX file descriptor?
+4.4(a.1) [0.5 points] What does this signify in general about a UNIX file descriptor?
 
-> End of file (EOF): there is no more data to read.
+> End of file (EOF) was reached; nothing more to read.
 
-4.4(a.2) What network event caused this?
+4.4(a.2) [1 point] What network event occurred to cause this?
 
-> The remote peer closed its socket, causing its TCP stack to send a FIN.
+> The remote peer closed its socket, and the remote network stack sent a FIN.
 
-4.4(b) The proxy is sending a 5000-byte object from `buf` to a browser over TCP. It calls `write(fd, buf + 2000, 1000)`.
+4.4(b) The proxy is sending a 5000-byte object back to the client through TCP file descriptor `fd`. The object is in a contiguous buffer `buf` of length 5000. The code calls `write(fd, buf + 2000, 1000)`.
 
-4.4(b.1) Which byte range is it trying to transfer?
+4.4(b.1) [0.5 points] Which byte range are you trying to transfer?
 
 > Bytes 2000-2999 inclusive in `buf`.
 
-4.4(b.2) If `write()` returns 500, what does this signify?
+4.4(b.2) [1 point] If this `write()` call returns 500, what does this signify?
 
-> Only bytes 2000-2499 were accepted/written.
+> Only bytes 2000-2499 were written.
 
-4.4(b.3) Why might this occur?
+4.4(b.3) [1 point] Why might this occur?
 
-> The socket send buffer may only have had space for 500 bytes. The application should issue another write for the remaining 500 bytes, e.g. `write(fd, buf + 2500, 500)`.
+> The socket buffer only had space for 500 bytes, not the full 1000. The application should call `write(fd, buf + 2500, 500)`.
 
 ### 2010 Mid
 
