@@ -1433,7 +1433,12 @@ B. A retransmission timeout at B, triggering a retransmission of the SYN-ACK pac
 
 The above figure shows a network topology. The LAN on the left uses a NAT to connect to the Internet and includes a client host H1. The LAN on the right includes a webserver H2. Packets between the two endpoints are routed along the path shown by a heavy dark lines, which includes two IPv4 tunnels. All packets which traverse the path use both tunnels. The various network interfaces have IP and MAC addresses as shown. 
 
-H1 has established an HTTP session with web server H2 and data packets are flowing between the two machines. As an example, we have filled in the headers for packet 1 (traveling from the server H2 to the client H1). Note that you should order your headers from “outermost” in, as shown: Ethernet should be listed before IP, because the Ethernet packet exists first on the wire. Header Type Source Destination Ethernet MAC 16 MAC 15 IP 3.0.1.2 1.2.3.4
+H1 has established an HTTP session with web server H2 and data packets are flowing between the two machines. As an example, we have filled in the headers for packet 1 (traveling from the server H2 to the client H1). Note that you should order your headers from “outermost” in, as shown: Ethernet should be listed before IP, because the Ethernet packet exists first on the wire. 
+
+| Header Type | Source  | Destination |
+| ----------- | ------- | ----------- |
+| Ethernet    | MAC 16  | MAC 15      |
+| IP          | 3.0.1.2 | 1.2.3.4     |
 
 You only have to fill in the header type and the source and destination address for the network and datalink layer headers for packets 2, 3, and 4 (these packets are all traveling from the client H1 to the server H2, as marked on the figure with heavy black arrows and numbers). Note: You might not need to use all the rows supplied.
 
