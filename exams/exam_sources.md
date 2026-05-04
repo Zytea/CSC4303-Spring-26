@@ -1684,7 +1684,11 @@ Consider the following graph of TCP throughput (NOT DRAWN TO SCALE), where the y
 
 2. [4 points] Assume that the network has an MSS of 1000 bytes. If point A occurs 1 second after the sender begins its transfer, and the sender has written 15,000 bytes to the network by that time, what is the RTT of the network?
 
-> 1 RTT for client handshake (SYN -> SYN-ACK). Then window size grows during slow start: 1 MSS, 2 MSS, 4 MSS, 8 MSS = 15 MSS = 15,000 bytes. Note that A occurs at the point of detecting triple duplicate ACK, and therefore the client must have seen at least some ACKs from the 8 MSS windows. Hence a total of 5 RTTs over 1 second = 200 ms.
+> 1 RTT for client handshake (SYN -> SYN-ACK). Then window size grows during slow start: 1 MSS, 2 MSS, 4 MSS, 8 MSS = 15 MSS = 15,000 bytes. 
+>
+> Note that A occurs at the point of detecting triple duplicate ACK, and therefore the client must have seen at least some ACKs from the 8 MSS windows. 
+>
+> Hence a total of 5 RTTs over 1 second = 200 ms.
 
 3. [4 points] What is the sender's window size in bytes at point B?
 
