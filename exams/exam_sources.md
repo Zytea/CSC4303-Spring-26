@@ -1733,12 +1733,8 @@ supplied. Remember to cleanup after you transmit the file.
 | 9 | | recv |
 | 10 | close | |
 | 11 | | close |
-| 12 | | |
-| 13 | | |
-| 14 | | |
-| 15 | | |
 
-> *** Note there are multiple different acceptable answers.
+> Note there are multiple different acceptable answers.
 
 3(2) [10 points] Now consider the pseudocode of the client's send call in a bit more
 depth. Write some pseudocode (it doesn't need to compile, but should look C-like), how
@@ -1853,7 +1849,7 @@ Now, the same sender resends the next missing packet and receives an ACK for pac
   Host B begins transferring a large file to host A. A new host D connects to the network,
   but is configured with the same IP address as already being used by A.
 
-  <img src="assets/image-20260504150341701.png" alt="image-20260504150341701" style="zoom: 33%;" />
+<img src="assets/image-20260504150341701.png" alt="image-20260504150341701" style="zoom: 33%;" />
 
 At time 55 seconds, an application running on host D opens a TCP connection to an
 application on C. A few seconds later, the TCP transfer between hosts A and B breaks.
@@ -1913,14 +1909,8 @@ appropriate socket, the operating system’s network stack uses the following fi
 
 > PDF: <https://www.cs.princeton.edu/courses/archive/spring23/cos461/exams/spring10-cos461-exam2.pdf>
 
-| PDF page(s) | Subpart ID(s) retained                                 | CSC4303 overlap                                                                                                                                  |
-| ----------: | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-|         2-3 | 1(a), 1(b), 1(c), 1(d), 1(e); 2(a), 2(b), 2(c) | HTTP redirection, DNS server selection, IP anycast, NAT/load balancer, ARP spoofing; IPv6; flow-table TCP/UDP filters; IP-header troubleshooting |
-|         5-6 | 3(a), 3(b), 3(c), 3(d)(1), 3(d)(2)                       | Distance-vector routing tables, count-to-infinity, path-vector loop avoidance                                                                    |
-|         7-8 | 4(a), 4(b), 4(c), 4(d)                                  | Routing/addressing/tunneling headers, NAT, IP/MAC/MPLS                                                                                           |
 
-
-Source note: the URL is an exam PDF, not an official answer key; retained items in this section have no official solution text in the source.
+Derived answers are supplied below based on the exam prompt and figures.
 
 1. Network system engineering (13 points)
 
@@ -1938,7 +1928,9 @@ will not get credit (overhead in terms of what?).
 
 1 disadvantage:
 
-> No official solution text is available in the cited source; prompt retained only.
+> Advantage: HTTP redirection can choose a server on a per-request basis using current load, failure state, or client location.
+>
+> Disadvantage: The client must first contact the redirecting server, which adds an extra HTTP round trip and makes that server a dependency.
 
 1(b) DNS server-selection
 
@@ -1946,7 +1938,9 @@ will not get credit (overhead in terms of what?).
 
 2 disadvantages:
 
-> No official solution text is available in the cited source; prompt retained only.
+> Advantage: DNS server-selection is transparent to clients and can direct the client to a nearby or available datacenter before the TCP connection is opened.
+>
+> Disadvantages: DNS caching makes failover and load changes slow unless TTLs are short, and the DNS server often sees the recursive resolver rather than the true client, so location-based selection can be inaccurate.
 
 1(c) IP anycast
 
@@ -1954,7 +1948,9 @@ will not get credit (overhead in terms of what?).
 
 2 disadvantages:
 
-> No official solution text is available in the cited source; prompt retained only.
+> Advantages: IP anycast is transparent to clients and can work for multiple application protocols; routing naturally directs traffic to a topologically close live site.
+>
+> Disadvantages: routing changes can move a TCP/session flow to a different replica, and operators have only coarse control over load balancing and debugging because selection follows routing policy.
 
 1(d) NAT + load-balancer
 
@@ -1962,7 +1958,9 @@ will not get credit (overhead in terms of what?).
 
 1 disadvantage:
 
-> No official solution text is available in the cited source; prompt retained only.
+> Advantage: a NAT/load-balancer can expose one public address while spreading connections across multiple backend servers without client changes.
+>
+> Disadvantage: the NAT/load-balancer is stateful and can become a bottleneck or single point of failure.
 
 1(e) ARP spoofing
 (unsolicited announcement of your MAC with other’s IP address)
@@ -1971,7 +1969,9 @@ will not get credit (overhead in terms of what?).
 
 1 disadvantage:
 
-> No official solution text is available in the cited source; prompt retained only.
+> Advantage: ARP spoofing can move a service IP to a different machine on the same LAN without changing DNS or routing.
+>
+> Disadvantage: it only works on the local layer-2 network and can confuse ARP caches, hijack traffic, or blackhole connections.
 
 2. More network system engineering (13 points)
 
@@ -1987,7 +1987,9 @@ Option 1: (answer <= 2 lines)
 
 Option 2: (answer <= 2 lines)
 
-> No official solution text is available in the cited source; prompt retained only.
+> Option 1: add native IPv6 forwarding support: recognize IPv6 frames, parse IPv6 headers, and maintain a forwarding table over 128-bit IPv6 prefixes.
+>
+> Option 2: tunnel IPv6 through IPv4 across the IPv4-only router, with encapsulation before the router and decapsulation after it.
 
 2(b) You are at Princeton for reunions and get a work phone call saying that the
 servers are running extremely slow and they believe the servers are under a DOS
@@ -2002,6 +2004,14 @@ and UDP’s is 17. What entries will you add in the flow table to do the followi
 >
 > Your entries should have the following format:
 > `<source IP, destination IP, protocol number, src Port, dst Port, 0 or 1>`
+
+> One reasonable rule set is:
+>
+> `<128.112.0.0/16, *, 6, *, *, 1>`
+>
+> `<66.220.0.0/16, *, *, *, *, 0>`
+>
+> `<*, 69.65.28.126, 17, *, 3333, 1>`
 
 2(c) Your company has grown and now has a couple of thousand users. You said
 farewell to the your simple router implementation and finally paid some $$ to Cisco.
@@ -2024,7 +2034,7 @@ servers and see the following packets (partial headers):
 What is going wrong? Or, explain why this information is useless.
 (answer <= 2 lines)
 
-> No official solution text is available in the cited source; prompt retained only.
+> Packets are caught in a routing loop: identical packets for `69.65.28.126` appear multiple times with lower TTL values. They will keep looping until their TTL expires.
 
 3. Distance-Vector Routing (9 points)
 
@@ -2050,27 +2060,42 @@ Figure transcription: the topology has links $A-B=21$, $A-D=15$, $B-C=18$, $B-D=
 
 3(a) Show the initial routing table of node E:
 
-> No official solution text is available in the cited source; prompt retained only.
+> | Destination | Cost | Next Hop |
+> | ----------- | ---: | -------- |
+> | A | ∞ | --- |
+> | B | ∞ | --- |
+> | C | 11 | C |
+> | D | 17 | D |
 
 3(b) Show the routing table of node E after one iteration of the algorithm:
 
-> No official solution text is available in the cited source; prompt retained only.
+> | Destination | Cost | Next Hop |
+> | ----------- | ---: | -------- |
+> | A | 32 | D |
+> | B | 29 | C or D |
+> | C | 11 | C |
+> | D | 16 | C |
 
 3(c) Show the routing table of node E after two iterations of the algorithm:
 
-> No official solution text is available in the cited source; prompt retained only.
+> | Destination | Cost | Next Hop |
+> | ----------- | ---: | -------- |
+> | A | 31 | C |
+> | B | 28 | C |
+> | C | 11 | C |
+> | D | 16 | C |
 
 3(d) In some failure situations, the administrator notices that it takes an exceptionally
 long time for the routing protocol to stabilize in this network.
 
 3(d)(1) What problem with the distance vector protocol is the cause?
 
-> No official solution text is available in the cited source; prompt retained only.
+> The count-to-infinity problem.
 
 3(d)(2) The administrator is told that BGP does not suﬀer from this problem. What
 prevents BGP from having this problem?
 
-> No official solution text is available in the cited source; prompt retained only.
+> BGP is a path-vector protocol: each route advertisement carries the AS path, so a router can reject a route that already contains its own AS and avoid routing loops.
 
 4. Routing, addressing, and tunneling (9 points)
 
@@ -2113,19 +2138,34 @@ the rows supplied.
 
 4(a) Header for packet 2:
 
-> No official solution text is available in the cited source; prompt retained only.
+> | Header Type | Source | Destination |
+> | ----------- | ------ | ----------- |
+> | Ethernet | MAC 1 | MAC 2 |
+> | IP | 10.0.0.2 | 3.0.1.2 |
 
 4(b) Header for packet 3:
 
-> No official solution text is available in the cited source; prompt retained only.
+> | Header Type | Source | Destination |
+> | ----------- | ------ | ----------- |
+> | Ethernet | MAC 3 | MAC 4 |
+> | IP | 1.2.3.4 | 3.0.1.2 |
 
 4(c) Header for packet 4:
 
-> No official solution text is available in the cited source; prompt retained only.
+> | Header Type | Source | Destination |
+> | ----------- | ------ | ----------- |
+> | Ethernet | MAC 9 | MAC 10 |
+> | MPLS | X | X |
+> | IP | 1.2.3.6 | 2.0.0.1 |
+> | IP | 1.2.3.4 | 3.0.1.2 |
 
 4(d) Header for packet 5:
 
-> No official solution text is available in the cited source; prompt retained only.
+> | Header Type | Source | Destination |
+> | ----------- | ------ | ----------- |
+> | Ethernet | MAC 11 | MAC 12 |
+> | IP | 1.2.3.6 | 2.0.0.1 |
+> | IP | 1.2.3.4 | 3.0.1.2 |
 
 ### 2009 Mid
 
