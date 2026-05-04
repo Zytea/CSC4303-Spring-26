@@ -1459,63 +1459,133 @@ You only have to fill in the header type and the source and destination address 
 | IP          | 1.2.3.6 | 2.0.0.1     |
 | IP          | 1.2.3.4 | 3.0.1.2     |
 
-2 TCP and Congestion Control 
+2. QUESTION 2: TCP and Congestion Control (10 points)
 
-Consider the following graph of TCP throughput (NOT DRAWN TO SCALE), where the y-axis describes the TCP window size of the sender. We will later ask you to describe what happens on the right side of the graph as the sender continues to transmit. 
+Consider the following graph of TCP throughput (NOT DRAWN TO SCALE), where the y-axis describes the TCP window size of the sender. We will later ask you to describe what happens on the right side of the graph as the sender continues to transmit.
 
 <img src="assets/image-20260504121147007.png" alt="image-20260504121147007" style="zoom:50%;" />
 
-2.1 The window size of the TCP sender decreases at several points in the graph, including those marked by B and D. 
+2.1 [5 points - 1 for each] The window size of the TCP sender decreases at several points in the graph, including those marked by B and D.
 
-2(a) What event at B causes the TCP sender to decrease its window, and does it prove the network discarded a packet?
+2.1(a) Name the event at B which occurs that causes the sender to decrease its window.
 
-> The event is triple duplicate ACK. It does not prove a packet was discarded, because reordering from queuing or asymmetric paths can also create duplicate ACKs.
+> Triple duplicate ACK.
 
-2(b) What event at D causes the TCP sender to decrease its window, and does it prove the network discarded a packet?
+2.1(b) Does the event at B necessitate that the network discarded a packet (Yes or No)? Why or why not?
 
-> The event is a timeout. It does not prove packet loss, because congestion in either direction can make RTT exceed the retransmission timeout.
+> No. It could be due to reordering due to queuing or asymmetric paths.
 
-2(c) Why does the TCP window grow with a curved slow-start slope at A instead of a linear slope?
+2.1(c) Name the event at D which occurs that causes the sender to decrease its window.
 
-> Slow start quickly discovers the path's usable throughput; pure additive increase would take too many RTTs to reach an efficient window.
+> Timeout.
 
-2(d) Why might point D be higher than point B when other clients share the same routers?
+2.1(d) Does the event at D necessitate that the network discarded a packet (Yes or No)? Why or why not?
 
-> Cross traffic from other senders can change over time, so the amount of congestion and the sender's window at later loss points can differ.
+> No. Congestion in either direction could cause RTT > RTO (retrans. timeout).
 
- (e) For a lightly-loaded network, is the event at D MORE likely or LESS likely to occur when the sender has multiple TCP segments outstanding? (Write “MORE” or “LESS”)
+2.1(e) For a lightly-loaded network, is the event at D MORE likely or LESS likely to occur when the sender has multiple TCP segments outstanding (in-flight) ? (Write "MORE" or "LESS")
 
-> LESS
+> LESS.
 
-2.2 Consider the curved slope labeled by point A. Why does the TCP window behave in such a manner, rather than have a linear slope? (Put another way, why would it be bad if region A had a linear slope?)
+2.2 [1 point] Consider the curved slope labeled by point A. Why does the TCP window behave in such a manner, rather than have a linear slope? Put another way, why would it be bad if region A had a linear slope?
 
-> This “slow-start” period quickly discovers the maximum acceptable throughput that the path supports – otherwise, AI (additive increase) could take too long (each a full RTT).
+> This "slow-start" period quickly discovers the maximum acceptable throughput that the path supports. Otherwise, AI (additive increase) could take too long, each a full RTT.
 
-2.3 Assume that the network has an MSS of 1000 bytes and the roundtrip-time between sender and receiver of 100 milliseconds. Assume at time 0 the sender attempts to open the connection. Also assume that the sender can “write” a full window’s worth of data instantaneously, so the only latency you need to worry about is the actual propagation delay of the network. 
+2.3 [3 points - 1 for each] Assume that the network has an MSS of 1000 bytes and the round-trip-time between sender and receiver of 100 mils. Assume at time 0 the sender attempts to open the connection. Also assume that the sender can "write" a full window's worth of data instantaneously, so the only latency you need to worry about is the actual propagation delay of the network.
 
-2.3 (a) How much time has progressed by point B?
+2.3(a) How much time has progressed by point B?
 
-…
+> It depends if you interpret B as before or after you received the triple duplicate ACK, so we will accept both answers: 1 RTT (TCP handshake) + 3-4 RTT in slow-start (1, 2, 4, (8) MSS) = 4 or 5 RTT = 400 or 500 ms.
 
-(b) How much time has progressed between points C and D?
+2.3(b) How much time has progressed between points C and D?
 
-(c) How much time has progressed between points E and F?
+> 4 MSS to 16 MSS = 12 periods of RTT = 1.2 s.
 
-2.4 If the sender shares its network with other clients whose traffic traverses the same IP routers, give one explanation for why point D is higher than point B?
+2.3(c) How much time has progressed between points E and F?
+
+> First: slow start to 8K window size (1 -> 2, 2 -> 4, 4 -> 8 MSS), then AI from 8 to 10 MSS window size (8 -> 9 -> (10) MSS). Similar question about where F exists as question (a), so we will accept either 5 or 6 RTT = 500 or 600 ms.
+
+2.4 [1 point] If the sender shares its network with other clients whose traffic traverses the same IP routers, give one explanation for why point D is higher than point B?
 
 > Changing cross-traffic by other concurrent senders across same routers.
 
-4.1(a) Suppose Ethernet was the only LAN technology and the Internet were one large switched Ethernet. Give two networking reasons this is a bad idea.
+4. QUESTION 4: Short Answers (15 points)
 
-   > Broadcast/flooding-based discovery would not scale, and MAC addresses are not hierarchical, so forwarding tables could not be aggregated like IP prefixes.
+4.1 Ethernet and IP
 
-4.1(b) Why not simply assign IP addresses to network adaptors instead of using both MAC and IP addresses?
+4.1(a) Suppose the Internet were built as one large switched Ethernet with globally unique Ethernet addresses. Give two networking reasons this is a bad idea.
 
-   > Either adaptors would need renumbering whenever they move, or static adaptor IPs would sacrifice topological aggregation and make routing tables too large.
+> Any two of: flooding for unknown destinations does not scale; ARP or spanning-tree flooding does not scale; MAC addresses are flat rather than hierarchical, so switches cannot aggregate forwarding entries like IP prefixes.
 
-4.2-4.4 Short answers on NAT/firewall rules, TCP ACKs, and socket writes.
+4.1(b) Why not simply assign IP addresses directly to network adaptors instead of using both MAC and IP addresses?
 
-   > With one public NAT address and about 100,000 simultaneous hosts, the NAT can run out of ports. A public web server behind NAT needs port forwarding from public port 80 to the internal server. The firewall should allow SYNs to 1.2.3.4:80, allow SYN-ACKs, allow outbound SYNs from 1.0.0.0/8, deny other inbound SYNs, and allow the rest. ACK 8001 proves three 1000-byte segments were received; duplicate ACKs suggest segment 8001-9000 may be lost; ACK 12001 means none of the original ten are still suspected lost and seven segments were definitely received. A socket read returning 0 means EOF from a remote FIN; a short write of 500 means only part of the requested buffer was accepted, so the program must write the remaining bytes.
+> Either IP would lose topological aggregation and make routing tables too large, or mobile/end hosts would need to participate in routing updates or a global ARP-like lookup when they move.
+
+4.2 NAT and firewall rules
+
+4.2(a) A company has about 100,000 machines simultaneously using port-based NAT through a single public IP address. What problem can arise?
+
+> A single public IP has only about 65K transport ports, so the NAT can run out of external port mappings. New connections may fail, or mappings may churn and break existing connections.
+
+4.2(b) The company wants a web server behind the NAT, and only that server, to be reachable from the public Internet. What setup is needed?
+
+> Configure static port forwarding from the NAT public address on port 80 to the internal web server's private address on port 80.
+
+4.2(c) Now assume the company is not NATted, owns prefix `1.0.0.0/8`, and has a web server at `1.2.3.4:80`. What TCP firewall rules allow only that server to accept incoming connections?
+
+| Source IP   | Source Port | Dest IP | Dest Port | TCP Flags | Allow/Deny |
+| ----------- | ----------- | ------- | --------- | --------- | ---------- |
+| `*`         | `*`         | `1.2.3.4` | `80`    | `SYN`     | `ALLOW`    |
+| `*`         | `*`         | `*`     | `*`       | `SYN-ACK` | `ALLOW`    |
+| `1.0.0.0/8` | `*`         | `*`     | `*`       | `SYN`     | `ALLOW`    |
+| `*`         | `*`         | `*`     | `*`       | `SYN`     | `DENY`     |
+| `*`         | `*`         | `*`     | `*`       | `*`       | `ALLOW`    |
+
+4.3 TCP ACKs
+
+Using TCP, a sender has sent ten 1000-byte data segments. The sender's initial sequence number is 5000. A segment carrying sequence numbers 20001 through 21000 may be referred to as "segment 21000".
+
+4.3(a) After the sender receives `ACK 8001`, how many TCP segments does it know were definitely received?
+
+> 3 segments: segments 6000, 7000, and 8000.
+
+4.3(b) The sender then receives two more `ACK 8001` packets. Which segment might be lost and should be retransmitted?
+
+> The segment carrying bytes 8001-9000, i.e. segment 9000.
+
+4.3(c) After retransmitting that segment, the sender receives `ACK 12001`. Which of the original ten segments might still be lost?
+
+> None.
+
+4.3(d) Which of the original ten segments were definitely received?
+
+> 7 segments, covering bytes 5001-12000.
+
+4.4 UNIX socket programming
+
+4.4(a) A proxy is downloading a web object over an open TCP connection, and `read()` on the socket returns 0.
+
+4.4(a.1) What does this signify for a UNIX file descriptor?
+
+> End of file (EOF): there is no more data to read.
+
+4.4(a.2) What network event caused this?
+
+> The remote peer closed its socket, causing its TCP stack to send a FIN.
+
+4.4(b) The proxy is sending a 5000-byte object from `buf` to a browser over TCP. It calls `write(fd, buf + 2000, 1000)`.
+
+4.4(b.1) Which byte range is it trying to transfer?
+
+> Bytes 2000-2999 inclusive in `buf`.
+
+4.4(b.2) If `write()` returns 500, what does this signify?
+
+> Only bytes 2000-2499 were accepted/written.
+
+4.4(b.3) Why might this occur?
+
+> The socket send buffer may only have had space for 500 bytes. The application should issue another write for the remaining 500 bytes, e.g. `write(fd, buf + 2500, 500)`.
 
 ### 2010 Mid
 
