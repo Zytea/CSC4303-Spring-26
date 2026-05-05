@@ -201,7 +201,7 @@ An endpoint for network communication that allows an application to attach to a 
 
   `listen ()` transforms a socket descriptor into a listening socket capable of accepting client connections. The `backlog` parameter suggests how many pending connections the kernel may queue before refusing new requests (typically around 128).
 
-- **Accept** `int accpet (int listenfd, sockaddr *addr, int *addrlen);`
+- **Accept** `int accept (int listenfd, sockaddr *addr, int *addrlen);`
 
   `accept()` blocks until a client connects via `listenfd`, stores the client's address in `addr`, and returns a `connfd` for communication using standard Unix I/O functions.
 
@@ -517,7 +517,7 @@ Application process identifier: IP address + transport protocol + port (16-bit i
             
         - **State Machine**
         
-            <img src="assets/2.png" width="100%" height="70%"  >
+            <img src="assets/2.png" width="70%" height="40%" style="zoom:%;"   >
         
             - Client Path `CLOSED → connect() → SYN_SENT → Receive SYN+ACK → ESTABLISHED`
         
@@ -639,7 +639,7 @@ Sender buffers up to $W$ segments until they are acknowledged. $LFS – LAR ≤ 
 
     $\text{SEQ} + \text{length} < \text{ACK} + \text{WIN}$
 
-    - <img src="assets/image-20260502122214270.png" alt="image-20260502122214270" style="zoom:50%;" />
+    - <img src="assets/image-20260502122214270.png" alt="image-20260502122214270" style="zoom: 67%;" />
 
     - **Adaptive Timeout**
 
@@ -672,10 +672,10 @@ Step 4 Repeat for remaining flows
 
 ### 1.4.3 Close-loop: **Bandwidth allocation**
 
-- Network layer provides direct feedback &vs.Transport layer reduces load 
+- Network layer provides direct feedback vs.Transport layer reduces load 
 [Network is distributed, no single party has an overall picture of its state. → AIMD]
 
-    > Network layer: 我这里堵了，我能看到 queue / loss / ECN
+    > Network layer: 我这里堵了，我能看到 queue / loss 
     >
     > Transport layer: 我收到这个信号后，减少 cwnd / sending rate
 
@@ -729,34 +729,38 @@ Step 4 Repeat for remaining flows
 
     > ```
     > 连接刚开始：
-    >     cwnd = 1
-    >     Slow Start 指数增长
+    >  cwnd = 1
+    >  Slow Start 指数增长
     > 
     > 如果 cwnd > ssthresh：
-    >     进入 AI
-    >     每 RTT 大约 +1
+    >  进入 AI
+    >  每 RTT 大约 +1
     > 
     > 如果发生 timeout：
-    >     ssthresh = cwnd / 2
-    >     cwnd = 1
-    >     回到 Slow Start
+    >  ssthresh = cwnd / 2
+    >  cwnd = 1
+    >  回到 Slow Start
     > 
     > 收到第 3 个 duplicate ACK：
-    >     retransmit 丢失的 packet
-    >     ssthresh = cwnd / 2
-    >     cwnd 大致减半
+    >  retransmit 丢失的 packet
+    >  ssthresh = cwnd / 2
+    >  cwnd = sshthresh + 3 
     > 
     > 后续又收到 duplicate ACK：
-    >     说明又有一个后续 packet 到达 receiver
-    >     sender 可以适当继续发送新 packet
-    >     维持 ACK clock
+    >  说明又有一个后续 packet 到达 receiver
+    >  sender 可以适当继续发送新 packet
+    >  维持 ACK clock
     > 
     > 当重传的 packet 被 receiver 收到：
-    >     receiver 补上缺口
-    >     ACK number 突然跳到更后面, 退出 Fast Recovery：
-    >         cwnd = ssthresh
-    >         进入 Additive Increase
+    >  receiver 补上缺口
+    >  ACK number 突然跳到更后面, 退出 Fast Recovery：
+    >      cwnd = ssthresh
+    >      进入 Additive Increase
     > ```
+    >
+    > 什么极端情况下，即使收到了 3 个重复 ACK，发送端也发不出新包？
+    >
+    > > 窗口太小 / rwnd太小
 
 # 2. Network Layer (07-08)
 
@@ -843,13 +847,14 @@ Step 4 Repeat for remaining flows
             >
             > ```
             > IP Address:   192.168.1.23
+            > &
             > Subnet Mask:  255.255.255.0
             > ```
             >
             > → 192.168.1.23/24 → 192.168.1.0/24
-
+        
         - Gateway 
-
+        
             > Example:
             >
             > ```
@@ -857,7 +862,7 @@ Step 4 Repeat for remaining flows
             > Gateway:     192.168.1.1
             > Destination: 8.8.8.8
             > ```
-
+        
         - DNS Server
 
 - **IP fragmentation**
@@ -896,7 +901,7 @@ Step 4 Repeat for remaining flows
 	> 
 	> Fragment 3:
 	> Total Length = 1060
-	> Data = 1000
+	> Data = 1040
 	> Offset = 370
 	> MF = 0
 	> ```
@@ -1041,9 +1046,9 @@ Traceroute sends probe packets with incrementing TTL. Each router that decrement
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
  ┌───────┬───────────────┬───────────────────────────────────────┐
  │Version│ Traffic Class │           Flow Label                  │
- ├───────┴───────────────┴───────┬───────────────────────────────┤
+ ├───────┴───────────────┴───────┬───────────────┬───────────────┤
  │        Payload Length         │    Protocol   │Hop Limit(TTL) │
- ├───────────────────────────────┴───────────────────────────────┤
+ ├───────────────────────────────┴───────────────┴───────────────┤
  |                         Source Address                        |
  │                           (128 bits)                          │
  ├───────────────────────────────────────────────────────────────┤
@@ -1160,11 +1165,17 @@ Traceroute sends probe packets with incrementing TTL. Each router that decrement
       > Example: 
       >
       > ```
-      > A -> B -> C -> A
+      > Initial topology:
       > 
-      > A thinks: to D via B
-      > B thinks: to D via C
-      > C thinks: to D via A
+      >         B
+      >       /   \
+      >    1 /     \ 1
+      >     A ----- C
+      >        10
+      > 
+      > D is directly attached to A with cost 1.
+      > 
+      > then A-D down
       > ```
 
 - **Link-State Routing**
@@ -1373,19 +1384,18 @@ Decentralized system using **consistent hashing**: keys and nodes hashed onto a 
     
     - **Consistent hashing** (ring; better) 
     
-        - Add a node from $N-1→N$: move $\frac{\text{size of new range (left)}}{\text{size of all ranges (right)}}$ of the keys 
+        - Add a node from $N-1→N$: move $\frac{\text{size of new range (left)}}{\text{size of all ranges}}$ of the keys 
 
     - **Virtual nodes (vnodes)** Virtual nodes assign multiple ring positions to each physical node, distributing data migration and improving load balancing across all nodes.
     
         - **Heterogeneity** More powerful nodes can have more capacity, thus more vnodes.
     
         - **Token map storage**: All nodes.
-    
             - Add a node: **Gossip**
-    
+            
                 1.  Inform a few nodes about the new node
                 2. $1/s$: Choose a random friend, Gossip about new nodes
-    
+        
     - **Replication** Dynamo skips nodes to ensure replicas reside on different nodes (set Replication Factor, i.e. $RF$).
     
         > Example: 
@@ -1569,7 +1579,7 @@ DNS is a naming service to map between host names and their IP addresses
 
 - **DNS Resolution** Start with the root nameserver and work down zones.
 
-<img src="assets/image-20260502230837254.png" alt="image-20260502230837254" style="zoom: 50%;" />
+<img src="assets/image-20260502230837254.png" alt="image-20260502230837254" style="zoom: 67%;" />
 
 - **Local Nameservers (as DNS resolver) and Root Nameservers** (with **Replicas**)
 

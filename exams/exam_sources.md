@@ -83,13 +83,13 @@
 
 > PDF: <https://www.composablesystems.org/15-440/fa2022/assets/midterm1_2020.pdf>
 
-1(6) It's better to use UDP rather than TCP to send game updates in fast-paced multiplayer games where low latency is a high priority.
+1(6) It's better to use UDP rather than TCP to send game updates in fast-paced multiplayer games where low latency is a high priority. (✅/❌)
 
 > True. TCP’s retries and ordering cause latency spikes in case of packet loss.
 
-1(7) Transmission delay is proportional to the packet size, while propagation delay is proportional to the length of the link.
+1(7) Transmission delay is proportional to the packet size, while propagation delay is proportional to the length of the link. (✅/❌)
 
-> Transmission delay is the time spent sending the packet by the router, while the propagation delay is the time it spends travelling on the link.
+> True. Transmission delay is the time spent sending the packet by the router, while the propagation delay is the time it spends travelling on the link.
 
 2(1) Explain two major differences between standard TCP and UDP. (Remember that P1 was a UDP protocol that added some functionalities of TCP.)
 
@@ -141,7 +141,7 @@ What shortcoming of Lamport logical clocks do vector clocks overcome?
 
 7.1 In the test environment for p0partA, we expected your implementation to have an exactly-once semantics because there are no packet drops and kvstore actions always succeed. However, in a real environment, packet drops, action failures, etc. are common. Assuming our clients wait for results indefinitely and don’t retry in case of failures, what are the actual semantics of the implementation? Explain your answer.
 
-At-most-once. Because the client and the server don't have a failure detection and retry mechanism, each request is executed at most once.
+> At-most-once. Because the client and the server don't have a failure detection and retry mechanism, each request is executed at most once.
 
 7.2 In p0partA it is possible to associate duplicate values to the same key. Bob doesn’t like duplicate values and decided to rewrite the implementation for kvstore with the following pseudocode.
 
@@ -281,14 +281,15 @@ you notice that the total RPC time does not improve very much. Explain why, by p
 
 2(e) The DNS root and GTLD servers often come under attack. Give 2 reasons that we don’t notice when they are under attack.
 
-> Solution: The records from the root and GTLD have long TTLs and are cached widely. The root and GTLD zones are replicated very widely and it is difficult to attack all locations at the same time.
+> Solution: The records from the root and GTLD have long TTLs and are cached widely. The root and GTLD zones are replicated very widely and it is difficult to attack all locations at the same time. (Anycast)
 
 
 4. As the CMU’s Distributed Systems class graduates ventured into the world, they spread their description of class lectures. As a result, the popularity of video recordings of the lectures skyrocketed (unfortunately, mostly for the jokes rather than the technical content) and now Srini needs your help in managing the storage and delivery of the files. Srini starts by building an Akamai-like CDN to deliver the files for his web site www.srinilectures.com. As a first step, Srini:
 
-1. registers the domain srini-lectures.com with two name servers ns1.srini-lectures.com and ns2.srini-lectures.com.
-2. sets up two regional, low-level DNS servers - east-ns.srini-lectures.com and westns.srini-lectures.com - for clients on the east and west coast.
-3. sets up two servers to deliver cached content with IP addresses 1.1.1.1 and 2.2.2.2. Srini expects users to get the 1.1.1.1 address for www.srini-lectures.com if they are on the east coast and 2.2.2.2 if they are on the west coast.
+   1. registers the domain srini-lectures.com with two name servers ns1.srini-lectures.com and ns2.srini-lectures.com.
+   2. sets up two regional, low-level DNS servers - east-ns.srini-lectures.com and westns.srini-lectures.com - for clients on the east and west coast.
+   3. sets up two servers to deliver cached content with IP addresses 1.1.1.1 and 2.2.2.2. Srini expects users to get the 1.1.1.1 address for www.srini-lectures.com if they are on the east coast and 2.2.2.2 if they are on the west coast.
+
 
 4(a) There are 6 name servers involved in the system:
 
@@ -388,10 +389,10 @@ Correct Explain briefly (1-2 sentences) where the bug is.
 > True. This can happen because sequence numbers wrap around.
 
 6. (14 points) Three computers at CMU (A, B, and C) communicate using a protocol that implements the idea of Lamport clocks (they include their clock time stamp in messages). For reference, if you need a reminder, recall that the three rules of Lamport’s algorithm are:
+   1. At process $i$, increment $L_i$ before each event.
+   2. To send message $m$ at process $i$, apply Rule 1 and then include the current local time in the message, i.e., $\mathrm{send}(m, L_i)$.
+   3. To receive a message $(m, t)$ at process $j$, set $L_j = \max(L_j, t)$ and then apply Rule 1 before time-stamping the receive event.
 
-1. At process $i$, increment $L_i$ before each event.
-2. To send message $m$ at process $i$, apply Rule 1 and then include the current local time in the message, i.e., $\mathrm{send}(m, L_i)$.
-3. To receive a message $(m, t)$ at process $j$, set $L_j = \max(L_j, t)$ and then apply Rule 1 before time-stamping the receive event.
 
 At the beginning of time, all three computers begin with their logical clock set to zero (0). Later, the following sequence of events occurs:
 
@@ -491,10 +492,10 @@ After all of these messages have been sent and received, what time does each com
 > Solution: GPS satellites have their own atomic clocks. NTP would not provide sufficient accuracy for this application.
 
 6. Three computers at CMU, A, B, and C communicate using a protocol that implements the idea of Lamport clocks (they include their clock timestamp in messages). For reference, if you need a reminder, recall that the three rules of Lamport’s algorithm are:
+   1. At process $i$, increment $L_i$ before each event.
+   2. To send message $m$ at process $i$, apply Rule 1 and then include the current local time in the message, i.e., $\mathrm{send}(m, L_i)$.
+   3. To receive a message $(m, t)$ at process $j$, set $L_j = \max(L_j, t)$ and then apply Rule 1 before time-stamping the receive event.
 
-1. At process $i$, increment $L_i$ before each event.
-2. To send message $m$ at process $i$, apply Rule 1 and then include the current local time in the message, i.e., $\mathrm{send}(m, L_i)$.
-3. To receive a message $(m, t)$ at process $j$, set $L_j = \max(L_j, t)$ and then apply Rule 1 before time-stamping the receive event.
 
 At the beginning of time, all three computers begin with their logical clock set to zero (0). Later, the following sequence of events occurs:
 
@@ -545,12 +546,6 @@ Once all of the messages have been sent and received, what times might C’s clo
 
 > PDF: <https://www.cs.cmu.edu/~dga/15-440/F12/midterm2010_solve.pdf>
 
-| PDF page(s) | Subpart ID(s) retained    | CSC4303 overlap                         |
-| ----------: | ----------------------------------- | --------------------------------------- |
-|           2 | 1                          | RPC vs local procedure-call differences |
-|           4 | 8                          | Application-level choice of UDP or TCP  |
-|       11-13 | 11(a), 11(b), 11(c), 11(d) | Lamport/Shamport clock ordering         |
-
 1. RPC tries to make remote procedure calls look the same as local procedure calls. But the illusion isn’t perfect. Circle all of the options that correctly describe differences between a local function call and an RPC:
 
 A. RPC calls require an extra parameter to identify the server.
@@ -559,7 +554,9 @@ B. RPC calls may have higher or variable latency.
 
 C. RPC calls are limited to call-by-value.
 
-D. RPC calls have different (more) failure modes. E. Local function calls require a malloc of a heap object to represent the return pointer.
+D. RPC calls have different (more) failure modes. 
+
+E. Local function calls require a malloc of a heap object to represent the return pointer.
 
    > A,B,D
 
@@ -685,7 +682,7 @@ A. Application-level failure handling
 
 B. Data marshalling/unmarshalling
 
-C. Asynchronous function calls
+C. Asynchronous function calls （要选，现在是2026）
 
 D. Exactly-once semantics
 
@@ -811,9 +808,9 @@ Style of system AND a brief rationale for this decision:
     L_3(m_6, recv) = 10
     ```
 
-What is the value of $x$? If it cannot be determined, write "unknown".
-
-    > $x = 7$. Message $m_5$ is sent by machine 4 with Lamport time 6, and machine 1's local clock before receiving it is 2, so the receive timestamp is $\max(2, 6) + 1 = 7$.
+	What is the value of $x$? If it cannot be determined, write "unknown".
+	
+	> $x = 7$. Message $m_5$ is sent by machine 4 with Lamport time 6, and machine 1's local clock before receiving it is 2, so the receive timestamp is $\max(2, 6) + 1 = 7$.
 
 12. (12) For the following, circle which event happened first. If it cannot be determined, circle "unknown."
 
@@ -1020,7 +1017,9 @@ How could this happen, and what should C do?
 
 1(a) If the buffer is completely full of TCP acknowledgment packets, how many packets are queued in the buffer? Assume **the TCP segment has no payload**, and the packet headers do not contain any IPv4 or TCP options. (3 points)
 
-> Ignoring the link-layer header and any minimum size restriction on the link-layer frame, a TCP ACK packet is 40 bytes long, consisting of a 20-byte IP header and a 20-byte TCP header. A 100,000-byte buffer can hold $100000/40 = 2500$ ACK packets. **Why the TCP segment has no payload?**
+> Ignoring the link-layer header and any minimum size restriction on the link-layer frame, a TCP ACK packet is 40 bytes long, consisting of a 20-byte IP header and a 20-byte TCP header. A 100,000-byte buffer can hold $100000/40 = 2500$ ACK packets. 
+>
+> **Why the TCP segment has no payload?**
 >
 > TCP header already has a Sequence Number (32) and an Acknowledgment Number (32).
 
@@ -1204,33 +1203,33 @@ For example, the ISP forwards all packets with destination addresses in 12.1.0.0
 > | encodes message   |
 > | into domain name  |
 > +---------+---------+
->           |
->           | DNS query:
->           | abc123.seq5.jrex.com
->           v
+>        |
+>        | DNS query:
+>        | abc123.seq5.jrex.com
+>        v
 > ================================================
->  Hotspot pay wall
->  Only allows DNS query to local DNS server
+> Hotspot pay wall
+> Only allows DNS query to local DNS server
 > ================================================
->           |
->           v
+>        |
+>        v
 > +-----------------------+
 > | Hotspot local DNS     |
 > | does recursive lookup |
 > +----------+------------+
->            |
->            | query for *.jrex.com
->            v
+>         |
+>         | query for *.jrex.com
+>         v
 > +-----------------------------+
 > | User's authoritative DNS    |
 > | server for jrex.com         |
 > | decodes message             |
 > | acts as proxy               |
 > +-------------+---------------+
->               |
->               | normal Internet access
->               v
->         Arbitrary website
+>            |
+>            | normal Internet access
+>            v
+>      Arbitrary website
 > ```
 >
 > 问题：
@@ -1243,17 +1242,21 @@ For example, the ISP forwards all packets with destination addresses in 12.1.0.0
 >
 > - 不检查 source IP 是否属于这个 MAC
 >
-> > ``` > Ethernet src MAC = attacker MAC M_A > IP src           = DNS server IP D > UDP port         = 53 > ``` > > gateway 检查 `IP D 是否真的属于 MAC M_A？` 就完蛋了
+> > ``` 
+> > > Ethernet src MAC = attacker MAC M_A 
+> > > IP src = DNS server IP D 
+> > > UDP port = 53 
+> > ```
+> >
+> > gateway 检查 `IP D 是否真的属于 MAC M_A？` 就完蛋了
 >
 > - 不启用 DHCP snooping / IP source guard / dynamic ARP inspection
 >
 > - firewall 只粗略看 IP/port，而不严格验证 DNS 语义
 >
-> > 若 > > ``` > 1. 必须是合法 DNS query / response > 2. query name 长度和字符正常 > 3. response 必须对应之前的 query > 4. 不允许异常大的 TXT record > 5. 不允许高频率、长随机子域名 > ```
->
 > ```
 > Before attack:
->
+> 
 > +----------------+                      +----------------+
 > | Unpaid client  |                      | Real DNS server|
 > | IP = C         |                      | IP = D         |
@@ -1272,14 +1275,14 @@ For example, the ISP forwards all packets with destination addresses in 12.1.0.0
 >         |
 >         v
 >      Internet
->
+> 
 > ---
->
+> 
 > ARP spoofing:
->
+> 
 > Attacker tells gateway:
 > "DNS server IP D is at my MAC M_C"
->
+> 
 > +----------------+
 > | Unpaid client  |
 > | MAC = M_C      |
@@ -1309,7 +1312,7 @@ For example, the ISP forwards all packets with destination addresses in 12.1.0.0
 >
 > ```
 > Normal case:
->
+> 
 > Paid user
 > +-------------+
 > | IP = P      |
@@ -1325,14 +1328,14 @@ For example, the ISP forwards all packets with destination addresses in 12.1.0.0
 >        |
 >        v
 >    Internet
->
+> 
 > ---
->
+> 
 > ARP spoofing:
->
+> 
 > Attacker says to gateway:
 > "paid user's IP P is at my MAC M_A"
->
+> 
 > +----------------+
 > | Hotspot gateway|
 > | ARP table:     |
@@ -1402,7 +1405,7 @@ For example, the ISP forwards all packets with destination addresses in 12.1.0.0
 
 <img src="assets/image-20260504115546375.png" alt="image-20260504115546375" style="zoom:50%;" />
 
-The above figure shows a network topology. The LAN on the left uses a NAT to connect to the Internet and includes a client host H1. The LAN on the right includes a webserver H2. Packets between the two endpoints are routed along the path shown by a heavy dark lines, which includes two IPv4 tunnels. All packets which traverse the path use both tunnels. The various network interfaces have IP and MAC addresses as shown.
+The above figure shows a network topology. The LAN on the left uses a NAT to connect to the Internet and includes a client host H1. The LAN on the right includes a webserver H2. Packets between the two endpoints are routed along the path shown by a heavy dark lines, which includes two IPv4 tunnels. All packets which traverse the path use bSoth tunnels. The various network interfaces have IP and MAC addresses as shown.
 
 H1 has established an HTTP session with web server H2 and data packets are flowing between the two machines. As an example, we have filled in the headers for packet 1 (traveling from the server H2 to the client H1). Note that you should order your headers from “outermost” in, as shown: Ethernet should be listed before IP, because the Ethernet packet exists first on the wire.
 
@@ -1573,14 +1576,6 @@ Using TCP, a sender has sent ten data segments, each 1000 bytes. The sender's IS
 
 > PDF: <https://www.cs.princeton.edu/courses/archive/spring23/cos461/exams/spring10-cos461-exam1-answers.pdf>
 
-| PDF page(s) | Subpart ID(s) retained | CSC4303 overlap                                                                                  |
-| ----------: | -------------------------------- | ------------------------------------------------------------------------------------------------ |
-|         2-4 | 1(1), 1(2), 1(3)           | DHCP, ARP, DNS, HTTP/TCP connection workflow and packet headers                                  |
-|         5-6 | 2(1), 2(2), 2(3), 2(4), 2(5) | TCP congestion control, slow start, AIMD/window calculation                                      |
-|         7-8 | 3(1), 3(2)                | Socket call ordering and looping on send/partial writes                                          |
-|        9-11 | 4(1)(a), 4(1)(b), 4(2)(a), 4(2)(b), 4(3), 4(4), 4(5) | IP-prefix aggregation, IP/MAC addressing, TCP ACK/loss, ARP-cache conflict, TCP vs UDP selection |
-|       12-13 | 5(2), 5(3), 5(6)           | UDP/TCP socket demultiplexing fields; RED/drop-tail/congestion                                   |
-
 1. Protocols and Addressing (19 points)
 
 In the topology shown below, a client A (on the left side) joins a network and wants to download the webpage for http://example.net/ from the webserver H (on the right side). All wires/links are Ethernet segments. In this question, you will be asked what packets are on the wire (and the addresses in those packets’ headers) for this to occur. When asked to provide the addresses of machines, you can refer to them abstractly: IP-H is the IP address of the webserver H, MAC-H is the MAC address of H. If a packet is being sent to a broadcast address, use “BR” as the destination (e.g., IP-BR or MAC-BR).
@@ -1616,18 +1611,22 @@ When you are asked to write a packet with its headers, you should include both n
 | 1 | MAC-A | MAC-BR | | | ARP Request |
 | 2 | MAC-C | MAC-A | | | ARP Reply |
 | 3 | MAC-A | MAC-C | IP-A | IP-C | DNS Request |
+|  |  |  |  |  |  |
 | 4 | MAC-C | MAC-G | IP-C | IP-E | DNS Request (to .) |
 | 5 | MAC-G | MAC-E | IP-C | IP-E | DNS Request |
 | 6 | MAC-E | MAC-G | IP-E | IP-C | DNS Reply |
 | 7 | MAC-G | MAC-C | IP-E | IP-C | DNS Reply |
+|  |  |  |  |  |  |
 | 8 | MAC-C | MAC-G | IP-C | IP-F | DNS Request (to .net) |
 | 9 | MAC-G | MAC-F | IP-C | IP-F | DNS Request |
 | 10 | MAC-F | MAC-G | IP-F | IP-C | DNS Reply |
 | 11 | MAC-G | MAC-C | IP-F | IP-C | DNS Reply |
+|  |  |  |  |  |  |
 | 12 | MAC-C | MAC-G | IP-C | IP-I | DNS Request (to example.net) |
 | 13 | MAC-G | MAC-I | IP-C | IP-I | DNS Request |
 | 14 | MAC-I | MAC-G | IP-I | IP-C | DNS Reply |
 | 15 | MAC-G | MAC-C | IP-I | IP-C | DNS Reply |
+|  |  |  |  |  |  |
 | 16 | MAC-C | MAC-A | IP-C | IP-A | DNS Reply |
 
 1(3) [5 points] Now that the client has IP_H, it wants to download the web page `http://example.net/index.html`. The webpage fits in one data packet. Write down all network-layer packets that are sent on the wire in order to complete this process. Remember to clean up any transfers.
@@ -1637,10 +1636,12 @@ When you are asked to write a packet with its headers, you should include both n
 | 1 | IP-A | IP-H | TCP SYN |
 | 2 | IP-H | IP-A | TCP SYN-ACK |
 | 3 | IP-A | IP-H | TCP ACK |
+|  |  |  |  |
 | 4 | IP-A | IP-H | HTTP Request |
 | 5 | IP-H | IP-A | TCP ACK |
 | 6 | IP-H | IP-A | HTTP Reply |
 | 7 | IP-A | IP-H | TCP ACK |
+|  |  |  |  |
 | 8 | IP-H | IP-A | TCP FIN |
 | 9 | IP-A | IP-H | TCP FIN-ACK |
 | 10 | IP-H | IP-A | TCP ACK |
@@ -2539,16 +2540,6 @@ This question explores how to set the (configurable) link weights in link-state 
 
 Answer DOC: <https://www.cs.princeton.edu/courses/archive/spring23/cos461/exams/spring07-cos461-exam1-answers.doc>
 
-| Page(s) | Subpart ID(s) retained      | CSC4303 overlap                                                                                             |
-| ------: | ------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-|     DOC | 1(a), 1(b), 1(c)             | bandwidth-delay product, TCP/IP header overhead, TCP receive-window limiting                                |
-|     DOC | 2(a), 2(b), 2(c), 2(d), 2(e) | stream sockets, TCP byte stream vs message boundaries, close behavior, SYN retransmission, UDP port binding |
-|     DOC | 3(a), 3(b), 3(c), 3(d), 3(e) | NAT, ARP/MAC, network-layer protocol demultiplexing, UDP/TCP demultiplexing, socket demultiplexing          |
-|     DOC | 4(c), 4(d)                   | TCP congestion-response incentives, parallel HTTP/TCP connections                                           |
-|     DOC | 5(a), 5(b), 5(c), 5(d)       | DHCP client/server behavior, gateway configuration, ARP plus NAT, public vs private IP address discovery    |
-|     DOC | 6(a), 6(b), 6(c), 6(d), 6(e) | soft state, HTTP vs IP header format, packet-size/header fields, CIDR, TCP retransmission timeout           |
-|     DOC | 7(a), 7(b), 7(c), 7(d), 7(e) | TCP AIMD, loss detection/adaptation, DNS hierarchy, hierarchical IP allocation, MAC/link-local addressing   |
-
 
 1. Internet Versus Station Wagon (15 POINTS)
 
@@ -2715,15 +2706,6 @@ Consider a home network with multiple hosts plugged in (via Ethernet cables) to 
 ### Spring 2007 Final
 
 Answer DOC: <https://www.cs.princeton.edu/courses/archive/spring23/cos461/exams/spring07-cos461-exam2-answers.doc>
-
-| Page(s) | Subpart ID(s) retained            | CSC4303 overlap                                                                                                                            |
-| ------: | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-|     DOC | 1(a), 1(b), 1(c), 1(d), 1(e), 1(f) | P2P distribution scalability, client/server vs peer-assisted transfer, BitTorrent incentives, incomplete downloads, rare-file availability |
-|     DOC | 2(a), 2(b), 2(e)                   | link-state routing convergence, transient forwarding loops, BGP over TCP with directly connected peers                                     |
-|     DOC | 4(a)                               | broadcast-generating protocols such as ARP and DHCP                                                                                        |
-|     DOC | 5(d)                               | Napster central directory vs Gnutella query flooding                                                                                       |
-|     DOC | 6(c), 6(d)                         | HTTP/TCP delivery, proxies, CDNs                                                                                                           |
-|     DOC | 7(b), 7(c), 7(d)                   | page-load packetization, transport-header inspection by middleboxes, DNS/BGP layer placement                                               |
 
 
 1. Scalability of Peer-to-Peer Systems (15 POINTS)
